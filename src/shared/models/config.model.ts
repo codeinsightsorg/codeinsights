@@ -1,12 +1,10 @@
-import {IPlugin} from "./plugins.model";
-import {PostProcessor} from "./post-processor.model";
+import { Plugin } from "./plugin.model";
+import { Finalizer } from "./finalizer.model";
 
-export interface IConfig {
-    repoPath?: string;
-    ignoreFolders?: string[];
-    plugins?: IPlugin[];
-    flattenOutput?: boolean;
-    postProcessors?: PostProcessor[];
+export interface ConfigModel {
+  repoPath?: string;
+  ignoreFolders?: string[];
+  flattenOutput?: boolean;
+  plugins?: Plugin[];
+  finalizers?: Finalizer[];
 }
-
-
