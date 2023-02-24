@@ -1,34 +1,51 @@
-import * as recast from 'recast';
-import {AnalyzedItem, IFile, IFunction} from "./types";
-import {isTSFile} from "../../shared/utils";
+import * as tsParser from "recast/parsers/typescript";
+import {IPlugin} from "../shared/models/plugins.model";
 import {last} from "lodash";
-import {getAST} from "./utils";
+import {isTSFile} from "../shared/utils";
 
+type FunctionType = 'ObjectMethod' | 'FunctionDeclaration' | 'ClassMethod';
 
-export async function analyzeFile(tsStr: string, filePath: string): Promise<AnalyzedItem[]> {
-    const analyzedItems: AnalyzedItem[] = [];
+interface IFile {
+    scope: 'file'
+    path: string;
+    name: string;
+    module: string;
+    hasStrictEnabled: boolean;
+    isTestFile: boolean;
+    loc: number;
+}
 
+interface IFunction {
+    scope: 'function',
+    type: FunctionType;
+    name: string;
+    file: string;
+    loc: number;
+}
 
-    const fileName = last(filePath.split('/')) as string;
+type AnalyzedItem = IFile | IFunction;
 
-    if (isTSFile(fileName)) {
-        const ast = getAST(tsStr);
-
-        const isTestFile = fileName.endsWith('.spec.ts');
-
+export const typescriptFilePlugin: IPlugin = {
+    id: 'TypeScriptFile',
+    fileExtensions: ['.ts'],
+    parser: tsParser,
+    initialAccumulator: [],
+    analyze(acc, metadata) {
+        const analyzedItems: AnalyzedItem[] = [];
+        const isTestFile = metadata.file.name.endsWith('.spec.ts');
         const file = {
             scope: 'file',
-            path: filePath,
-            name: fileName,
-            loc: ast.loc.end.line,
+            path: metadata.file.path,
+            name: metadata.file.name,
+            loc: metadata.ast.loc.end.line,
             isTestFile
         } as IFile;
 
-        recast.visit(ast, {
+        metadata.helpers.visit({
             visitFunction(path) {
                 const baseFunctionObj = {
                     scope: 'function',
-                    file: filePath,
+                    file: metadata.file.path,
                     type: path.value.type,
                 } as IFunction;
 
@@ -52,9 +69,7 @@ export async function analyzeFile(tsStr: string, filePath: string): Promise<Anal
                 this.traverse(path);
             }
         });
-
         analyzedItems.push(file);
+        return [...acc, ...analyzedItems];
     }
-
-    return analyzedItems;
 }
