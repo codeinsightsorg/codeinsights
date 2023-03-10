@@ -1,8 +1,12 @@
-import { ConfigModel } from "../shared/models/config.model";
+import { ConfigModel, FinalizerConfig } from "../shared/models/config.model";
 import { Plugin } from "../shared/models/plugin.model";
 import { merge } from "lodash";
 import { DEFAULT_FINALIZERS, DEFAULT_PLUGINS } from "./constants";
-import { Finalizer } from "../shared/models/finalizer.model";
+import {
+  Finalizer,
+  FinalizerOptions,
+  FinalizerProcessFn,
+} from "../shared/models/finalizer.model";
 import { argv } from "../env";
 
 export class Config {
@@ -13,7 +17,6 @@ export class Config {
   constructor(config: ConfigModel) {
     const defaultConfig: ConfigModel = {
       repoPath: argv.repoPath ?? "./",
-      flattenOutput: true,
     };
     this.data = merge(defaultConfig, config);
   }
@@ -30,19 +33,47 @@ export class Config {
       (finalizer) => {
         if (Array.isArray(finalizer)) {
           const [fn, options] = finalizer;
-          if (options.disabled) {
+          if (options?.disabled) {
             return false;
           }
         }
         return true;
       }
     );
-    const allFinalizers = await Promise.all(
+
+    const getProcessorFn = async (
+      finalizer: FinalizerConfig | Finalizer
+    ): Promise<{
+      processFn: FinalizerProcessFn;
+      config?: FinalizerOptions;
+    }> => {
+      if (typeof finalizer === "string") {
+        return {
+          processFn: (await import(finalizer)).default,
+        };
+      } else if (Array.isArray(finalizer)) {
+        const [path, finalizerConfig] = finalizer;
+        return {
+          processFn: (await import(path)).default,
+          config: finalizerConfig,
+        };
+      }
+      return finalizer;
+    };
+
+    const allFinalizers: Finalizer[] = await Promise.all(
       filteredFinalizers.map(async (finalizer) => {
-        if (typeof finalizer === "string") {
-          return (await import(finalizer)).default;
+        const result = await getProcessorFn(finalizer);
+        const finalizerItem: Finalizer = {
+          processFn: result.processFn,
+        };
+        if (result.config?.beforeProcess) {
+          finalizerItem.preProcessFn = (
+            await import(result.config.beforeProcess)
+          ).default;
         }
-        return finalizer;
+        finalizerItem.config = result.config;
+        return finalizerItem;
       })
     );
     return allFinalizers;

@@ -1,6 +1,7 @@
 import { Visitor } from "ast-types/gen/visitor";
+import { AnalyzedEntity } from "./analyze.model";
 
-export interface AnalyzeMetadata {
+export interface AnalyzeInfo {
   file: {
     path: string;
     name: string;
@@ -12,15 +13,20 @@ export interface AnalyzeMetadata {
   };
 }
 
+export interface PluginContext {
+  analyzeFile: (analyzeInfo: AnalyzeInfo) => any;
+  done: () => AnalyzedEntity[];
+}
+
 export interface Plugin {
   id: string;
-  analyze: (accumulator: any, metadata: AnalyzeMetadata) => any;
   fileExtensions?: string[];
-  initialAccumulator?: any;
   parser?: any;
-  done?: (items: any) => any;
+  analyze: () => PluginContext;
 }
 
 export interface PluginOptions {
   disabled?: boolean;
 }
+
+export type PluginsContextMap = Record<string, PluginContext>;

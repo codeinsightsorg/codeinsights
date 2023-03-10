@@ -7,10 +7,13 @@ interface CoralogixProcessorConfig {
   subsystemName?: string;
 }
 
-export default function coralogixFinalizer(config: CoralogixProcessorConfig) {
+export default async function coralogixFinalizer(
+  finalResult: any,
+  config: CoralogixProcessorConfig
+) {
   const url = config.clusterURL ?? "https://api.coralogix.com/api/v1/logs";
-  return async (finalResult: any) => {
-    console.log("Sending logs to Coralogix");
+  console.log("Sending logs to Coralogix");
+  try {
     const result = (
       await axios.post(url, {
         privateKey: config.privateKey,
@@ -20,5 +23,7 @@ export default function coralogixFinalizer(config: CoralogixProcessorConfig) {
       })
     ).data;
     console.log(result);
-  };
+  } catch (e) {
+    console.error(e);
+  }
 }

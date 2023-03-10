@@ -1,13 +1,17 @@
 import { Finalizer } from "../shared/models/finalizer.model";
+import { AnalyzeResults } from "../shared/models/analyze.model";
 
-export async function processResults(result: any, finalizers: Finalizer[]) {
-  for (const processor of finalizers) {
-    if (Array.isArray(processor)) {
-      const [processorFn, options] = processor;
-      const data = options?.beforeProcess?.(result) || result;
-      await processorFn(data);
+export async function processResults(
+  this: any,
+  result: AnalyzeResults,
+  finalizers: Finalizer[]
+) {
+  for (const finalizer of finalizers) {
+    if (finalizer.preProcessFn) {
+      const processResult = await finalizer.preProcessFn(result);
+      finalizer.processFn.call(this, processResult, finalizer?.config?.params);
     } else {
-      await processor(result);
+      finalizer.processFn.call(this, result, finalizer?.config?.params);
     }
   }
 }

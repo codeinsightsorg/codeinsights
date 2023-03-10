@@ -1,6 +1,16 @@
+import { AnalyzeResults } from "./analyze.model";
+
 export interface FinalizerOptions {
-  beforeProcess?: (results: any) => any;
+  beforeProcess?: string;
   disabled?: boolean;
+  params?: any;
 }
 
-export type Finalizer = (finalResult: any) => any;
+export type FinalizerProcessFn = (items: AnalyzeResults, ...args: any[]) => any;
+export type FinalizerPreProcessFn = (items: AnalyzeResults) => any;
+
+export interface Finalizer {
+  processFn: FinalizerProcessFn;
+  config?: FinalizerOptions;
+  preProcessFn?: FinalizerPreProcessFn;
+}
