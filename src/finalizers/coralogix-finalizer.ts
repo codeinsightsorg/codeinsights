@@ -7,7 +7,7 @@ interface CoralogixProcessorConfig {
   subsystemName?: string;
 }
 
-export function coralogixFinalizer(config: CoralogixProcessorConfig) {
+export default function coralogixFinalizer(config: CoralogixProcessorConfig) {
   const url = config.clusterURL ?? "https://api.coralogix.com/api/v1/logs";
   return async (finalResult: any) => {
     console.log("Sending logs to Coralogix");

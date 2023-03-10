@@ -1,10 +1,6 @@
-type SimpleFinalizer = (finalResult: any) => any;
-
-interface FinalizerOptions {
+export interface FinalizerOptions {
   beforeProcess?: (results: any) => any;
   disabled?: boolean;
 }
 
-type FinalizerWithOptions = [SimpleFinalizer, FinalizerOptions];
-
-export type Finalizer = SimpleFinalizer | FinalizerWithOptions;
+export type Finalizer = (finalResult: any) => any;

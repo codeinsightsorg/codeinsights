@@ -7,37 +7,36 @@ interface StrictIgnoreFile {
   hasStrictEnabled: boolean;
 }
 
-export function strictIgnoreCommentPlugin() {
-  const plugin: Plugin = {
-    id: "StrictIgnoreComment",
-    fileExtensions: [".ts"],
-    initialAccumulator: [],
-    analyze(acc, metadata) {
-      const file = {
-        type: "file",
-        name: metadata.file.name,
-        path: metadata.file.path,
-      } as StrictIgnoreFile;
+const plugin: Plugin = {
+  id: "StrictIgnoreComment",
+  fileExtensions: [".ts"],
+  initialAccumulator: [],
+  analyze(acc, metadata) {
+    const file = {
+      type: "file",
+      name: metadata.file.name,
+      path: metadata.file.path,
+    } as StrictIgnoreFile;
 
-      metadata.helpers.visit({
-        visitComment: function (path) {
-          const commentValue: string = path.value.value;
-          const containsTsIgnore = commentValue.includes("@ts-strict-ignore");
-          file.hasStrictEnabled = !containsTsIgnore;
-          if (containsTsIgnore) {
-            return false;
-          } else {
-            this.traverse(path);
-          }
-        },
-      });
+    metadata.helpers.visit({
+      visitComment: function (path) {
+        const commentValue: string = path.value.value;
+        const containsTsIgnore = commentValue.includes("@ts-strict-ignore");
+        file.hasStrictEnabled = !containsTsIgnore;
+        if (containsTsIgnore) {
+          return false;
+        } else {
+          this.traverse(path);
+        }
+      },
+    });
 
-      if (file.hasStrictEnabled) {
-        return [...acc, file];
-      }
+    if (file.hasStrictEnabled) {
+      return [...acc, file];
+    }
 
-      return acc;
-    },
-  };
-  return plugin;
-}
+    return acc;
+  },
+};
+
+export default plugin;

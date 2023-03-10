@@ -1,5 +1,3 @@
-export function consoleLogFinalizer() {
-  return (finalResult: any) => {
-    console.log(finalResult);
-  };
+export default function consoleLogFinalizer(finalResult: any) {
+  console.log(finalResult);
 }

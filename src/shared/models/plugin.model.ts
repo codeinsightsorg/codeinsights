@@ -20,3 +20,7 @@ export interface Plugin {
   parser?: any;
   done?: (items: any) => any;
 }
+
+export interface PluginOptions {
+  disabled?: boolean;
+}

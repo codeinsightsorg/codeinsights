@@ -9,7 +9,7 @@ type FlatResult = any;
 type AnalyzeResult = Record<string, any> | FlatResult;
 
 export async function analyzeFiles(config: Config): Promise<AnalyzeResult> {
-  const plugins = config.getAllPlugins();
+  const plugins = config.plugins;
   const pluginsMap: Record<string, any> = {};
   const rootPath = config.data.repoPath as string;
 
