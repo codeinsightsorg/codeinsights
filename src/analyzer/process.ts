@@ -9,9 +9,9 @@ export async function processResults(
   for (const finalizer of finalizers) {
     if (finalizer.preProcessFn) {
       const processResult = await finalizer.preProcessFn(result);
-      finalizer.processFn.call(this, processResult, finalizer?.config?.params);
+      finalizer.processFn(processResult, finalizer?.config?.params);
     } else {
-      finalizer.processFn.call(this, result, finalizer?.config?.params);
+      finalizer.processFn(result, finalizer?.config?.params);
     }
   }
 }

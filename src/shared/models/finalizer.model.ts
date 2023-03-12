@@ -6,7 +6,7 @@ export interface FinalizerOptions {
   params?: any;
 }
 
-export type FinalizerProcessFn = (items: AnalyzeResults, ...args: any[]) => any;
+export type FinalizerProcessFn = (items: AnalyzeResults, params: any) => any;
 export type FinalizerPreProcessFn = (items: AnalyzeResults) => any;
 
 export interface Finalizer {

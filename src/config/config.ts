@@ -1,5 +1,5 @@
 import { ConfigModel, FinalizerConfig } from "../shared/models/config.model";
-import { Plugin } from "../shared/models/plugin.model";
+import { Plugin, PluginOptions } from "../shared/models/plugin.model";
 import { merge } from "lodash";
 import { DEFAULT_FINALIZERS, DEFAULT_PLUGINS } from "./constants";
 import {
@@ -96,10 +96,14 @@ export class Config {
 
     const allPlugins = await Promise.all(
       filteredPlugins.map(async (plugin) => {
-        const defaultPluginOptions: Partial<Plugin> = {
-          fileExtensions: [".ts"],
-        };
-        const mergePluginWithDefaultOptions = (pluginDefinition: Plugin) => {
+        const mergePluginWithDefaultOptions = (
+          pluginDefinition: Plugin,
+          options?: PluginOptions
+        ) => {
+          const defaultPluginOptions: Partial<Plugin> = {
+            fileExtensions: [".ts"],
+            options,
+          };
           return merge(defaultPluginOptions, pluginDefinition);
         };
 
@@ -109,7 +113,7 @@ export class Config {
         } else if (Array.isArray(plugin)) {
           const [path, options] = plugin;
           const pluginDefinition = (await import(path)).default;
-          return mergePluginWithDefaultOptions(pluginDefinition);
+          return mergePluginWithDefaultOptions(pluginDefinition, options);
         }
         return mergePluginWithDefaultOptions(plugin);
       })

@@ -1,7 +1,8 @@
 import { typescriptFilePlugin } from "../shared/plugins/ts-file";
 import { Finalizer } from "../shared/models/finalizer.model";
+import { importPlugin } from "../shared/plugins/imports";
 
-export const DEFAULT_PLUGINS = [typescriptFilePlugin];
+export const DEFAULT_PLUGINS = [typescriptFilePlugin, importPlugin];
 
 export const DEFAULT_FINALIZERS: Finalizer[] = [];
 

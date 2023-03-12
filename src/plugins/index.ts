@@ -6,7 +6,7 @@ import {
 
 export function getPluginsContext(plugins: Plugin[]) {
   return plugins.reduce((pluginsContextMap: PluginsContextMap, plugin) => {
-    pluginsContextMap[plugin.id] = plugin.analyze();
+    pluginsContextMap[plugin.id] = plugin.analyze(plugin.options?.params);
     return pluginsContextMap;
   }, {});
 }

@@ -22,11 +22,13 @@ export interface Plugin {
   id: string;
   fileExtensions?: string[];
   parser?: any;
-  analyze: () => PluginContext;
+  analyze: (params?: any) => PluginContext;
+  options?: PluginOptions;
 }
 
 export interface PluginOptions {
   disabled?: boolean;
+  params?: any;
 }
 
 export type PluginsContextMap = Record<string, PluginContext>;
