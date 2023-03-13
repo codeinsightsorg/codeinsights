@@ -1,5 +1,5 @@
 import { Visitor } from "ast-types/gen/visitor";
-import { AnalyzedEntity } from "./analyze.model";
+import { AnalyzedEntity, AnalyzeResults } from "./analyze.model";
 
 export interface AnalyzeInfo {
   file: {
@@ -13,22 +13,20 @@ export interface AnalyzeInfo {
   };
 }
 
-export interface PluginContext {
-  analyzeFile: (analyzeInfo: AnalyzeInfo) => any;
-  done: () => AnalyzedEntity[];
-}
-
-export interface Plugin {
-  id: string;
+export interface AnalyzerPlugin<T = null> {
   fileExtensions?: string[];
+  analyzeFile?: (analyzeInfo: AnalyzeInfo) => any;
   parser?: any;
-  analyze: (params?: any) => PluginContext;
-  options?: PluginOptions;
+  options?: PluginOptions<T>;
+  onFinishProcessing?: () => AnalyzedEntity[];
+  onAllFinishProcessing?: (
+    items: AnalyzeResults,
+    config?: T
+  ) => any | Promise<any>;
 }
 
-export interface PluginOptions {
+export interface PluginOptions<T = any> {
   disabled?: boolean;
-  params?: any;
+  params?: T;
+  path: string;
 }
-
-export type PluginsContextMap = Record<string, PluginContext>;

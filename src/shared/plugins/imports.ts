@@ -1,5 +1,4 @@
-import * as tsParser from "recast/parsers/typescript";
-import { Plugin } from "../models/plugin.model";
+import { AnalyzeInfo, AnalyzerPlugin } from "../models/plugin.model";
 import { AnalyzedEntityMetrics } from "../models/analyze.model";
 
 interface ImportDefinition {
@@ -13,49 +12,48 @@ interface ImportDefinition {
   };
 }
 
-export const importPlugin: Plugin = {
-  id: "Imports",
-  fileExtensions: [".ts"],
-  parser: tsParser,
-  analyze() {
+class ImportsPlugin implements AnalyzerPlugin {
+  allFilesImports: ImportDefinition[] = [];
+
+  analyzeFile({ file, helpers }: AnalyzeInfo) {
     const allFilesImports: ImportDefinition[] = [];
-    return {
-      analyzeFile({ file, helpers }) {
-        helpers.visit({
-          visitImportDeclaration(path) {
-            const importPath = path.node.source.value as string;
-            const importItems = path.node.specifiers;
-            if (importItems?.length) {
-              for (const item of importItems) {
-                const getName = () => {
-                  if (
-                    item.type === "ImportDefaultSpecifier" ||
-                    item.type === "ImportNamespaceSpecifier"
-                  ) {
-                    return item.local?.name;
-                  }
-                  return item.imported.name;
-                };
-                const importDefinition: ImportDefinition = {
-                  metrics: {},
-                  labels: {
-                    type: "import",
-                    filePath: file.path,
-                    fileName: file.name,
-                    name: getName() as string,
-                    importedFrom: importPath,
-                  },
-                };
-                allFilesImports.push(importDefinition);
+    helpers.visit({
+      visitImportDeclaration(path) {
+        const importPath = path.node.source.value as string;
+        const importItems = path.node.specifiers;
+        if (importItems?.length) {
+          for (const item of importItems) {
+            const getName = () => {
+              if (
+                item.type === "ImportDefaultSpecifier" ||
+                item.type === "ImportNamespaceSpecifier"
+              ) {
+                return item.local?.name;
               }
-            }
-            this.traverse(path);
-          },
-        });
+              return item.imported.name;
+            };
+            const importDefinition: ImportDefinition = {
+              metrics: {},
+              labels: {
+                type: "import",
+                filePath: file.path,
+                fileName: file.name,
+                name: getName() as string,
+                importedFrom: importPath,
+              },
+            };
+            allFilesImports.push(importDefinition);
+          }
+        }
+        this.traverse(path);
       },
-      done() {
-        return allFilesImports;
-      },
-    };
-  },
-};
+    });
+    this.allFilesImports.push(...allFilesImports);
+  }
+
+  onFinishProcessing() {
+    return this.allFilesImports;
+  }
+}
+
+export default ImportsPlugin;

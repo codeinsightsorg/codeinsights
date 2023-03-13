@@ -1,3 +1,5 @@
+import { AnalyzerPlugin } from "./plugin.model";
+
 export type AnalyzedEntityLabels = Record<string, string | boolean | undefined>;
 
 export type AnalyzedEntityMetrics = Record<string, number | undefined>;
@@ -8,7 +10,7 @@ export interface AnalyzedEntity {
 }
 
 export interface AnalyzeResultItem {
-  id: string;
+  plugin: AnalyzerPlugin;
   result: AnalyzedEntity[];
 }
 

@@ -1,18 +1,13 @@
-import { ConfigModel, FinalizerConfig } from "../shared/models/config.model";
-import { Plugin, PluginOptions } from "../shared/models/plugin.model";
+import { ConfigModel } from "../shared/models/config.model";
 import { merge } from "lodash";
-import { DEFAULT_FINALIZERS, DEFAULT_PLUGINS } from "./constants";
-import {
-  Finalizer,
-  FinalizerOptions,
-  FinalizerProcessFn,
-} from "../shared/models/finalizer.model";
+import { DEFAULT_PLUGINS } from "./constants";
 import { argv } from "../env";
+import { BasePlugin } from "../plugins/analyze-plugin";
+import { AnalyzerPlugin, PluginOptions } from "../shared/models/plugin.model";
 
 export class Config {
   data: ConfigModel;
-  plugins!: Plugin[];
-  finalizers!: Finalizer[];
+  plugins!: BasePlugin[];
 
   constructor(config: ConfigModel) {
     const defaultConfig: ConfigModel = {
@@ -23,101 +18,37 @@ export class Config {
 
   async init() {
     this.plugins = await this.getAllPlugins();
-    this.finalizers = await this.getAllFinalizers();
   }
 
-  private async getAllFinalizers(): Promise<Finalizer[]> {
-    const finalizers = this.data.finalizers ?? [];
-
-    const filteredFinalizers = [...DEFAULT_FINALIZERS, ...finalizers].filter(
-      (finalizer) => {
-        if (Array.isArray(finalizer)) {
-          const [fn, options] = finalizer;
-          if (options?.disabled) {
-            return false;
-          }
-        }
-        return true;
-      }
-    );
-
-    const getProcessorFn = async (
-      finalizer: FinalizerConfig | Finalizer
-    ): Promise<{
-      processFn: FinalizerProcessFn;
-      config?: FinalizerOptions;
-    }> => {
-      if (typeof finalizer === "string") {
-        return {
-          processFn: (await import(finalizer)).default,
-        };
-      } else if (Array.isArray(finalizer)) {
-        const [path, finalizerConfig] = finalizer;
-        return {
-          processFn: (await import(path)).default,
-          config: finalizerConfig,
-        };
-      }
-      return finalizer;
-    };
-
-    const allFinalizers: Finalizer[] = await Promise.all(
-      filteredFinalizers.map(async (finalizer) => {
-        const result = await getProcessorFn(finalizer);
-        const finalizerItem: Finalizer = {
-          processFn: result.processFn,
-        };
-        if (result.config?.beforeProcess) {
-          finalizerItem.preProcessFn = (
-            await import(result.config.beforeProcess)
-          ).default;
-        }
-        finalizerItem.config = result.config;
-        return finalizerItem;
-      })
-    );
-    return allFinalizers;
-  }
-
-  private async getAllPlugins(): Promise<Plugin[]> {
+  private async getAllPlugins(): Promise<BasePlugin[]> {
     const plugins = this.data.plugins ?? [];
+    const pluginsInstances: BasePlugin[] = [];
 
-    const filteredPlugins = [...DEFAULT_PLUGINS, ...plugins].filter(
-      (finalizer) => {
-        if (Array.isArray(finalizer)) {
-          const [fn, options] = finalizer;
-          if (options.disabled) {
-            return false;
-          }
+    for (const pluginId in plugins) {
+      let pluginConfig = plugins[pluginId];
+      const getPath = (): string => {
+        if (typeof pluginConfig === "string") {
+          return pluginConfig;
         }
-        return true;
-      }
-    );
+        return pluginConfig.path;
+      };
+      const pluginClass = (await import(getPath())).default;
+      pluginConfig = (
+        typeof pluginConfig === "string" ? {} : pluginConfig
+      ) as PluginOptions;
+      const defaultPluginOptions: Partial<AnalyzerPlugin> = {
+        fileExtensions: [".ts"],
+      };
+      pluginConfig = merge(defaultPluginOptions, pluginConfig);
+      const pluginInstance = new BasePlugin(pluginClass, pluginConfig);
+      pluginsInstances.push(pluginInstance);
+    }
 
-    const allPlugins = await Promise.all(
-      filteredPlugins.map(async (plugin) => {
-        const mergePluginWithDefaultOptions = (
-          pluginDefinition: Plugin,
-          options?: PluginOptions
-        ) => {
-          const defaultPluginOptions: Partial<Plugin> = {
-            fileExtensions: [".ts"],
-            options,
-          };
-          return merge(defaultPluginOptions, pluginDefinition);
-        };
+    for (const plugin of DEFAULT_PLUGINS) {
+      const instance = new BasePlugin(plugin);
+      pluginsInstances.push(instance);
+    }
 
-        if (typeof plugin === "string") {
-          const pluginDefinition = (await import(plugin)).default;
-          return mergePluginWithDefaultOptions(pluginDefinition);
-        } else if (Array.isArray(plugin)) {
-          const [path, options] = plugin;
-          const pluginDefinition = (await import(path)).default;
-          return mergePluginWithDefaultOptions(pluginDefinition, options);
-        }
-        return mergePluginWithDefaultOptions(plugin);
-      })
-    );
-    return allPlugins;
+    return pluginsInstances;
   }
 }

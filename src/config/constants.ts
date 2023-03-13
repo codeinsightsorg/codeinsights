@@ -1,10 +1,12 @@
-import { typescriptFilePlugin } from "../shared/plugins/ts-file";
-import { Finalizer } from "../shared/models/finalizer.model";
-import { importPlugin } from "../shared/plugins/imports";
+import { TSFilePlugin } from "../shared/plugins/ts-file";
+import ImportsPlugin from "../shared/plugins/imports";
+import { AnalyzerPlugin } from "../shared/models/plugin.model";
+import { Type } from "../shared/models/general.model";
 
-export const DEFAULT_PLUGINS = [typescriptFilePlugin, importPlugin];
-
-export const DEFAULT_FINALIZERS: Finalizer[] = [];
+export const DEFAULT_PLUGINS: Type<AnalyzerPlugin>[] = [
+  TSFilePlugin,
+  ImportsPlugin,
+];
 
 export const DEFAULT_CONFIG_FILE_NAME = "analyzer.config.json";
 

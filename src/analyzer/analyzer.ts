@@ -3,7 +3,7 @@ import { getAST } from "./utils";
 import { AnalyzeInfo } from "../shared/models/plugin.model";
 import * as recast from "recast";
 import { Config } from "../config/config";
-import { getPluginsContext, getPluginsResult } from "../plugins";
+import { getPluginsResult } from "../plugins";
 
 type FlatResult = any;
 
@@ -11,12 +11,11 @@ type AnalyzeResult = Record<string, any> | FlatResult;
 
 export async function analyzeFiles(config: Config): Promise<AnalyzeResult> {
   const plugins = config.plugins;
-  const pluginsContext = getPluginsContext(plugins);
   const rootPath = config.data.repoPath as string;
 
   await _recursiveAnalyzeAllFiles(rootPath);
 
-  return getPluginsResult(plugins, pluginsContext);
+  return getPluginsResult(plugins);
 
   async function _recursiveAnalyzeAllFiles(rootPath: string) {
     const filesNames = await fs.readdir(rootPath);
@@ -37,8 +36,8 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResult> {
       }
       const fileString = (await fs.readFile(fullPath)).toString("utf-8");
 
-      for (const plugin of plugins) {
-        const context = pluginsContext[plugin.id];
+      for (const basePlugin of plugins) {
+        const plugin = basePlugin.plugin;
         if (plugin.fileExtensions?.every((ext) => !fileName.endsWith(ext))) {
           continue;
         }
@@ -54,7 +53,10 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResult> {
             visit: (visitor) => recast.visit(ast, visitor),
           },
         };
-        context.analyzeFile(analyzeInfo);
+
+        if (plugin.analyzeFile) {
+          plugin.analyzeFile(analyzeInfo);
+        }
       }
     }
   }
