@@ -1,9 +1,9 @@
 import fs from "fs/promises";
 import { getAST } from "./utils";
-import { AnalyzeInfo } from "../shared/models/plugin.model";
 import * as recast from "recast";
 import { Config } from "../config/config";
 import { getPluginsResult } from "../plugins";
+import { BaseAnalyzeInfo } from "../shared/models/plugin.model";
 
 type FlatResult = any;
 
@@ -38,24 +38,29 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResult> {
 
       for (const basePlugin of plugins) {
         const plugin = basePlugin.plugin;
-        if (plugin.fileExtensions?.every((ext) => !fileName.endsWith(ext))) {
+        if (
+          !plugin.analyzeFile ||
+          plugin.fileExtensions?.every((ext) => !fileName.endsWith(ext))
+        ) {
           continue;
         }
-        const ast = getAST(fileString, plugin.parser);
-        const analyzeInfo: AnalyzeInfo = {
+        const ast = getAST(fileString);
+        const baseAnalyzeInfo: BaseAnalyzeInfo = {
           ast,
           file: {
             path: filePathFromRoot,
             contents: fileString,
             name: fileName,
           },
-          helpers: {
-            visit: (visitor) => recast.visit(ast, visitor),
-          },
         };
-
-        if (plugin.analyzeFile) {
-          plugin.analyzeFile(analyzeInfo);
+        if (plugin.parser === "TypeScript") {
+          plugin.analyzeFile({
+            ...baseAnalyzeInfo,
+            visit: (visitor) => recast.visit(ast, visitor),
+          });
+        }
+        if (plugin.parser === "HTML") {
+          // plugin.analyzeFile(baseAnalyzeInfo);
         }
       }
     }

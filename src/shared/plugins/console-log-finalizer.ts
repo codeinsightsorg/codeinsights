@@ -1,7 +1,7 @@
 import { AnalyzeResults } from "../models/analyze.model";
-import { AnalyzerPlugin } from "../models/plugin.model";
+import { BaseAnalyzerPlugin } from "../models/plugin.model";
 
-export class ConsoleLogFinalizer implements AnalyzerPlugin {
+export class ConsoleLogFinalizer implements BaseAnalyzerPlugin {
   onAllFinishProcessing(items: AnalyzeResults) {
     console.log(items);
   }

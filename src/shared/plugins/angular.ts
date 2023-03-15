@@ -1,5 +1,8 @@
 import { first } from "lodash";
-import { AnalyzeInfo, AnalyzerPlugin } from "../models/plugin.model";
+import {
+  TypeScriptAnalyzeInfo,
+  TypeScriptPlugin,
+} from "../models/plugin.model";
 import { AnalyzedEntityMetrics } from "../models/analyze.model";
 
 interface Component {
@@ -12,12 +15,13 @@ interface Component {
   };
 }
 
-export class AngularPlugin implements AnalyzerPlugin {
+export class AngularPlugin implements TypeScriptPlugin {
   items: Component[] = [];
+  parser = "TypeScript" as const;
 
-  analyzeFile({ helpers, file }: AnalyzeInfo) {
+  analyzeFile({ visit, file }: TypeScriptAnalyzeInfo) {
     const items: Component[] = [];
-    helpers.visit({
+    visit({
       visitClassDeclaration(path) {
         const decorators = path.value.decorators ?? [];
         for (const decorator of decorators) {

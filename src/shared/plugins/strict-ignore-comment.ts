@@ -1,4 +1,4 @@
-import { AnalyzerPlugin } from "../models/plugin.model";
+import { BaseAnalyzerPlugin } from "../models/plugin.model";
 import { AnalyzedEntityMetrics } from "../models/analyze.model";
 
 interface StrictIgnoreFile {
@@ -11,7 +11,7 @@ interface StrictIgnoreFile {
   metrics: AnalyzedEntityMetrics;
 }
 
-export class StrictIgnoreComment implements AnalyzerPlugin {
+export class StrictIgnoreComment implements BaseAnalyzerPlugin {
   items: StrictIgnoreFile[] = [];
 
   analyzeFile({ file, helpers }) {

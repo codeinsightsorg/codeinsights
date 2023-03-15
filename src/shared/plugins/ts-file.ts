@@ -1,4 +1,4 @@
-import { AnalyzerPlugin } from "../models/plugin.model";
+import { AnalyzerPlugin, TypeScriptPlugin } from "../models/plugin.model";
 
 type FunctionType = "ObjectMethod" | "FunctionDeclaration" | "ClassMethod";
 
@@ -26,10 +26,11 @@ interface File {
   };
 }
 
-export class TSFilePlugin implements AnalyzerPlugin {
+export class TSFilePlugin implements TypeScriptPlugin {
   analyzedItems: (File | FunctionModel)[] = [];
+  parser = "TypeScript" as const;
 
-  analyzeFile({ file, helpers, ast }) {
+  analyzeFile({ file, visit, ast }) {
     const self = this;
     const isTestFile = file.name.endsWith(".spec.ts");
     const fileDefinition: File = {
@@ -44,7 +45,7 @@ export class TSFilePlugin implements AnalyzerPlugin {
       },
     };
 
-    helpers.visit({
+    visit({
       visitFunction(path) {
         const functionEntity: FunctionModel = {
           metrics: {},

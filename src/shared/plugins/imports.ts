@@ -1,4 +1,9 @@
-import { AnalyzeInfo, AnalyzerPlugin } from "../models/plugin.model";
+import {
+  BaseAnalyzeInfo,
+  BaseAnalyzerPlugin,
+  TypeScriptAnalyzeInfo,
+  TypeScriptPlugin,
+} from "../models/plugin.model";
 import { AnalyzedEntityMetrics } from "../models/analyze.model";
 
 interface ImportDefinition {
@@ -12,12 +17,13 @@ interface ImportDefinition {
   };
 }
 
-class ImportsPlugin implements AnalyzerPlugin {
+class ImportsPlugin implements TypeScriptPlugin {
   allFilesImports: ImportDefinition[] = [];
+  parser = "TypeScript" as const;
 
-  analyzeFile({ file, helpers }: AnalyzeInfo) {
+  analyzeFile({ file, visit }: TypeScriptAnalyzeInfo) {
     const allFilesImports: ImportDefinition[] = [];
-    helpers.visit({
+    visit({
       visitImportDeclaration(path) {
         const importPath = path.node.source.value as string;
         const importItems = path.node.specifiers;

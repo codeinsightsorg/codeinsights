@@ -1,26 +1,46 @@
 import { Visitor } from "ast-types/gen/visitor";
 import { AnalyzedEntity, AnalyzeResults } from "./analyze.model";
 import { BasePlugin } from "../../plugins/analyze-plugin";
+import { DOMWindow } from "jsdom";
 
-export interface AnalyzeInfo {
+export interface BaseAnalyzeInfo {
   file: {
     path: string;
     name: string;
     contents: string;
   };
   ast: any;
-  helpers: {
-    visit: (visitor: Visitor) => any;
-  };
 }
 
-export interface AnalyzerPlugin {
+export interface TypeScriptAnalyzeInfo extends BaseAnalyzeInfo {
+  visit: (visitor: Visitor) => any;
+}
+
+export interface HTMLAnalyzeInfo extends BaseAnalyzeInfo {
+  window: DOMWindow;
+  document: Document;
+}
+
+type Parser = "TypeScript" | "HTML";
+
+export interface BaseAnalyzerPlugin<T extends BaseAnalyzeInfo = any> {
   fileExtensions?: string[];
-  analyzeFile?: (analyzeInfo: AnalyzeInfo) => any;
-  parser?: any;
   onFinishProcessing?: () => AnalyzedEntity[];
   onAllFinishProcessing?: (items: AnalyzeResults, plugin: BasePlugin) => any;
+  analyzeFile?: (analyzeInfo: T) => any;
+  parser?: Parser;
 }
+
+export interface TypeScriptPlugin
+  extends BaseAnalyzerPlugin<TypeScriptAnalyzeInfo> {
+  parser: "TypeScript";
+}
+
+export interface HTMLPlugin extends BaseAnalyzerPlugin<HTMLAnalyzeInfo> {
+  parser: "HTML";
+}
+
+export type AnalyzerPlugin = BaseAnalyzerPlugin | TypeScriptPlugin | HTMLPlugin;
 
 export type BeforeHookKeys = "onAllFinishProcessing";
 

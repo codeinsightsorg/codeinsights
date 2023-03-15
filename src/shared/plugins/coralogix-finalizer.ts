@@ -1,4 +1,4 @@
-import { AnalyzerPlugin } from "../models/plugin.model";
+import { BaseAnalyzerPlugin } from "../models/plugin.model";
 import { AnalyzeResults } from "../models/analyze.model";
 import axios from "axios";
 import { BasePlugin } from "../../plugins/analyze-plugin";
@@ -9,7 +9,7 @@ interface CoralogixProcessorConfig {
   subsystemName?: string;
 }
 
-export class CoralogixPlugin implements AnalyzerPlugin {
+export class CoralogixPlugin implements BaseAnalyzerPlugin {
   async onAllFinishProcessing(items: AnalyzeResults, plugin: BasePlugin) {
     const config = plugin.options?.params as CoralogixProcessorConfig;
     const url =
