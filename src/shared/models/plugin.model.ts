@@ -9,11 +9,11 @@ export interface BaseAnalyzeInfo {
     name: string;
     contents: string;
   };
-  ast: any;
 }
 
 export interface TypeScriptAnalyzeInfo extends BaseAnalyzeInfo {
   visit: (visitor: Visitor) => any;
+  ast: any;
 }
 
 export interface HTMLAnalyzeInfo extends BaseAnalyzeInfo {
@@ -24,10 +24,9 @@ export interface HTMLAnalyzeInfo extends BaseAnalyzeInfo {
 type Parser = "TypeScript" | "HTML";
 
 export interface BaseAnalyzerPlugin<T extends BaseAnalyzeInfo = any> {
-  fileExtensions?: string[];
   onFinishProcessing?: () => AnalyzedEntity[];
   onAllFinishProcessing?: (items: AnalyzeResults, plugin: BasePlugin) => any;
-  analyzeFile?: (analyzeInfo: T) => any;
+  analyzeFile?: (analyzeInfo: T, pluginOptions: PluginOptions) => any;
   parser?: Parser;
 }
 

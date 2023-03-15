@@ -4,6 +4,7 @@ import * as recast from "recast";
 import { Config } from "../config/config";
 import { getPluginsResult } from "../plugins";
 import { BaseAnalyzeInfo } from "../shared/models/plugin.model";
+import { JSDOM } from "jsdom";
 
 type FlatResult = any;
 
@@ -38,29 +39,37 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResult> {
 
       for (const basePlugin of plugins) {
         const plugin = basePlugin.plugin;
-        if (
-          !plugin.analyzeFile ||
-          plugin.fileExtensions?.every((ext) => !fileName.endsWith(ext))
-        ) {
+        if (!plugin.analyzeFile) {
           continue;
         }
-        const ast = getAST(fileString);
         const baseAnalyzeInfo: BaseAnalyzeInfo = {
-          ast,
           file: {
             path: filePathFromRoot,
             contents: fileString,
             name: fileName,
           },
         };
-        if (plugin.parser === "TypeScript") {
-          plugin.analyzeFile({
-            ...baseAnalyzeInfo,
-            visit: (visitor) => recast.visit(ast, visitor),
-          });
+        if (plugin.parser === "TypeScript" && fileName.endsWith(".ts")) {
+          const ast = getAST(fileString);
+          plugin.analyzeFile(
+            {
+              ...baseAnalyzeInfo,
+              ast,
+              visit: (visitor) => recast.visit(ast, visitor),
+            },
+            basePlugin.options
+          );
         }
-        if (plugin.parser === "HTML") {
-          // plugin.analyzeFile(baseAnalyzeInfo);
+        if (plugin.parser === "HTML" && fileName.endsWith(".html")) {
+          const dom = new JSDOM(fileString);
+          plugin.analyzeFile(
+            {
+              ...baseAnalyzeInfo,
+              document: dom.window.document,
+              window: dom.window,
+            },
+            basePlugin.options
+          );
         }
       }
     }

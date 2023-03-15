@@ -6,10 +6,6 @@ interface IBasePlugin {
   options: PluginOptions;
 }
 
-const defaultPlugin: Partial<AnalyzerPlugin> = {
-  fileExtensions: [".ts"],
-};
-
 export class BasePlugin implements IBasePlugin {
   plugin: AnalyzerPlugin;
 
@@ -18,8 +14,5 @@ export class BasePlugin implements IBasePlugin {
     public options: PluginOptions
   ) {
     this.plugin = new PluginClass();
-    if (!this.plugin.fileExtensions) {
-      this.plugin.fileExtensions = defaultPlugin.fileExtensions;
-    }
   }
 }

@@ -75,7 +75,7 @@ export class TSFilePlugin implements TypeScriptPlugin {
     this.analyzedItems.push(fileDefinition);
   }
 
-  done() {
+  onFinishProcessing() {
     return this.analyzedItems;
   }
 }

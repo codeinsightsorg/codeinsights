@@ -43,7 +43,7 @@ export class StrictIgnoreComment implements BaseAnalyzerPlugin {
     this.items.push(fileDefinition);
   }
 
-  done() {
+  onFinishProcessing() {
     return this.items;
   }
 }
