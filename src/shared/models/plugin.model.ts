@@ -1,5 +1,6 @@
 import { Visitor } from "ast-types/gen/visitor";
 import { AnalyzedEntity, AnalyzeResults } from "./analyze.model";
+import { BasePlugin } from "../../plugins/analyze-plugin";
 
 export interface AnalyzeInfo {
   file: {
@@ -13,20 +14,19 @@ export interface AnalyzeInfo {
   };
 }
 
-export interface AnalyzerPlugin<T = null> {
+export interface AnalyzerPlugin {
   fileExtensions?: string[];
   analyzeFile?: (analyzeInfo: AnalyzeInfo) => any;
   parser?: any;
-  options?: PluginOptions<T>;
   onFinishProcessing?: () => AnalyzedEntity[];
-  onAllFinishProcessing?: (
-    items: AnalyzeResults,
-    config?: T
-  ) => any | Promise<any>;
+  onAllFinishProcessing?: (items: AnalyzeResults, plugin: BasePlugin) => any;
 }
+
+export type BeforeHookKeys = "onAllFinishProcessing";
 
 export interface PluginOptions<T = any> {
   disabled?: boolean;
   params?: T;
   path: string;
+  beforeHooks: Record<BeforeHookKeys, string>;
 }

@@ -36,16 +36,12 @@ export class Config {
       pluginConfig = (
         typeof pluginConfig === "string" ? {} : pluginConfig
       ) as PluginOptions;
-      const defaultPluginOptions: Partial<AnalyzerPlugin> = {
-        fileExtensions: [".ts"],
-      };
-      pluginConfig = merge(defaultPluginOptions, pluginConfig);
       const pluginInstance = new BasePlugin(pluginClass, pluginConfig);
       pluginsInstances.push(pluginInstance);
     }
 
     for (const plugin of DEFAULT_PLUGINS) {
-      const instance = new BasePlugin(plugin);
+      const instance = new BasePlugin(plugin, {} as PluginOptions);
       pluginsInstances.push(instance);
     }
 

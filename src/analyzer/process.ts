@@ -9,10 +9,13 @@ export async function processResults(
   if (!basePlugin.plugin.onAllFinishProcessing) {
     return;
   }
-  basePlugin.plugin.onAllFinishProcessing(result, basePlugin.options?.params);
-  // if (plugin.preProcessFn) {
-  //   const processResult = await plugin.preProcessFn(result);
-  //   plugin.onAllFinishProcessing(processResult, plugin?.config?.params);
-  // } else {
-  // }
+  let data = result;
+
+  const onAllFinishBeforeHook =
+    basePlugin.options?.beforeHooks?.onAllFinishProcessing;
+  if (onAllFinishBeforeHook) {
+    const preProcessFn = (await import(onAllFinishBeforeHook)).default;
+    data = preProcessFn(result);
+  }
+  basePlugin.plugin.onAllFinishProcessing(data, basePlugin);
 }
