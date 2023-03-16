@@ -5,12 +5,9 @@ import { Config } from "../config/config";
 import { getPluginsResult } from "../plugins";
 import { BaseAnalyzeInfo } from "../shared/models/plugin.model";
 import { JSDOM } from "jsdom";
+import { AnalyzeResults } from "../shared/models/analyze.model";
 
-type FlatResult = any;
-
-type AnalyzeResult = Record<string, any> | FlatResult;
-
-export async function analyzeFiles(config: Config): Promise<AnalyzeResult> {
+export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
   const plugins = config.plugins;
   const rootPath = config.data.repoPath as string;
 
