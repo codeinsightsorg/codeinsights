@@ -1,13 +1,21 @@
-import { Finalizer } from "../shared/models/finalizer.model";
+import { AnalyzeResults } from "../shared/models/analyze.model";
+import { BasePlugin } from "../plugins/analyze-plugin";
 
-export async function processResults(result: any, finalizers: Finalizer[]) {
-  for (const processor of finalizers) {
-    if (Array.isArray(processor)) {
-      const [processorFn, options] = processor;
-      const data = options?.beforeProcess?.(result) || result;
-      await processorFn(data);
-    } else {
-      await processor(result);
-    }
+export async function processResults(
+  this: any,
+  result: AnalyzeResults,
+  basePlugin: BasePlugin
+) {
+  if (!basePlugin.plugin.onAllFinishProcessing) {
+    return;
   }
+  let data = result;
+
+  const onAllFinishBeforeHook =
+    basePlugin.options?.beforeHooks?.onAllFinishProcessing;
+  if (onAllFinishBeforeHook) {
+    const preProcessFn = (await import(onAllFinishBeforeHook)).default;
+    data = preProcessFn(result);
+  }
+  basePlugin.plugin.onAllFinishProcessing(data, basePlugin);
 }

@@ -1,41 +1,50 @@
 import { ConfigModel } from "../shared/models/config.model";
-import { Plugin } from "../shared/models/plugin.model";
 import { merge } from "lodash";
-import { DEFAULT_PLUGINS, DEFAULT_FINALIZERS } from "./constants";
-import { Finalizer } from "../shared/models/finalizer.model";
+import { DEFAULT_PLUGINS } from "./constants";
 import { argv } from "../env";
+import { BasePlugin } from "../plugins/analyze-plugin";
+import { PluginOptions } from "../shared/models/plugin.model";
 
 export class Config {
   data: ConfigModel;
+  plugins!: BasePlugin[];
 
   constructor(config: ConfigModel) {
     const defaultConfig: ConfigModel = {
       repoPath: argv.repoPath ?? "./",
-      flattenOutput: true,
     };
     this.data = merge(defaultConfig, config);
   }
 
-  getAllFinalizers(): Finalizer[] {
-    const finalizers = this.data.finalizers ?? [];
-    return [...DEFAULT_FINALIZERS, ...finalizers].filter((finalizer) => {
-      if (Array.isArray(finalizer)) {
-        const [fn, options] = finalizer;
-        if (options.disabled) {
-          return false;
-        }
-      }
-      return true;
-    });
+  async init() {
+    this.plugins = await this.getAllPlugins();
   }
 
-  getAllPlugins(): Plugin[] {
+  private async getAllPlugins(): Promise<BasePlugin[]> {
     const plugins = this.data.plugins ?? [];
-    return [...DEFAULT_PLUGINS, ...plugins].map((plugin) => {
-      const defaultPluginOptions: Partial<Plugin> = {
-        fileExtensions: [".ts"],
+    const pluginsInstances: BasePlugin[] = [];
+
+    for (const pluginId in plugins) {
+      let pluginConfig = plugins[pluginId];
+      const getPath = (): string => {
+        if (typeof pluginConfig === "string") {
+          return pluginConfig;
+        }
+        return pluginConfig.path;
       };
-      return merge(defaultPluginOptions, plugin);
-    });
+      const pluginClass = (await import(getPath())).default;
+      pluginConfig = (
+        typeof pluginConfig === "string" ? {} : pluginConfig
+      ) as PluginOptions;
+      const pluginInstance = new BasePlugin(pluginClass, pluginConfig);
+      pluginsInstances.push(pluginInstance);
+    }
+
+    for (const plugin of DEFAULT_PLUGINS) {
+      const instance = new BasePlugin(plugin, {} as PluginOptions);
+      pluginsInstances.push(instance);
+    }
+
+    return pluginsInstances;
   }
 }
