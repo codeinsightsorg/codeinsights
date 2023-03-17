@@ -1,6 +1,6 @@
 {
-  "name": "codeinsightsjs",
-  "version": "0.1.0-alpha.1",
+  "name": "@codeinsights/js",
+  "version": "0.1.2-alpha.1",
   "description": "",
   "main": "index.js",
   "scripts": {
