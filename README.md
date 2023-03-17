@@ -19,8 +19,6 @@
 <h3 align="center">CodeInsightsJS</h3>
 
   <p align="center">
-    project_description
-    <br />
     <a href="https://github.com/yaircohendev/codeinsightsjs"><strong>Explore the docs »</strong></a>
     <br />
     <br />
@@ -38,18 +36,14 @@
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#usage">Usage (Coming soon)</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -62,8 +56,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 CodeInsightsJS aims to help developers overcome the challenge of not being able to gain a high-level overview of their projects. This is particularly useful for large projects consisting of thousands of files, where it can be difficult to identify specific problematic areas, detect anomalies in the code, or obtain a macroscopic understanding of the project.
 
