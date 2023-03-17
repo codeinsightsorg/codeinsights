@@ -26,16 +26,16 @@ export class Config {
 
     for (const pluginId in plugins) {
       let pluginConfig = plugins[pluginId];
-      const getPath = (): string => {
-        if (typeof pluginConfig === "string") {
-          return pluginConfig;
-        }
-        return pluginConfig.path;
-      };
-      const pluginClass = (await import(getPath())).default;
       pluginConfig = (
         typeof pluginConfig === "string" ? {} : pluginConfig
       ) as PluginOptions;
+      if (pluginConfig.disabled) {
+        continue;
+      }
+      const pluginClass = (await import(pluginConfig.path)).default;
+      if (pluginConfig.disabled) {
+        continue;
+      }
       const pluginInstance = new BasePlugin(pluginClass, pluginConfig);
       pluginsInstances.push(pluginInstance);
     }
