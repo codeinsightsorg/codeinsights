@@ -1,6 +1,6 @@
 {
-  "name": "code-analyzer",
-  "version": "0.0.1",
+  "name": "codeinsightsjs",
+  "version": "0.1.0-alpha.1",
   "description": "",
   "main": "index.js",
   "scripts": {
