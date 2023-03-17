@@ -19,9 +19,6 @@
 <h3 align="center">CodeInsightsJS</h3>
 
   <p align="center">
-    <a href="https://github.com/yaircohendev/codeinsightsjs"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
     <a href="https://github.com/yaircohendev/codeinsightsjs/issues">Report Bug</a>
     ·
     <a href="https://github.com/yaircohendev/codeinsightsjs/issues">Request Feature</a>
@@ -112,7 +109,7 @@ Don't forget to give the project a star! Thanks again!
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the GNU General Public License (GPL). See `LICENSE.txt` for more information.
 
 ## Contact
 
