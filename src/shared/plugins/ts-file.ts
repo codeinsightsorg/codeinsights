@@ -1,4 +1,4 @@
-import { AnalyzerPlugin, TypeScriptPlugin } from "../models/plugin.model";
+import { AnalyzerPlugin, TypeScriptAnalyzeInfo, TypeScriptPlugin } from '../models/plugin.model'
 
 type FunctionType = "ObjectMethod" | "FunctionDeclaration" | "ClassMethod";
 
@@ -30,7 +30,7 @@ export class TSFilePlugin implements TypeScriptPlugin {
   analyzedItems: (File | FunctionModel)[] = [];
   parser = "TypeScript" as const;
 
-  analyzeFile({ file, visit, ast }) {
+  analyzeFile({ file, visit, ast }: TypeScriptAnalyzeInfo) {
     const self = this;
     const isTestFile = file.name.endsWith(".spec.ts");
     const fileDefinition: File = {
