@@ -1,5 +1,5 @@
-import { TSFilePlugin } from "../shared/plugins/ts-file";
-import ImportsPlugin from "../shared/plugins/imports";
+import { TSFilePlugin } from "../../plugins/ts-file";
+import ImportsPlugin from "../../plugins/imports";
 import { AnalyzerPlugin } from "../shared/models/plugin.model";
 import { Type } from "../shared/models/general.model";
 

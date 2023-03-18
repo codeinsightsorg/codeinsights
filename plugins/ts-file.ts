@@ -1,4 +1,4 @@
-import { AnalyzerPlugin, TypeScriptAnalyzeInfo, TypeScriptPlugin } from '../models/plugin.model'
+import { AnalyzerPlugin, TypeScriptAnalyzeInfo, TypeScriptPlugin } from '../src/shared/models/plugin.model'
 
 type FunctionType = "ObjectMethod" | "FunctionDeclaration" | "ClassMethod";
 

@@ -1,5 +1,5 @@
-import { BaseAnalyzerPlugin } from "../models/plugin.model";
-import { AnalyzedEntityMetrics } from "../models/analyze.model";
+import { BaseAnalyzerPlugin } from "../src/shared/models/plugin.model";
+import { AnalyzedEntityMetrics } from "../src/shared/models/analyze.model";
 
 interface StrictIgnoreFile {
   labels: {

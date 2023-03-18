@@ -3,8 +3,8 @@ import {
   BaseAnalyzerPlugin,
   TypeScriptAnalyzeInfo,
   TypeScriptPlugin,
-} from "../models/plugin.model";
-import { AnalyzedEntityMetrics } from "../models/analyze.model";
+} from "../src/shared/models/plugin.model";
+import { AnalyzedEntityMetrics } from "../src/shared/models/analyze.model";
 
 interface ImportDefinition {
   metrics: AnalyzedEntityMetrics;

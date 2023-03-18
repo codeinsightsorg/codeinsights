@@ -2,7 +2,7 @@ import {
   HTMLAnalyzeInfo,
   HTMLPlugin,
   PluginOptions,
-} from "../models/plugin.model";
+} from "../src/shared/models/plugin.model";
 
 interface HTMLTag {
   labels: {
