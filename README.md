@@ -13,11 +13,11 @@
 [![MIT License][license-shield]][license-url]
 
 
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
-<h3 align="center">CodeInsightsJS</h3>
-
+<a href="https://github.com/yaircohendev/codeinsightsjs">
+    <img src="images/Dark-BG.png" alt="Logo">
+</a>
   <p align="center">
     <a href="https://github.com/yaircohendev/codeinsightsjs/issues">Report Bug</a>
     ·
