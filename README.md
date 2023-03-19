@@ -16,7 +16,7 @@
 <br />
 <div align="center">
 <a href="https://github.com/yaircohendev/codeinsightsjs">
-    <img src="images/Dark-BG.png" alt="Logo">
+    <img src="images/Dark-BG.png" alt="Logo" width="500" height="160">
 </a>
   <p align="center">
     <a href="https://github.com/yaircohendev/codeinsightsjs/issues">Report Bug</a>
