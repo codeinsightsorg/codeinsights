@@ -46,7 +46,13 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
             name: fileName,
           },
         };
-        if (plugin.parser === "TypeScript" && fileName.endsWith(".ts")) {
+        const isSpecifiedPluginExtension = plugin.fileExtensions?.some(
+          (extension) => fileName.endsWith(extension)
+        );
+        if (
+          isSpecifiedPluginExtension ||
+          (plugin.parser === "TypeScript" && fileName.endsWith(".ts"))
+        ) {
           const ast = getAST(fileString);
           plugin.analyzeFile(
             {
@@ -57,7 +63,10 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
             basePlugin.options
           );
         }
-        if (plugin.parser === "HTML" && fileName.endsWith(".html")) {
+        if (
+          isSpecifiedPluginExtension ||
+          (plugin.parser === "HTML" && fileName.endsWith(".html"))
+        ) {
           const dom = new JSDOM(fileString);
           plugin.analyzeFile(
             {
