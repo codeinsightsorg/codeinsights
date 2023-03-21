@@ -26,6 +26,7 @@ type Parser = "TypeScript" | "HTML";
 export interface BaseAnalyzerPlugin<T extends BaseAnalyzeInfo = any> {
   onFinishProcessing?: () => AnalyzedEntity[];
   onAllFinishProcessing?: (items: AnalyzeResults, plugin: BasePlugin) => any;
+  fileExtensions?: string[];
   analyzeFile?: (analyzeInfo: T, pluginOptions: PluginOptions) => any;
   parser?: Parser;
 }
