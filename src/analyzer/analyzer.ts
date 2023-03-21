@@ -3,9 +3,10 @@ import { getAST } from "./utils";
 import * as recast from "recast";
 import { Config } from "../config/config";
 import { getPluginsResult } from "../plugins";
-import { BaseAnalyzeInfo, ParsingError } from "../shared/models/plugin.model";
+import { BaseAnalyzeInfo } from "../shared/models/plugin.model";
 import { JSDOM } from "jsdom";
 import { BasePlugin } from "../plugins/analyze-plugin";
+import { ParsingError } from "../shared/models/analyze.model";
 
 export async function analyzeFiles(config: Config) {
   const plugins = config.plugins;

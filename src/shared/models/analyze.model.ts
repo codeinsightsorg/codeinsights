@@ -1,4 +1,5 @@
 import { BasePlugin } from "../../plugins/analyze-plugin";
+import { ParseError } from "@babel/parser";
 
 export type AnalyzedEntityLabels = Record<string, string | boolean | undefined>;
 
@@ -14,4 +15,13 @@ export interface AnalyzeResultItem {
   result: AnalyzedEntity[];
 }
 
-export type AnalyzeResults = AnalyzeResultItem[];
+export type AnalyzeResults = {
+  results: AnalyzeResultItem[];
+  parsingErrors: ParsingError[];
+};
+
+export interface ParsingError {
+  error: ParseError;
+  fileName: string;
+  fullPath: string;
+}

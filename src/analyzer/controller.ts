@@ -6,7 +6,7 @@ export async function initAnalyzer(config: Config) {
   const analyzeResult = await analyzeFiles(config);
 
   for (const plugin of config.plugins) {
-    await processResults(analyzeResult.results, plugin);
+    await processResults(analyzeResult, plugin);
   }
 
   console.log(`Finished running`);

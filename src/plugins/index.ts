@@ -1,11 +1,8 @@
-import {
-  AnalyzeResultItem,
-  AnalyzeResults,
-} from "../shared/models/analyze.model";
+import { AnalyzeResultItem } from "../shared/models/analyze.model";
 import { BasePlugin } from "./analyze-plugin";
 
 export function getPluginsResult(plugins: BasePlugin[]) {
-  const pluginResults: AnalyzeResults = [];
+  const pluginResults: AnalyzeResultItem[] = [];
   plugins.forEach((plugin) => {
     if (plugin.plugin?.onFinishProcessing) {
       const result = plugin.plugin.onFinishProcessing();

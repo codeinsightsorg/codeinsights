@@ -55,9 +55,3 @@ export interface PluginOptions<T = any> {
   path: string;
   beforeHooks: Record<BeforeHookKeys, string>;
 }
-
-export interface ParsingError {
-  error: ParseError;
-  fileName: string;
-  fullPath: string;
-}
