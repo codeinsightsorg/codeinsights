@@ -2,6 +2,9 @@ import { Visitor } from "ast-types/gen/visitor";
 import { AnalyzedEntity, AnalyzeResults } from "./analyze.model";
 import { BasePlugin } from "../../plugins/analyze-plugin";
 import { DOMWindow } from "jsdom";
+import recast, { Options, types } from "recast";
+import { PrintResultType } from "recast/lib/printer";
+import { ParseError } from "@babel/parser";
 
 export interface BaseAnalyzeInfo {
   file: {
@@ -13,6 +16,8 @@ export interface BaseAnalyzeInfo {
 
 export interface TypeScriptAnalyzeInfo extends BaseAnalyzeInfo {
   visit: (visitor: Visitor) => any;
+  print: (node: types.ASTNode, options?: Options) => PrintResultType;
+  prettyPrint: (node: types.ASTNode, options?: Options) => PrintResultType;
   ast: any;
 }
 
@@ -49,4 +54,10 @@ export interface PluginOptions<T = any> {
   params?: T;
   path: string;
   beforeHooks: Record<BeforeHookKeys, string>;
+}
+
+export interface ParsingError {
+  error: ParseError;
+  fileName: string;
+  fullPath: string;
 }

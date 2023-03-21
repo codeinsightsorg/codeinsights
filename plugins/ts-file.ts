@@ -34,7 +34,7 @@ export class TSFilePlugin implements TypeScriptPlugin {
   analyzedItems: (File | FunctionModel)[] = [];
   parser = "TypeScript" as const;
 
-  analyzeFile({ file, visit, ast }: TypeScriptAnalyzeInfo) {
+  analyzeFile({ file, visit, ast, prettyPrint }: TypeScriptAnalyzeInfo) {
     const self = this;
     const isTestFile = file.name.endsWith(".spec.ts");
     const fileDefinition: File = {
@@ -68,7 +68,7 @@ export class TSFilePlugin implements TypeScriptPlugin {
           functionEntity.labels.name = path.value.key.name;
         }
         if (path.value.type === "FunctionDeclaration") {
-          functionEntity.labels.name = path.value.id.name;
+          functionEntity.labels.name = path?.value?.id?.name ?? "";
           functionEntity.metrics.loc =
             path.value.body.loc.end.line - path.value.body.loc.start.line;
         }

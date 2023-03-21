@@ -3,22 +3,24 @@ import { getAST } from "./utils";
 import * as recast from "recast";
 import { Config } from "../config/config";
 import { getPluginsResult } from "../plugins";
-import { BaseAnalyzeInfo } from "../shared/models/plugin.model";
+import { BaseAnalyzeInfo, ParsingError } from "../shared/models/plugin.model";
 import { JSDOM } from "jsdom";
-import { AnalyzeResults } from "../shared/models/analyze.model";
 import { BasePlugin } from "../plugins/analyze-plugin";
 
-export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
+export async function analyzeFiles(config: Config) {
   const plugins = config.plugins;
   const rootPath = config.data.repoPath as string;
+  const parsingErrors: ParsingError[] = [];
 
   await _recursiveAnalyzeAllFiles(rootPath);
 
-  return getPluginsResult(plugins);
+  return {
+    results: getPluginsResult(plugins),
+    parsingErrors,
+  };
 
   async function _recursiveAnalyzeAllFiles(rootPath: string) {
     const filesNames = await fs.readdir(rootPath);
-
     for (const fileName of filesNames) {
       const fullPath = `${rootPath}/${fileName}`;
       const filePathFromRoot = fullPath.replace(`${config.data.repoPath}/`, "");
@@ -26,6 +28,9 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
         config.data.ignoreFolders &&
         config.data.ignoreFolders.includes(filePathFromRoot)
       ) {
+        continue;
+      }
+      if (fileName.startsWith(".")) {
         continue;
       }
       const lStat = await fs.lstat(fullPath);
@@ -53,9 +58,6 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
             name: fileName,
           },
         };
-        if (fileName === "service-catalog-service-requests") {
-          console.log("hads");
-        }
         const isSpecifiedPluginExtension = doesPluginMatchesFileName(
           basePlugin,
           fileName
@@ -64,17 +66,26 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
           continue;
         }
         if (plugin.parser === "TypeScript") {
-          const ast = getAST(fileString, fileName);
+          let ast;
+          try {
+            ast = getAST(fileString, fileName);
+          } catch (e) {
+            continue;
+          }
+          ast.errors.forEach((error) => {
+            parsingErrors.push({ error, fileName, fullPath });
+          });
           plugin.analyzeFile(
             {
               ...baseAnalyzeInfo,
               ast,
               visit: (visitor) => recast.visit(ast, visitor),
+              print: recast.print,
+              prettyPrint: recast.prettyPrint,
             },
             basePlugin.options
           );
-        }
-        if (plugin.parser === "HTML") {
+        } else if (plugin.parser === "HTML") {
           const dom = new JSDOM(fileString);
           plugin.analyzeFile(
             {
