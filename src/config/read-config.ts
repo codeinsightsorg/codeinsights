@@ -6,6 +6,7 @@ import isURL from "is-url";
 import { tryImport } from "../shared/utils/fs.utils";
 const path = require("path");
 const { execSync } = require("child_process");
+import fs from "fs";
 
 export async function readConfig(): Promise<Config> {
   const dir = path.join(process.cwd(), MAIN_REPOS_FOLDER_PATH);
@@ -13,7 +14,9 @@ export async function readConfig(): Promise<Config> {
   let configFromRepo: ConfigModel = {};
 
   if (repoPath.startsWith("https://github.com") && isURL(repoPath)) {
-    fetchRepoFromURL(repoPath, dir);
+    if (!argv.useCachedRepo && !fs.existsSync(dir)) {
+      fetchRepoFromURL(repoPath, dir);
+    }
     repoPath = dir;
   } else {
     const importResult = await fetchConfigFromFolder(repoPath);
