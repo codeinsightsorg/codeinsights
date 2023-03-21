@@ -4,6 +4,10 @@ import { DEFAULT_PLUGINS } from "./constants";
 import { argv } from "../env";
 import { BasePlugin } from "../plugins/analyze-plugin";
 import { PluginOptions } from "../shared/models/plugin.model";
+import path from "path";
+
+const PLUGINS_FOLDER = "plugins";
+const SHARED_PLUGINS_DIRECTORY = path.join(process.cwd(), PLUGINS_FOLDER);
 
 export class Config {
   data: ConfigModel;
@@ -24,11 +28,16 @@ export class Config {
     const plugins = this.data.plugins ?? [];
     const pluginsInstances: BasePlugin[] = [];
 
-    for (const pluginId in plugins) {
-      let pluginConfig = plugins[pluginId];
+    for (const plugin of plugins) {
+      let pluginConfig = plugin;
       pluginConfig = (
-        typeof pluginConfig === "string" ? {} : pluginConfig
+        typeof pluginConfig === "string"
+          ? {
+              path: `${PLUGINS_FOLDER}/${plugin}`,
+            }
+          : pluginConfig
       ) as PluginOptions;
+      pluginConfig.path = path.join(process.cwd(), pluginConfig.path);
       if (pluginConfig.disabled) {
         continue;
       }
