@@ -6,6 +6,7 @@ import { getPluginsResult } from "../plugins";
 import { BaseAnalyzeInfo } from "../shared/models/plugin.model";
 import { JSDOM } from "jsdom";
 import { AnalyzeResults } from "../shared/models/analyze.model";
+import { BasePlugin } from "../plugins/analyze-plugin";
 
 export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
   const plugins = config.plugins;
@@ -32,6 +33,12 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
         await _recursiveAnalyzeAllFiles(fullPath);
         continue;
       }
+      const isSupportedFile = plugins.some((plugin) =>
+        doesPluginMatchesFileName(plugin, fileName)
+      );
+      if (!isSupportedFile) {
+        continue;
+      }
       const fileString = (await fs.readFile(fullPath)).toString("utf-8");
 
       for (const basePlugin of plugins) {
@@ -46,14 +53,18 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
             name: fileName,
           },
         };
-        const isSpecifiedPluginExtension = plugin.fileExtensions?.some(
-          (extension) => fileName.endsWith(extension)
+        if (fileName === "service-catalog-service-requests") {
+          console.log("hads");
+        }
+        const isSpecifiedPluginExtension = doesPluginMatchesFileName(
+          basePlugin,
+          fileName
         );
-        if (
-          isSpecifiedPluginExtension ||
-          (plugin.parser === "TypeScript" && fileName.endsWith(".ts"))
-        ) {
-          const ast = getAST(fileString);
+        if (!isSpecifiedPluginExtension) {
+          continue;
+        }
+        if (plugin.parser === "TypeScript") {
+          const ast = getAST(fileString, fileName);
           plugin.analyzeFile(
             {
               ...baseAnalyzeInfo,
@@ -63,10 +74,7 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
             basePlugin.options
           );
         }
-        if (
-          isSpecifiedPluginExtension ||
-          (plugin.parser === "HTML" && fileName.endsWith(".html"))
-        ) {
+        if (plugin.parser === "HTML") {
           const dom = new JSDOM(fileString);
           plugin.analyzeFile(
             {
@@ -80,4 +88,10 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
       }
     }
   }
+}
+
+function doesPluginMatchesFileName(plugin: BasePlugin, fileName: string) {
+  return plugin.plugin.fileExtensions?.some((extension) =>
+    fileName.endsWith(`.${extension}`)
+  );
 }

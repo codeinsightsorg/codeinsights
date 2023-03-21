@@ -14,5 +14,18 @@ export class BasePlugin implements IBasePlugin {
     public options: PluginOptions
   ) {
     this.plugin = new PluginClass();
+    this.plugin.fileExtensions = this.getFileExtensions();
+  }
+
+  private getFileExtensions() {
+    if (this.plugin.fileExtensions) {
+      return;
+    }
+    if (this.plugin.parser === "TypeScript") {
+      return ["ts", "js"];
+    }
+    if (this.plugin.parser === "HTML") {
+      return ["html"];
+    }
   }
 }
