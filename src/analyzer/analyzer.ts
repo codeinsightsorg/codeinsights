@@ -45,7 +45,12 @@ export async function analyzeFiles(config: Config) {
       if (!isSupportedFile) {
         continue;
       }
-      const fileString = (await fs.readFile(fullPath)).toString("utf-8");
+      const fileString = await tryToReadFile(fullPath);
+
+      if (!fileString) {
+        // todo: add error to list
+        continue;
+      }
 
       for (const basePlugin of plugins) {
         const plugin = basePlugin.plugin;
@@ -76,6 +81,7 @@ export async function analyzeFiles(config: Config) {
           ast.errors.forEach((error) => {
             parsingErrors.push({ error, fileName, fullPath });
           });
+
           plugin.analyzeFile(
             {
               ...baseAnalyzeInfo,
@@ -106,4 +112,12 @@ function doesPluginMatchesFileName(plugin: BasePlugin, fileName: string) {
   return plugin.plugin.fileExtensions?.some((extension) =>
     fileName.endsWith(`.${extension}`)
   );
+}
+
+async function tryToReadFile(fullPath: string) {
+  try {
+    return (await fs.readFile(fullPath)).toString("utf-8");
+  } catch (e) {
+    //
+  }
 }

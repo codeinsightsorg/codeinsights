@@ -36,7 +36,8 @@ export class TSFilePlugin implements TypeScriptPlugin {
 
   analyzeFile({ file, visit, ast, prettyPrint }: TypeScriptAnalyzeInfo) {
     const self = this;
-    const isTestFile = file.name.endsWith(".spec.ts");
+    const isTestFile =
+      file.name.endsWith(".spec.ts") || file.name.endsWith(".test.ts");
     const fileDefinition: File = {
       type: "file",
       metrics: {

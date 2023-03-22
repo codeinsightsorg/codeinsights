@@ -4,6 +4,12 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
+  <header>
+    <div class="logo">
+      <img src="@/assets/Dark-BG.png" width="300" />
+    </div>
+  </header>
+
   <RouterView />
 </template>
 
@@ -14,8 +20,10 @@ header {
 }
 
 .logo {
-  display: block;
-  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 nav {

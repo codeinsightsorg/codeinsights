@@ -16,15 +16,10 @@ const renderChart = () => {
     chartInstance = new Chart(chartCanvas.value, {
       ...props.config,
       options: {
-        plugins: {
-          legend: {
-            display: false
-          },
-        },
         scales: {
           y: {
             ticks: {
-              color: 'rgba(29,140,248,0.0)',
+              color: '#9a9a9a',
             },
             grid: {
               color: 'rgba(29,140,248,0.0)',
@@ -37,6 +32,13 @@ const renderChart = () => {
             },
             ticks: {
               color: '#9a9a9a',
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#fff'
             }
           }
         }
