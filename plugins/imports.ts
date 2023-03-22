@@ -7,9 +7,9 @@ import {
 import { AnalyzedEntityMetrics } from "../src/shared/models/analyze.model";
 
 interface ImportDefinition {
+  type: "import";
   metrics: AnalyzedEntityMetrics;
   labels: {
-    type: "import";
     filePath: string;
     name: string;
     fileName: string;
@@ -39,9 +39,9 @@ class ImportsPlugin implements TypeScriptPlugin {
               return item.imported.name;
             };
             const importDefinition: ImportDefinition = {
+              type: "import",
               metrics: {},
               labels: {
-                type: "import",
                 filePath: file.path,
                 fileName: file.name,
                 name: getName() as string,

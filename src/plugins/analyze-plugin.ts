@@ -10,7 +10,7 @@ export class BasePlugin implements IBasePlugin {
   plugin: AnalyzerPlugin;
 
   constructor(
-    private PluginClass: Type<AnalyzerPlugin>,
+    public PluginClass: Type<AnalyzerPlugin>,
     public options: PluginOptions
   ) {
     this.plugin = new PluginClass();

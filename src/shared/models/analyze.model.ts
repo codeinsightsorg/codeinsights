@@ -6,6 +6,7 @@ export type AnalyzedEntityLabels = Record<string, string | boolean | undefined>;
 export type AnalyzedEntityMetrics = Record<string, number | undefined>;
 
 export interface AnalyzedEntity {
+  type: string;
   metrics?: AnalyzedEntityMetrics;
   labels?: AnalyzedEntityLabels;
 }

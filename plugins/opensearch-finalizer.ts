@@ -13,7 +13,7 @@ export class OpensearchFinalizer implements BaseAnalyzerPlugin {
     const params = (plugin.options.params || {}) as ElasticOptions;
     const runId = uuidv4();
     const timestamp = new Date().toISOString();
-    const allLogs = items
+    const allLogs = items.results
       .flatMap((item) => item.result)
       .map((item) => {
         return {

@@ -6,9 +6,9 @@ import {
 import { AnalyzedEntityMetrics } from "../src/shared/models/analyze.model";
 
 interface Component {
+  type: "component";
   metrics: AnalyzedEntityMetrics;
   labels: {
-    type: "component";
     selector: string;
     name: string;
     path: string;
@@ -38,8 +38,8 @@ export class AngularPlugin implements TypeScriptPlugin {
                   const selectorKey = selectorNode.value.value;
                   const component: Component = {
                     metrics: {},
+                    type: "component",
                     labels: {
-                      type: "component",
                       selector: selectorKey,
                       name: path.value.id.name,
                       path: file.path,
