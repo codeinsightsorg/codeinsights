@@ -1,17 +1,13 @@
 import { Visitor } from "ast-types/gen/visitor";
-import { AnalyzedEntity, AnalyzeResults } from "./analyze.model";
+import {
+  PluginAnalyzedEntity,
+  AnalyzeResults,
+  BaseAnalyzeInfo,
+} from "./analyze.model";
 import { BasePlugin } from "../../plugins/analyze-plugin";
 import { DOMWindow } from "jsdom";
 import { Options, types } from "recast";
 import { PrintResultType } from "recast/lib/printer";
-
-export interface BaseAnalyzeInfo {
-  file: {
-    path: string;
-    name: string;
-    contents: string;
-  };
-}
 
 export interface TypeScriptAnalyzeInfo extends BaseAnalyzeInfo {
   visit: (visitor: Visitor) => any;
@@ -28,7 +24,7 @@ export interface HTMLAnalyzeInfo extends BaseAnalyzeInfo {
 type Parser = "TypeScript" | "HTML";
 
 export interface BaseAnalyzerPlugin<T extends BaseAnalyzeInfo = any> {
-  onFinishProcessing?: () => AnalyzedEntity[];
+  onFinishProcessing?: () => PluginAnalyzedEntity[];
   onAllFinishProcessing?: (items: AnalyzeResults, plugin: BasePlugin) => any;
   fileExtensions?: string[];
   analyzeFile?: (analyzeInfo: T, pluginOptions: PluginOptions) => any;

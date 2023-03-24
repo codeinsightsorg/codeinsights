@@ -6,9 +6,9 @@ import {
 
 interface HTMLTag {
   type: "tag";
+  path: string;
   labels: {
     name: string;
-    fileName: string;
   };
 }
 
@@ -37,9 +37,9 @@ export default class UsedHTMLTags implements HTMLPlugin {
       }
       this.allTags.push({
         type: "tag",
+        path: file.path,
         labels: {
           name: tagName,
-          fileName: file.name,
         },
       });
     });
