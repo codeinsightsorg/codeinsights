@@ -7,11 +7,11 @@ import {
 type FunctionType = "ObjectMethod" | "FunctionDeclaration" | "ClassMethod";
 
 interface FunctionModel {
+  type: "function";
   metrics: {
     loc?: number;
   };
   labels: {
-    type?: "function";
     functionType?: FunctionType;
     name?: string;
     file?: string;
@@ -19,11 +19,11 @@ interface FunctionModel {
 }
 
 interface File {
+  type: "file";
   metrics: {
     loc: number;
   };
   labels: {
-    type: "file";
     path: string;
     name: string;
     isTestFile: boolean;
@@ -36,13 +36,14 @@ export class TSFilePlugin implements TypeScriptPlugin {
 
   analyzeFile({ file, visit, ast, prettyPrint }: TypeScriptAnalyzeInfo) {
     const self = this;
-    const isTestFile = file.name.endsWith(".spec.ts");
+    const isTestFile =
+      file.name.endsWith(".spec.ts") || file.name.endsWith(".test.ts");
     const fileDefinition: File = {
+      type: "file",
       metrics: {
         loc: ast.loc.end.line,
       },
       labels: {
-        type: "file",
         path: file.path,
         name: file.name,
         isTestFile,
@@ -52,9 +53,9 @@ export class TSFilePlugin implements TypeScriptPlugin {
     visit({
       visitFunction(path) {
         const functionEntity: FunctionModel = {
+          type: "function",
           metrics: {},
           labels: {
-            type: "function",
             file: file.path,
             functionType: path.value.type,
           },
@@ -68,6 +69,11 @@ export class TSFilePlugin implements TypeScriptPlugin {
           functionEntity.labels.name = path.value.key.name;
         }
         if (path.value.type === "FunctionDeclaration") {
+          functionEntity.labels.name = path?.value?.id?.name ?? "";
+          functionEntity.metrics.loc =
+            path.value.body.loc.end.line - path.value.body.loc.start.line;
+        }
+        if (path.value.type === "ArrowFunctionExpression") {
           functionEntity.labels.name = path?.value?.id?.name ?? "";
           functionEntity.metrics.loc =
             path.value.body.loc.end.line - path.value.body.loc.start.line;

@@ -2,9 +2,8 @@ import { Visitor } from "ast-types/gen/visitor";
 import { AnalyzedEntity, AnalyzeResults } from "./analyze.model";
 import { BasePlugin } from "../../plugins/analyze-plugin";
 import { DOMWindow } from "jsdom";
-import recast, { Options, types } from "recast";
+import { Options, types } from "recast";
 import { PrintResultType } from "recast/lib/printer";
-import { ParseError } from "@babel/parser";
 
 export interface BaseAnalyzeInfo {
   file: {

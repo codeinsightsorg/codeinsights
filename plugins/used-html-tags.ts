@@ -5,8 +5,8 @@ import {
 } from "../src/shared/models/plugin.model";
 
 interface HTMLTag {
+  type: "tag";
   labels: {
-    type: "tag";
     name: string;
     fileName: string;
   };
@@ -36,8 +36,8 @@ export default class UsedHTMLTags implements HTMLPlugin {
         }
       }
       this.allTags.push({
+        type: "tag",
         labels: {
-          type: "tag",
           name: tagName,
           fileName: file.name,
         },
