@@ -1,6 +1,4 @@
 import {
-  BaseAnalyzeInfo,
-  BaseAnalyzerPlugin,
   TypeScriptAnalyzeInfo,
   TypeScriptPlugin,
 } from "../src/shared/models/plugin.model";
@@ -8,11 +6,10 @@ import { AnalyzedEntityMetrics } from "../src/shared/models/analyze.model";
 
 interface ImportDefinition {
   type: "import";
+  path: string;
   metrics: AnalyzedEntityMetrics;
   labels: {
-    filePath: string;
     name: string;
-    fileName: string;
     importedFrom: string;
   };
 }
@@ -41,9 +38,8 @@ class ImportsPlugin implements TypeScriptPlugin {
             const importDefinition: ImportDefinition = {
               type: "import",
               metrics: {},
+              path: file.path,
               labels: {
-                filePath: file.path,
-                fileName: file.name,
                 name: getName() as string,
                 importedFrom: importPath,
               },

@@ -3,21 +3,26 @@ import { getAST } from "./utils";
 import * as recast from "recast";
 import { Config } from "../config/config";
 import { getPluginsResult } from "../plugins";
-import { BaseAnalyzeInfo } from "../shared/models/plugin.model";
 import { JSDOM } from "jsdom";
 import { BasePlugin } from "../plugins/analyze-plugin";
-import { ParsingError } from "../shared/models/analyze.model";
+import {
+  BaseAnalyzeInfo,
+  BaseFileInfoMap,
+  ParsingError,
+} from "../shared/models/analyze.model";
 
 export async function analyzeFiles(config: Config) {
   const plugins = config.plugins;
   const rootPath = config.data.repoPath as string;
   const parsingErrors: ParsingError[] = [];
+  const fileInformation: BaseFileInfoMap = {};
 
   await _recursiveAnalyzeAllFiles(rootPath);
 
   return {
-    results: getPluginsResult(plugins),
+    results: getPluginsResult(plugins, fileInformation),
     parsingErrors,
+    fileInformation,
   };
 
   async function _recursiveAnalyzeAllFiles(rootPath: string) {
@@ -64,6 +69,7 @@ export async function analyzeFiles(config: Config) {
             name: fileName,
           },
         };
+        fileInformation[filePathFromRoot] = baseAnalyzeInfo;
         const isSpecifiedPluginExtension = doesPluginMatchesFileName(
           basePlugin,
           fileName

@@ -1,5 +1,4 @@
 import {
-  AnalyzerPlugin,
   TypeScriptAnalyzeInfo,
   TypeScriptPlugin,
 } from "../src/shared/models/plugin.model";
@@ -8,24 +7,23 @@ type FunctionType = "ObjectMethod" | "FunctionDeclaration" | "ClassMethod";
 
 interface FunctionModel {
   type: "function";
+  path: string;
   metrics: {
     loc?: number;
   };
   labels: {
     functionType?: FunctionType;
     name?: string;
-    file?: string;
   };
 }
 
 interface File {
   type: "file";
+  path: string;
   metrics: {
     loc: number;
   };
   labels: {
-    path: string;
-    name: string;
     isTestFile: boolean;
   };
 }
@@ -40,12 +38,11 @@ export class TSFilePlugin implements TypeScriptPlugin {
       file.name.endsWith(".spec.ts") || file.name.endsWith(".test.ts");
     const fileDefinition: File = {
       type: "file",
+      path: file.path,
       metrics: {
         loc: ast.loc.end.line,
       },
       labels: {
-        path: file.path,
-        name: file.name,
         isTestFile,
       },
     };
@@ -54,9 +51,9 @@ export class TSFilePlugin implements TypeScriptPlugin {
       visitFunction(path) {
         const functionEntity: FunctionModel = {
           type: "function",
+          path: file.path,
           metrics: {},
           labels: {
-            file: file.path,
             functionType: path.value.type,
           },
         };

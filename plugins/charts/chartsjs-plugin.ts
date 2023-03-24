@@ -1,5 +1,5 @@
 import { BaseAnalyzerPlugin } from '../../src/shared/models/plugin.model'
-import { AnalyzeResults } from '../../src/shared/models/analyze.model'
+import { AnalyzedEntity, AnalyzeResults } from '../../src/shared/models/analyze.model'
 import { BasePlugin } from '../../src/plugins/analyze-plugin'
 import { ChartConfiguration } from 'chart.js'
 import fs from 'fs/promises'
@@ -18,19 +18,27 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
 
     results.forEach((pluginResult) => {
       const chartDataMap: ChartDataMap = {}
-      const groupedByType = groupBy(pluginResult.result, 'type')
+      const groupedByType = groupBy(pluginResult.result, (item) => item.result.type)
 
       Object.entries(groupedByType).forEach(([type, items]) => {
+        if (!chartDataMap[type]) {
+          chartDataMap[type] = {}
+        }
+
         items.forEach((item) => {
-          Object.entries(item.labels || {}).forEach(([labelKey, labelValue]) => {
+          const baseLabels = {
+            path: item.baseInformation.file.path,
+            name: item.baseInformation.file.name
+          }
+          const mergedLabels = {
+            ...(item.result.labels || {}),
+            ...baseLabels
+          }
+          Object.entries(mergedLabels).forEach(([labelKey, labelValue]) => {
             if (!labelValue || typeof labelValue !== 'string') {
               return
             }
-            if (!chartDataMap[type]) {
-              chartDataMap[type] = {}
-            }
-
-            Object.entries(item.metrics || {}).forEach(([metricKey, metricValue]) => {
+            Object.entries(item.result.metrics || {}).forEach(([metricKey, metricValue]) => {
               const chartKey = `${labelKey}_${metricKey}`
               if (!chartDataMap[type][chartKey]) {
                 chartDataMap[type][chartKey] = { labels: [], data: [] }
@@ -144,13 +152,20 @@ function getChartsDefinition(chartDataMap: ChartDataMap) {
   return allCharts
 }
 
-function countUniqueValues(array) {
+function countUniqueValues(array: AnalyzedEntity[]) {
   const counts = {}
 
-  array.forEach((obj) => {
-    const labels = obj.labels
-    Object.keys(labels).forEach((key) => {
-      const value = labels[key]
+  array.forEach((item) => {
+    const baseLabels = {
+      path: item.baseInformation.file.path,
+      name: item.baseInformation.file.name
+    }
+    const mergedLabels = {
+      ...(item.result.labels || {}),
+      ...baseLabels
+    }
+    Object.keys(mergedLabels).forEach((key) => {
+      const value = mergedLabels[key]
       if (counts[key]) {
         if (!counts[key][value]) {
           counts[key][value] = 1
