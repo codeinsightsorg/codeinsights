@@ -4,7 +4,7 @@ import { AnalyzerPlugin } from "../shared/models/plugin.model";
 import { Type } from "../shared/models/general.model";
 import ConsoleLogFinalizer from "../../plugins/console-log-finalizer";
 import UsedHTMLTags from "../../plugins/used-html-tags";
-import ChartJSPlugin from "../../plugins/ui/chartsjs-plugin";
+import ChartJSPlugin from "../../plugins/chartsjs-plugin";
 
 export const MAIN_REPOS_FOLDER_PATH = "_repo";
 
