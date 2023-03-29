@@ -36,9 +36,9 @@ console.log(plugins)
 }
 
 .type-name {
-  background-color: #f7df1e;
+  background-color: #d048b6;
   width: fit-content;
-  color: #333333;
+  color: #fff;
   border-radius: 4px;
   padding: 2px 4px;
   font-weight: 600;

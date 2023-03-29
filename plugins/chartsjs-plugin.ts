@@ -36,8 +36,8 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
 
         items.forEach((item) => {
           const baseLabels = {
-            path: item.baseInformation.file.path,
-            name: item.baseInformation.file.name,
+            ["base.path"]: item.baseInformation.file.path,
+            ["base.name"]: item.baseInformation.file.name,
           };
           const mergedLabels = {
             ...(item.result.labels || {}),
@@ -171,8 +171,8 @@ function countUniqueValues(array: AnalyzedEntity[]) {
 
   array.forEach((item) => {
     const baseLabels = {
-      path: item.baseInformation.file.path,
-      name: item.baseInformation.file.name,
+      ["base.path"]: item.baseInformation.file.path,
+      ["base.name"]: item.baseInformation.file.name,
     };
     const mergedLabels = {
       ...(item.result.labels || {}),
