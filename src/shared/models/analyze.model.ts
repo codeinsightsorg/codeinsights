@@ -6,10 +6,15 @@ export type AnalyzedEntityLabels = Record<string, string | boolean | undefined>;
 export type AnalyzedEntityMetrics = Record<string, number | undefined>;
 
 export interface BaseAnalyzeInfo {
-  file: {
-    path: string;
-    name: string;
-    contents: string;
+  labels: {
+    file: {
+      path: string;
+      name: string;
+      contents: string;
+    };
+  };
+  metrics: {
+    loc: number;
   };
 }
 export interface PluginAnalyzedEntity {
@@ -20,13 +25,13 @@ export interface PluginAnalyzedEntity {
 }
 
 export interface AnalyzedEntity {
-  result: PluginAnalyzedEntity;
-  baseInformation: BaseAnalyzeInfo;
+  analyzed: PluginAnalyzedEntity;
+  baseInfo: BaseAnalyzeInfo;
 }
 
 export interface AnalyzeResultItem {
   plugin: BasePlugin;
-  result: AnalyzedEntity[];
+  data: AnalyzedEntity[];
 }
 
 type FilePath = string;

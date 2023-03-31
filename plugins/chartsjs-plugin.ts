@@ -25,8 +25,8 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
     results.forEach((pluginResult) => {
       const chartDataMap: ChartDataMap = {};
       const groupedByType = groupBy(
-        pluginResult.result,
-        (item) => item.result.type
+        pluginResult.data,
+        (item) => item.analyzed.type
       );
 
       Object.entries(groupedByType).forEach(([type, items]) => {
@@ -35,19 +35,18 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
         }
 
         items.forEach((item) => {
-          const baseLabels = {
-            ["base.path"]: item.baseInformation.file.path,
-            ["base.name"]: item.baseInformation.file.name,
-          };
+          // const baseLabels = {
+          //   ["base.path"]: item.baseInformation.file.path,
+          //   ["base.name"]: item.baseInformation.file.name,
+          // };
           const mergedLabels = {
-            ...(item.result.labels || {}),
-            ...baseLabels,
+            ...(item.analyzed.labels || {}),
           };
           Object.entries(mergedLabels).forEach(([labelKey, labelValue]) => {
             if (!labelValue || typeof labelValue !== "string") {
               return;
             }
-            Object.entries(item.result.metrics || {}).forEach(
+            Object.entries(item.analyzed.metrics || {}).forEach(
               ([metricKey, metricValue]) => {
                 const chartKey = `${labelKey}_${metricKey}`;
                 if (!chartDataMap[type][chartKey]) {
@@ -169,29 +168,29 @@ function getChartsDefinition(chartDataMap: ChartDataMap) {
 function countUniqueValues(array: AnalyzedEntity[]) {
   const counts = {};
 
-  array.forEach((item) => {
-    const baseLabels = {
-      ["base.path"]: item.baseInformation.file.path,
-      ["base.name"]: item.baseInformation.file.name,
-    };
-    const mergedLabels = {
-      ...(item.result.labels || {}),
-      ...baseLabels,
-    };
-    Object.keys(mergedLabels).forEach((key) => {
-      const value = mergedLabels[key];
-      if (counts[key]) {
-        if (!counts[key][value]) {
-          counts[key][value] = 1;
-        } else {
-          counts[key][value]++;
-        }
-      } else {
-        counts[key] = {};
-        counts[key][value] = 1;
-      }
-    });
-  });
+  // array.forEach((item) => {
+  //   const baseLabels = {
+  //     ["base.path"]: item.baseResult.file.path,
+  //     ["base.name"]: item.baseResult.file.name,
+  //   };
+  //   const mergedLabels = {
+  //     ...(item.pluginResult.labels || {}),
+  //     ...baseLabels,
+  //   };
+  //   Object.keys(mergedLabels).forEach((key) => {
+  //     const value = mergedLabels[key];
+  //     if (counts[key]) {
+  //       if (!counts[key][value]) {
+  //         counts[key][value] = 1;
+  //       } else {
+  //         counts[key][value]++;
+  //       }
+  //     } else {
+  //       counts[key] = {};
+  //       counts[key][value] = 1;
+  //     }
+  //   });
+  // });
 
   return counts;
 }

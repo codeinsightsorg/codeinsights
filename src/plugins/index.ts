@@ -13,10 +13,10 @@ export function getPluginsResult(
     if (plugin.plugin?.onFinishProcessing) {
       const result = plugin.plugin.onFinishProcessing();
       const pluginResult: AnalyzeResultItem = {
-        result: result.map((item) => {
+        data: result.map((item) => {
           return {
-            baseInformation: fileMap[item.path],
-            result: item,
+            baseInfo: fileMap[item.path],
+            analyzed: item,
           };
         }),
         plugin,

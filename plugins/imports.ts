@@ -18,7 +18,8 @@ class ImportsPlugin implements TypeScriptPlugin {
   allFilesImports: ImportDefinition[] = [];
   parser = "TypeScript" as const;
 
-  analyzeFile({ file, visit }: TypeScriptAnalyzeInfo) {
+  analyzeFile({ labels, visit }: TypeScriptAnalyzeInfo) {
+    const file = labels.file;
     const allFilesImports: ImportDefinition[] = [];
     visit({
       visitImportDeclaration(path) {
