@@ -33,7 +33,10 @@ export class TSFilePlugin implements TypeScriptPlugin {
     const { fileName, filePath } = labels;
     const self = this;
     const isTestFile =
-      fileName.endsWith(".spec.ts") || fileName.endsWith(".test.ts");
+      fileName.endsWith(".spec.js") ||
+      fileName.endsWith(".spec.ts") ||
+      fileName.endsWith(".test.js") ||
+      fileName.endsWith(".test.ts");
     const fileDefinition: File = {
       type: "file",
       path: filePath,

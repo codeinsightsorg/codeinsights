@@ -32,27 +32,36 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
       Object.entries(groupedByType).forEach(([type, items]) => {
         const charts: GenericChartDefinition[] = [];
         const countMap: Record<string, Record<string, number>> = {};
+        const metricsAndLabelsMap: Record<any, any> = {};
 
         items.forEach((item) => {
           const baseLabels = pick(item.baseInfo.labels, [
             "fileName",
             "filePath",
           ]);
+          if (!item.analyzed.labels) {
+            return;
+          }
+          Object.entries(item.analyzed.labels).forEach(
+            ([labelKey, labelValue]) => {
+              if (!countMap[labelKey]) {
+                countMap[labelKey] = {};
+              }
+              const labelValueString = String(labelValue);
+              if (!countMap[labelKey][labelValueString]) {
+                countMap[labelKey][labelValueString] = 0;
+              }
+              countMap[labelKey][labelValueString]++;
+            }
+          );
+        });
 
-          Object.entries(baseLabels).forEach(([labelKey, labelValue]) => {
-            if (!countMap[labelKey]) {
-              countMap[labelKey] = {};
-            }
-            const labelValueString = String(labelValue);
-            if (!countMap[labelKey][labelValueString]) {
-              countMap[labelKey][labelValueString] = 0;
-            }
-            countMap[labelKey][labelValueString]++;
-          });
+        Object.entries(metricsAndLabelsMap).forEach(([chartKey, data]) => {
+          console.log(data);
         });
 
         Object.entries(countMap).forEach(([labelKey, countMetrics]) => {
-          const chartKey = `Count of ${type} - ${labelKey}`;
+          const chartKey = `Count of ${labelKey} - ${type}`;
           const sorted = Object.entries(countMetrics).sort(
             (a, b) => a[1] - b[1]
           );
@@ -83,5 +92,20 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
     );
   }
 }
+
+// Object.entries(item.baseInfo.metrics).forEach(
+//   ([metricKey, metricValue]) => {
+//     const chartKey = `${metricKey} by ${labelKey}`;
+//     if (!metricsAndLabelsMap[chartKey]) {
+//       metricsAndLabelsMap[chartKey] = {
+//         labels: [],
+//         values: [],
+//       };
+//     }
+//     metricsAndLabelsMap[chartKey].labels.push(labelValueString);
+//     metricsAndLabelsMap[chartKey].values.push(metricValue);
+//     console.log(chartKey);
+//   }
+// );
 
 export default ChartJSPlugin;
