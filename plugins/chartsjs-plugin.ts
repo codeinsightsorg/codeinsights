@@ -49,22 +49,6 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
             }
             countMap[labelKey][labelValueString]++;
           });
-
-          // Object.entries(mergedLabels).forEach(([labelKey, labelValue]) => {
-          //   if (!labelValue || typeof labelValue !== "string") {
-          //     return;
-          //   }
-          //   Object.entries(item.analyzed.metrics || {}).forEach(
-          //     ([metricKey, metricValue]) => {
-          //       const chartKey = `${labelKey}_${metricKey}`;
-          //       if (!chartDataMap[type][chartKey]) {
-          //         chartDataMap[type][chartKey] = { labels: [], data: [] };
-          //       }
-          //       chartDataMap[type][chartKey].labels.push(labelValue);
-          //       chartDataMap[type][chartKey].data.push(metricValue!);
-          //     }
-          //   );
-          // });
         });
 
         Object.entries(countMap).forEach(([labelKey, countMetrics]) => {

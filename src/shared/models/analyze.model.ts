@@ -15,10 +15,13 @@ type BaseMetrics = AnalyzedEntityMetrics & {
   loc: number;
 };
 
-export interface BaseAnalyzeInfo {
+export type BaseAnalyzeInfo = PluginAnalyzedEntity & {
   labels: BaseLabels;
   metrics: BaseMetrics;
-}
+  type: "file";
+  path: string;
+};
+
 export interface PluginAnalyzedEntity {
   type: string;
   path: string;
