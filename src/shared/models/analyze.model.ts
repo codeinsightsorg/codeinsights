@@ -5,17 +5,19 @@ export type AnalyzedEntityLabels = Record<string, string | boolean | undefined>;
 
 export type AnalyzedEntityMetrics = Record<string, number | undefined>;
 
+type BaseLabels = AnalyzedEntityLabels & {
+  fileName: string;
+  filePath: string;
+  fileContents: string;
+};
+
+type BaseMetrics = AnalyzedEntityMetrics & {
+  loc: number;
+};
+
 export interface BaseAnalyzeInfo {
-  labels: {
-    file: {
-      path: string;
-      name: string;
-      contents: string;
-    };
-  };
-  metrics: {
-    loc: number;
-  };
+  labels: BaseLabels;
+  metrics: BaseMetrics;
 }
 export interface PluginAnalyzedEntity {
   type: string;

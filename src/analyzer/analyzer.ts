@@ -65,11 +65,9 @@ export async function analyzeFiles(config: Config) {
         }
         const baseAnalyzeInfo: BaseAnalyzeInfo = {
           labels: {
-            file: {
-              path: filePathFromRoot,
-              contents: fileString,
-              name: fileName,
-            },
+            filePath: filePathFromRoot,
+            fileName: fileName,
+            fileContents: fileString,
           },
           metrics: {
             loc,

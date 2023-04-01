@@ -30,13 +30,13 @@ export class TSFilePlugin implements TypeScriptPlugin {
   parser = "TypeScript" as const;
 
   analyzeFile({ labels, visit, ast }: TypeScriptAnalyzeInfo) {
-    const file = labels.file;
+    const { fileName, filePath } = labels;
     const self = this;
     const isTestFile =
-      file.name.endsWith(".spec.ts") || file.name.endsWith(".test.ts");
+      fileName.endsWith(".spec.ts") || fileName.endsWith(".test.ts");
     const fileDefinition: File = {
       type: "file",
-      path: file.path,
+      path: filePath,
       labels: {
         isTestFile,
       },
@@ -46,7 +46,7 @@ export class TSFilePlugin implements TypeScriptPlugin {
       visitFunction(path) {
         const functionEntity: FunctionModel = {
           type: "function",
-          path: file.path,
+          path: filePath,
           metrics: {},
           labels: {
             functionType: path.value.type,
