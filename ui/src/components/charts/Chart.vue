@@ -6,11 +6,7 @@ const props = defineProps<{
 }>()
 const chartCanvas = ref<any>(null);
 let chartInstance: Chart | null = null;
-console.log(props.config)
 const renderChart = () => {
-  const getRandomColors = () => {
-    return  null
-  }
   if (chartCanvas.value && props.config) {
     if (chartInstance) {
       chartInstance.destroy();
@@ -35,6 +31,7 @@ const renderChart = () => {
         ]
       },
       options: {
+        responsive: true,
         scales: {
           y: {
             beginAtZero: true,
