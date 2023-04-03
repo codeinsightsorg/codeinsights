@@ -72,7 +72,7 @@ export async function analyzeFiles(config: Config) {
             fileContents: fileString,
           },
           metrics: {
-            loc,
+            fileLinesOfCode: loc,
           },
         };
         fileInformation[filePathFromRoot] = baseAnalyzeInfo;

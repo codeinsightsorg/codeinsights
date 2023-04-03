@@ -12,7 +12,7 @@ type BaseLabels = AnalyzedEntityLabels & {
 };
 
 type BaseMetrics = AnalyzedEntityMetrics & {
-  loc: number;
+  fileLinesOfCode: number;
 };
 
 export type BaseAnalyzeInfo = PluginAnalyzedEntity & {

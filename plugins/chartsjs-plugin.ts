@@ -2,7 +2,10 @@ import fs from "fs/promises";
 import path from "path";
 import { groupBy, isNil, pick, sum } from "lodash";
 import { BaseAnalyzerPlugin } from "../src/shared/models/plugin.model";
-import { AnalyzeResults } from "../src/shared/models/analyze.model";
+import {
+  AnalyzedEntity,
+  AnalyzeResults,
+} from "../src/shared/models/analyze.model";
 
 interface GenericChartDefinition {
   chartType: "line" | "bar" | "doughnut";
@@ -12,117 +15,49 @@ interface GenericChartDefinition {
 }
 
 interface ChartDataMap {
-  [key: string]: GenericChartDefinition[];
+  [key: string]: {
+    count: number;
+    charts: GenericChartDefinition[];
+  };
 }
 
 export class ChartJSPlugin implements BaseAnalyzerPlugin {
   async onAllFinishProcessing({ results }: AnalyzeResults) {
     const pluginResults: {
       name: string;
-      charts: Record<string, GenericChartDefinition[]>;
+      charts: ChartDataMap;
     }[] = [];
 
     results.forEach((pluginResult) => {
       const chartDataMap: ChartDataMap = {};
+
       const groupedByType = groupBy(
         pluginResult.data,
         (item) => item.analyzed.type
       );
 
       Object.entries(groupedByType).forEach(([type, items]) => {
-        const charts: GenericChartDefinition[] = [];
-        const countMap: Record<string, Record<string, number>> = {};
-        const metricsAndLabelsMap: Record<
-          string,
-          {
-            labels: string[];
-            values: number[];
-          }
-        > = {};
-
-        items.forEach((item) => {
-          if (!item.analyzed.labels) {
-            return;
-          }
-          Object.entries(item.analyzed.labels).forEach(
-            ([labelKey, labelValue]) => {
-              if (isNil(labelValue)) {
-                return;
-              }
-              if (!countMap[labelKey]) {
-                countMap[labelKey] = {};
-              }
-              const labelValueString = String(labelValue);
-              if (!countMap[labelKey][labelValueString]) {
-                countMap[labelKey][labelValueString] = 0;
-              }
-              countMap[labelKey][labelValueString]++;
-
-              if (!item.analyzed.metrics) {
-                return;
-              }
-              Object.entries(item.analyzed.metrics).forEach(
-                ([metricKey, metricValue]) => {
-                  if (isNil(metricValue)) {
-                    return;
-                  }
-                  const chartKey = `${labelKey} by ${metricKey}`;
-                  if (!metricsAndLabelsMap[chartKey]) {
-                    metricsAndLabelsMap[chartKey] = {
-                      labels: [],
-                      values: [],
-                    };
-                  }
-                  metricsAndLabelsMap[chartKey].labels.push(labelValueString);
-                  metricsAndLabelsMap[chartKey].values.push(metricValue);
-                }
-              );
-            }
-          );
-        });
-
-        Object.entries(metricsAndLabelsMap).forEach(([chartKey, data]) => {
-          const sorted = data.labels
-            .map(
-              (label, index) => [label, data.values[index]] as [string, number]
-            )
-            .sort((a, b) => a[1] - b[1])
-            .map(([label, value]) => {
-              return {
-                label,
-                value,
-              };
-            });
-          const grouped = groupBy(sorted, (item) => item.label);
-          console.log(data);
-          const chart: GenericChartDefinition = {
-            chartType: "line",
-            labels: Object.keys(grouped),
-            values: Object.values(grouped).map((metrics) => {
-              return sum(metrics.map((metric) => metric.value));
-            }),
-            key: chartKey,
-          };
-          charts.push(chart);
-        });
-
-        Object.entries(countMap).forEach(([labelKey, countMetrics]) => {
-          const chartKey = `Count of ${labelKey} - ${type}`;
-          const sorted = Object.entries(countMetrics).sort(
-            (a, b) => a[1] - b[1]
-          );
-          const sortedLabels = sorted.map((item) => item[0]);
-          const sortedValues = sorted.map((item) => item[1]);
-          const chart: GenericChartDefinition = {
-            chartType: "line",
-            labels: sortedLabels,
-            values: sortedValues,
-            key: chartKey,
-          };
-          charts.push(chart);
-        });
-
-        chartDataMap[type] = charts;
+        const getBaseLabels = (item: AnalyzedEntity) =>
+          pick(item.baseInfo.labels, ["fileName", "filePath"]);
+        const getAnalyzedLabels = (item: AnalyzedEntity) =>
+          item.analyzed.labels;
+        const getAnalyzedMetrics = (item: AnalyzedEntity) =>
+          item.analyzed.metrics;
+        const analyzedCharts = getCharts(
+          items,
+          getAnalyzedLabels,
+          getAnalyzedMetrics
+        );
+        const enrichedCharts = getCharts(
+          items,
+          getBaseLabels,
+          getAnalyzedMetrics,
+          true
+        );
+        chartDataMap[type] = {
+          count: items.length,
+          charts: [...analyzedCharts, ...enrichedCharts],
+        };
       });
 
       pluginResults.push({
@@ -139,19 +74,103 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
   }
 }
 
-// Object.entries(item.baseInfo.metrics).forEach(
-//   ([metricKey, metricValue]) => {
-//     const chartKey = `${metricKey} by ${labelKey}`;
-//     if (!metricsAndLabelsMap[chartKey]) {
-//       metricsAndLabelsMap[chartKey] = {
-//         labels: [],
-//         values: [],
-//       };
-//     }
-//     metricsAndLabelsMap[chartKey].labels.push(labelValueString);
-//     metricsAndLabelsMap[chartKey].values.push(metricValue);
-//     console.log(chartKey);
-//   }
-// );
+function getCharts(
+  items: AnalyzedEntity[],
+  getLabelsFn: any,
+  getMetricsFn: any,
+  skipCount = false
+) {
+  const charts: GenericChartDefinition[] = [];
+  const countMap: Record<string, Record<string, number>> = {};
+  const metricsAndLabelsMap: Record<
+    string,
+    {
+      labels: string[];
+      values: number[];
+    }
+  > = {};
+
+  items.forEach((item) => {
+    if (!item.analyzed.labels) {
+      return;
+    }
+    Object.entries(getLabelsFn(item)).forEach(([labelKey, labelValue]) => {
+      if (isNil(labelValue)) {
+        return;
+      }
+      if (!countMap[labelKey]) {
+        countMap[labelKey] = {};
+      }
+      const labelValueString = String(labelValue);
+      if (!countMap[labelKey][labelValueString]) {
+        countMap[labelKey][labelValueString] = 0;
+      }
+      countMap[labelKey][labelValueString]++;
+
+      if (!getMetricsFn(item)) {
+        return;
+      }
+      Object.entries(getMetricsFn(item)).forEach(([metricKey, metricValue]) => {
+        if (isNil(metricValue) || typeof metricValue !== "number") {
+          return;
+        }
+        const chartKey = `${labelKey} by ${metricKey}`;
+        if (!metricsAndLabelsMap[chartKey]) {
+          metricsAndLabelsMap[chartKey] = {
+            labels: [],
+            values: [],
+          };
+        }
+        metricsAndLabelsMap[chartKey].labels.push(labelValueString);
+        metricsAndLabelsMap[chartKey].values.push(metricValue);
+      });
+    });
+  });
+
+  if (!skipCount) {
+    Object.entries(countMap).forEach(([labelKey, countMetrics]) => {
+      const chartKey = `Count of ${labelKey}`;
+      const sorted = Object.entries(countMetrics).sort((a, b) => a[1] - b[1]);
+      const sortedLabels = sorted.map((item) => item[0]);
+      const sortedValues = sorted.map((item) => item[1]);
+      const chart: GenericChartDefinition = {
+        chartType: "line",
+        labels: sortedLabels,
+        values: sortedValues,
+        key: chartKey,
+      };
+      charts.push(chart);
+    });
+  }
+
+  Object.entries(metricsAndLabelsMap).forEach(([chartKey, data]) => {
+    const mapped = data.labels.map((label, index) => {
+      return {
+        label,
+        value: data.values[index],
+      };
+    });
+    const grouped = groupBy(mapped, (item) => item.label);
+    const sorted = Object.entries(grouped)
+      .map(([label, values]) => {
+        return {
+          label,
+          value: sum(values.map((metric) => metric.value)),
+        };
+      })
+      .sort((a, b) => {
+        return a.value - b.value;
+      });
+    const chart: GenericChartDefinition = {
+      chartType: "bar",
+      labels: sorted.map((item) => item.label),
+      values: sorted.map((item) => item.value),
+      key: chartKey,
+    };
+    charts.push(chart);
+  });
+
+  return charts;
+}
 
 export default ChartJSPlugin;

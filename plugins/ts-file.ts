@@ -23,6 +23,9 @@ interface File {
   labels: {
     isTestFile: boolean;
   };
+  metrics: {
+    loc: number;
+  };
 }
 
 export class TSFilePlugin implements TypeScriptPlugin {
@@ -42,6 +45,9 @@ export class TSFilePlugin implements TypeScriptPlugin {
       path: filePath,
       labels: {
         isTestFile,
+      },
+      metrics: {
+        loc: ast.loc.end.line,
       },
     };
 
