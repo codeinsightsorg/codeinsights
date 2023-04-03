@@ -21,9 +21,10 @@ export default class UsedHTMLTags implements HTMLPlugin {
   allTags: HTMLTag[] = [];
 
   analyzeFile(
-    { document, file }: HTMLAnalyzeInfo,
+    { document, labels }: HTMLAnalyzeInfo,
     pluginOptions: PluginOptions<Params>
   ) {
+    const { filePath } = labels;
     const elements = document.body.querySelectorAll("*");
     elements.forEach((element) => {
       const matchPattern = pluginOptions.params?.matchPattern;
@@ -37,7 +38,7 @@ export default class UsedHTMLTags implements HTMLPlugin {
       }
       this.allTags.push({
         type: "tag",
-        path: file.path,
+        path: filePath,
         labels: {
           name: tagName,
         },

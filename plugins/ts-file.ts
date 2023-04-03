@@ -20,11 +20,11 @@ interface FunctionModel {
 interface File {
   type: "file";
   path: string;
-  metrics: {
-    loc: number;
-  };
   labels: {
     isTestFile: boolean;
+  };
+  metrics: {
+    loc: number;
   };
 }
 
@@ -32,18 +32,22 @@ export class TSFilePlugin implements TypeScriptPlugin {
   analyzedItems: (File | FunctionModel)[] = [];
   parser = "TypeScript" as const;
 
-  analyzeFile({ file, visit, ast, prettyPrint }: TypeScriptAnalyzeInfo) {
+  analyzeFile({ labels, visit, ast }: TypeScriptAnalyzeInfo) {
+    const { fileName, filePath } = labels;
     const self = this;
     const isTestFile =
-      file.name.endsWith(".spec.ts") || file.name.endsWith(".test.ts");
+      fileName.endsWith(".spec.js") ||
+      fileName.endsWith(".spec.ts") ||
+      fileName.endsWith(".test.js") ||
+      fileName.endsWith(".test.ts");
     const fileDefinition: File = {
       type: "file",
-      path: file.path,
-      metrics: {
-        loc: ast.loc.end.line,
-      },
+      path: filePath,
       labels: {
         isTestFile,
+      },
+      metrics: {
+        loc: ast.loc.end.line,
       },
     };
 
@@ -51,7 +55,7 @@ export class TSFilePlugin implements TypeScriptPlugin {
       visitFunction(path) {
         const functionEntity: FunctionModel = {
           type: "function",
-          path: file.path,
+          path: filePath,
           metrics: {},
           labels: {
             functionType: path.value.type,

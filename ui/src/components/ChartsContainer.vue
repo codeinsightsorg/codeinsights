@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import plugins from '@/assets/charts.json';
-
 import Chart from "@/components/charts/Chart.vue";
 console.log(plugins)
 </script>
@@ -10,9 +9,9 @@ console.log(plugins)
     <div class="plugin" v-for="(plugin, index) of plugins" :key="index">
       <h1 class="plugin-name">{{plugin.name}}</h1>
       <div class="analyzed-item-type-container" v-for="(value, type) in plugin.charts" :key="type">
-        <h2 class="type-name">{{type}}</h2>
+        <h2 class="type-name">{{type}} ({{value.count}})</h2>
         <div class="charts">
-          <div class="chart" v-for="(chart, index) of value" :key="index">
+          <div class="chart" v-for="(chart, index) of value.charts" :key="index">
             <Chart :config="chart" />
           </div>
         </div>
@@ -25,7 +24,7 @@ console.log(plugins)
 <style scoped>
 .charts {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat( 2, 1fr);
   gap: 16px;
 }
 

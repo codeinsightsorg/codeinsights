@@ -1,23 +1,40 @@
 <script lang="ts" setup>
-import {ref, onMounted, watch} from 'vue';
-import {Chart, ChartConfiguration} from 'chart.js/auto';
-
+import {onMounted, ref, watch} from 'vue';
+import {Chart} from 'chart.js/auto';
 const props = defineProps<{
-  config: ChartConfiguration;
+  config: any;
 }>()
 const chartCanvas = ref<any>(null);
 let chartInstance: Chart | null = null;
-console.log(props.config)
 const renderChart = () => {
   if (chartCanvas.value && props.config) {
     if (chartInstance) {
       chartInstance.destroy();
     }
     chartInstance = new Chart(chartCanvas.value, {
-      ...props.config,
+      type: props.config.chartType,
+      data: {
+        labels: props.config.labels.slice(-20),
+        datasets: [
+          {
+            label: props.config.key,
+            fill: true,
+            borderWidth: 2,
+            borderDash: [],
+            borderDashOffset: 0.0,
+            pointBorderWidth: 20,
+            pointHoverRadius: 4,
+            pointHoverBorderWidth: 15,
+            pointRadius: 4,
+            data: props.config.values.slice(-20),
+          }
+        ]
+      },
       options: {
+        responsive: true,
         scales: {
           y: {
+            beginAtZero: true,
             ticks: {
               color: '#9a9a9a',
             },
@@ -40,7 +57,7 @@ const renderChart = () => {
             labels: {
               color: '#fff'
             }
-          }
+          },
         }
       }
     });

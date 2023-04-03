@@ -18,7 +18,8 @@ class ImportsPlugin implements TypeScriptPlugin {
   allFilesImports: ImportDefinition[] = [];
   parser = "TypeScript" as const;
 
-  analyzeFile({ file, visit }: TypeScriptAnalyzeInfo) {
+  analyzeFile({ labels, visit }: TypeScriptAnalyzeInfo) {
+    const { filePath } = labels;
     const allFilesImports: ImportDefinition[] = [];
     visit({
       visitImportDeclaration(path) {
@@ -38,7 +39,7 @@ class ImportsPlugin implements TypeScriptPlugin {
             const importDefinition: ImportDefinition = {
               type: "import",
               metrics: {},
-              path: file.path,
+              path: filePath,
               labels: {
                 name: getName() as string,
                 importedFrom: importPath,

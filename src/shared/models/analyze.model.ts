@@ -5,13 +5,23 @@ export type AnalyzedEntityLabels = Record<string, string | boolean | undefined>;
 
 export type AnalyzedEntityMetrics = Record<string, number | undefined>;
 
-export interface BaseAnalyzeInfo {
-  file: {
-    path: string;
-    name: string;
-    contents: string;
-  };
-}
+type BaseLabels = AnalyzedEntityLabels & {
+  fileName: string;
+  filePath: string;
+  fileContents: string;
+};
+
+type BaseMetrics = AnalyzedEntityMetrics & {
+  fileLinesOfCode: number;
+};
+
+export type BaseAnalyzeInfo = PluginAnalyzedEntity & {
+  labels: BaseLabels;
+  metrics: BaseMetrics;
+  type: "file";
+  path: string;
+};
+
 export interface PluginAnalyzedEntity {
   type: string;
   path: string;
@@ -20,13 +30,13 @@ export interface PluginAnalyzedEntity {
 }
 
 export interface AnalyzedEntity {
-  result: PluginAnalyzedEntity;
-  baseInformation: BaseAnalyzeInfo;
+  analyzed: PluginAnalyzedEntity;
+  baseInfo: BaseAnalyzeInfo;
 }
 
 export interface AnalyzeResultItem {
   plugin: BasePlugin;
-  result: AnalyzedEntity[];
+  data: AnalyzedEntity[];
 }
 
 type FilePath = string;

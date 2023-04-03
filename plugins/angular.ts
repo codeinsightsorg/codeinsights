@@ -19,7 +19,8 @@ export class AngularPlugin implements TypeScriptPlugin {
   items: Component[] = [];
   parser = "TypeScript" as const;
 
-  analyzeFile({ visit, file }: TypeScriptAnalyzeInfo) {
+  analyzeFile({ visit, labels }: TypeScriptAnalyzeInfo) {
+    const file = labels.file;
     const items: Component[] = [];
     visit({
       visitClassDeclaration(path) {

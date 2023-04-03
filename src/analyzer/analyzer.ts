@@ -56,6 +56,7 @@ export async function analyzeFiles(config: Config) {
         // todo: add error to list
         continue;
       }
+      const loc = fileString.split("\n").length;
 
       for (const basePlugin of plugins) {
         const plugin = basePlugin.plugin;
@@ -63,10 +64,15 @@ export async function analyzeFiles(config: Config) {
           continue;
         }
         const baseAnalyzeInfo: BaseAnalyzeInfo = {
-          file: {
-            path: filePathFromRoot,
-            contents: fileString,
-            name: fileName,
+          path: filePathFromRoot,
+          type: "file",
+          labels: {
+            filePath: filePathFromRoot,
+            fileName: fileName,
+            fileContents: fileString,
+          },
+          metrics: {
+            fileLinesOfCode: loc,
           },
         };
         fileInformation[filePathFromRoot] = baseAnalyzeInfo;
