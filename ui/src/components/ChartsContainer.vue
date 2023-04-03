@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import plugins from '@/assets/charts.json';
-
 import Chart from "@/components/charts/Chart.vue";
 console.log(plugins)
 </script>
@@ -25,7 +24,7 @@ console.log(plugins)
 <style scoped>
 .charts {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 

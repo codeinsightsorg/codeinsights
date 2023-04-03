@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {ref, onMounted, watch} from 'vue';
-import {Chart, ChartConfiguration} from 'chart.js/auto';
-
+import {onMounted, ref, watch} from 'vue';
+import {Chart} from 'chart.js/auto';
 const props = defineProps<{
   config: any;
 }>()
@@ -9,6 +8,9 @@ const chartCanvas = ref<any>(null);
 let chartInstance: Chart | null = null;
 console.log(props.config)
 const renderChart = () => {
+  const getRandomColors = () => {
+    return  null
+  }
   if (chartCanvas.value && props.config) {
     if (chartInstance) {
       chartInstance.destroy();
@@ -21,14 +23,9 @@ const renderChart = () => {
           {
             label: props.config.key,
             fill: true,
-            backgroundColor: "rgba(72,72,176,0.2)",
-            borderColor: "#d048b6",
             borderWidth: 2,
             borderDash: [],
             borderDashOffset: 0.0,
-            pointBackgroundColor: "#d048b6",
-            pointBorderColor: "rgba(255,255,255,0)",
-            pointHoverBackgroundColor: "#d048b6",
             pointBorderWidth: 20,
             pointHoverRadius: 4,
             pointHoverBorderWidth: 15,
@@ -63,7 +60,7 @@ const renderChart = () => {
             labels: {
               color: '#fff'
             }
-          }
+          },
         }
       }
     });

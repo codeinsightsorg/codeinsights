@@ -8,7 +8,7 @@ import {
 } from "../src/shared/models/analyze.model";
 
 interface GenericChartDefinition {
-  chartType: "line" | "bar" | "doughnut";
+  chartType: "line" | "bar" | "pie";
   key: string;
   labels: string[];
   values: number[];
@@ -95,13 +95,13 @@ function getCharts(
       return;
     }
     Object.entries(getLabelsFn(item)).forEach(([labelKey, labelValue]) => {
-      if (isNil(labelValue)) {
+      const labelValueString = String(labelValue);
+      if (!labelValueString) {
         return;
       }
       if (!countMap[labelKey]) {
         countMap[labelKey] = {};
       }
-      const labelValueString = String(labelValue);
       if (!countMap[labelKey][labelValueString]) {
         countMap[labelKey][labelValueString] = 0;
       }
@@ -134,7 +134,7 @@ function getCharts(
       const sortedLabels = sorted.map((item) => item[0]);
       const sortedValues = sorted.map((item) => item[1]);
       const chart: GenericChartDefinition = {
-        chartType: "line",
+        chartType: "pie",
         labels: sortedLabels,
         values: sortedValues,
         key: chartKey,
