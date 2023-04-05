@@ -1,0 +1,18 @@
+.logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  nav {
+    a {
+      text-decoration: none;
+      color: #fff;
+      background-color: #d048b6;
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      border-radius: 3px;
+    }
+  }
+}
