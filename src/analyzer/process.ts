@@ -2,7 +2,6 @@ import { AnalyzeResults } from "../shared/models/analyze.model";
 import { BasePlugin } from "../plugins/analyze-plugin";
 
 export async function processResults(
-  this: any,
   result: AnalyzeResults,
   basePlugin: BasePlugin
 ) {

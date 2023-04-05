@@ -8,10 +8,10 @@ const path = require("path");
 const { execSync } = require("child_process");
 import fs from "fs";
 
-export async function readConfig(): Promise<Config> {
+export async function readConfig(configData?: ConfigModel): Promise<Config> {
   const dir = path.join(process.cwd(), MAIN_REPOS_FOLDER_PATH);
-  let repoPath = argv.repoPath ?? "";
-  let configFromRepo: ConfigModel = {};
+  let repoPath = argv.repoPath ?? configData?.repoPath ?? "";
+  let configFromRepo: ConfigModel = configData ?? {};
 
   if (repoPath.startsWith("https://github.com") && isURL(repoPath)) {
     if (!fs.existsSync(dir) || !argv.useCachedRepo) {

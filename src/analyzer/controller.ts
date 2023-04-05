@@ -10,4 +10,5 @@ export async function initAnalyzer(config: Config) {
   }
 
   console.log(`Finished running`);
+  return analyzeResult;
 }

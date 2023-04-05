@@ -22,7 +22,6 @@ export async function analyzeFiles(config: Config) {
   return {
     results: getPluginsResult(plugins, fileInformation),
     parsingErrors,
-    fileInformation,
   };
 
   async function _recursiveAnalyzeAllFiles(rootPath: string) {
