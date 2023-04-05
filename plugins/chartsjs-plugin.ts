@@ -68,7 +68,7 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
 
     const dir = path.dirname(__filename);
     await fs.writeFile(
-      `${dir}/../ui/src/assets/charts.json`,
+      `${dir}/../ui/public/charts.json`,
       JSON.stringify(pluginResults)
     );
   }
