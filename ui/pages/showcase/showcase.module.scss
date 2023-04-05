@@ -6,13 +6,17 @@
   nav {
     a {
       text-decoration: none;
-      color: #fff;
-      background-color: #d048b6;
+      color: rgba(156,163,175,1);
       padding: 8px 12px;
       font-weight: 600;
-      font-size: 12px;
+      font-size: 13px;
       text-transform: uppercase;
       border-radius: 3px;
+
+      &:hover {
+        color: #fff;
+        transition: 200ms background-color, color;
+      }
     }
   }
 }
