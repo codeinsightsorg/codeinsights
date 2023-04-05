@@ -6,7 +6,7 @@ export async function processResults(
   basePlugin: BasePlugin
 ) {
   if (!basePlugin.plugin.onAllFinishProcessing) {
-    return;
+    return [];
   }
   let data = result;
 
@@ -16,5 +16,5 @@ export async function processResults(
     const preProcessFn = (await import(onAllFinishBeforeHook)).default;
     data = preProcessFn(result);
   }
-  basePlugin.plugin.onAllFinishProcessing(data, basePlugin);
+  return basePlugin.plugin.onAllFinishProcessing(data, basePlugin);
 }

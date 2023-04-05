@@ -28,3 +28,7 @@
 .pluginName:not(:first-child) {
   margin-top: 16px;
 }
+
+.loadingContainer {
+  height: 100%;
+}

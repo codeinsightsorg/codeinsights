@@ -37,6 +37,7 @@ export interface AnalyzedEntity {
 export interface AnalyzeResultItem {
   plugin: BasePlugin;
   data: AnalyzedEntity[];
+  allPluginsData?: AnalyzedEntity[];
 }
 
 type FilePath = string;

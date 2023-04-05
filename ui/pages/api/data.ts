@@ -8,6 +8,5 @@ export default async function handler(
   const result = await init({
     repoPath: "https://github.com/yaircohendev/codeinsightsjs.git",
   });
-  console.log(result);
   res.status(200).json(result);
 }

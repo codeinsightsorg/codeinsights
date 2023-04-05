@@ -66,11 +66,7 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
       });
     });
 
-    // const dir = path.dirname(__filename);
-    // await fs.writeFile(
-    //   `${dir}/../ui/public/charts.json`,
-    //   JSON.stringify(pluginResults)
-    // );
+    return pluginResults;
   }
 }
 
