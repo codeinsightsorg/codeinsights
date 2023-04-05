@@ -16,6 +16,9 @@
 <br />
 <div align="center">
 <a href="https://github.com/yaircohendev/codeinsightsjs">
+
+![Logo](./images/Dark-BG.png =500x160)
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./images/Dark-BG.png">
   <img alt="Logo" src="./images/White-BG.png" width="500" height="160">

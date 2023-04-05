@@ -1,8 +1,9 @@
 {
   "name": "@codeinsights/js",
-  "version": "0.1.4-alpha.1",
+  "version": "0.1.5-alpha.1",
   "description": "",
-  "main": "index.js",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,6 +15,10 @@
   },
   "keywords": [],
   "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yaircohendev/codeinsightsjs.git"
+  },
   "license": "ISC",
   "dependencies": {
     "@babel/parser": "^7.21.3",
@@ -39,5 +44,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.4",
     "ts-node": "^10.9.1"
-  }
+  },
+  "files": ["lib"]
 }
