@@ -13,11 +13,14 @@
 [![MIT License][license-shield]][license-url]
 
 
-[//]: # (![Logo]&#40;./images/Dark-BG.png =500x160&#41;)
-
+<br />
 <div align="center">
-<img src="./images/Dark-BG.png" width="500" height="160">
-
+<a href="https://github.com/yaircohendev/codeinsightsjs">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./images/Dark-BG.png">
+  <img alt="Logo" src="./images/White-BG.png" width="500" height="160">
+</picture>
+</a>
   <p align="center">
     <a href="https://github.com/yaircohendev/codeinsightsjs/issues">Report Bug</a>
     ·
@@ -55,18 +58,21 @@
 
 ## About The Project
 
+CodeInsightsJS aims to help developers overcome the challenge of not being able to gain a high-level overview of their projects. This is particularly useful for large projects consisting of thousands of files, where it can be difficult to identify specific problematic areas, detect anomalies in the code, or obtain a macroscopic understanding of the project.
 CodeInsightsJS aims to help developers overcome the challenge of not being able to gain a high-level overview of their
 projects. This is particularly useful for large projects consisting of thousands of files, where it can be difficult to
 identify specific problematic areas, detect anomalies in the code, or obtain a macroscopic understanding of the project.
 
 ### Features
 
+CodeInsightsJS analyzes your repository and generates metrics using built-in plugins that output raw data. You can obtain a wide range of information, including:
 CodeInsightsJS analyzes your repository and generates metrics using built-in plugins that output raw data. You can
 obtain a wide range of information, including:
 
 - Number of imports and import information, which can be used to generate the top imports
 - File and line of code data to determine the largest files and functions
 - Angular support, providing the number of components
+- HTML analysis, giving tag information to determine the most used tags by searching for specific prefixes (e.g., if your design system component library prefix is "cx-", you can identify the top component usage in the design system)
 - HTML analysis, giving tag information to determine the most used tags by searching for specific prefixes (e.g., if
   your design system component library prefix is "cx-", you can identify the top component usage in the design system)
 - Ability to create custom plugins and generate any desired metrics from the code
@@ -97,14 +103,17 @@ To get a local copy up and running follow these simple example steps.
 - [ ] React support
 - [ ] Vue support
 
+See the [open issues](https://github.com/yaircohendev/codeinsightsjs/issues) for a full list of proposed features (and known issues).
 See the [open issues](https://github.com/yaircohendev/codeinsightsjs/issues) for a full list of proposed features (and
 known issues).
 
 ## Contributing
 
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any
 contributions you make are **greatly appreciated**.
 
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also
 simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
@@ -126,6 +135,7 @@ Yair Cohen - [@YairDev](https://twitter.com/YairDev) - yaircohenth@gmail.com
 Project Link: [https://github.com/yaircohendev/codeinsightsjs](https://github.com/yaircohendev/codeinsightsjs)
 
 ## Acknowledgments
+* A special mention to [harelba](https://github.com/harelba) for providing valuable insights on architecture and contributing to the overall planning of the project.
 
 * A special mention to [harelba](https://github.com/harelba) for providing valuable insights on architecture and
   contributing to the overall planning of the project.
@@ -190,3 +200,4 @@ Project Link: [https://github.com/yaircohendev/codeinsightsjs](https://github.co
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 
 [JQuery-url]: https://jquery.com
+
