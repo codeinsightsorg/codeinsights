@@ -13,17 +13,11 @@
 [![MIT License][license-shield]][license-url]
 
 
-<br />
+[//]: # (![Logo]&#40;./images/Dark-BG.png =500x160&#41;)
+
 <div align="center">
-<a href="https://github.com/yaircohendev/codeinsightsjs">
+<img src="./images/Dark-BG.png" width="500" height="160">
 
-![Logo](./images/Dark-BG.png =500x160)
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./images/Dark-BG.png">
-  <img alt="Logo" src="./images/White-BG.png" width="500" height="160">
-</picture>
-</a>
   <p align="center">
     <a href="https://github.com/yaircohendev/codeinsightsjs/issues">Report Bug</a>
     ·

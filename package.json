@@ -11,7 +11,8 @@
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "lint:check": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "bump-version": "npm version patch"
   },
   "keywords": [],
   "author": "",
