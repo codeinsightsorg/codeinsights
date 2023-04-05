@@ -1,0 +1,21 @@
+{
+  "index": "Introduction",
+  "another": "Another Page",
+  "advanced": "Advanced (A Folder)",
+  "about": {
+    "title": "About",
+    "type": "page"
+  },
+  "showcase": {
+    "title": "Showcase",
+    "type": "page",
+    "href": "/showcase",
+    "newWindow": true
+  },
+  "contact": {
+    "title": "Contact ↗",
+    "type": "page",
+    "href": "https://twitter.com/yairdev",
+    "newWindow": true
+  }
+}

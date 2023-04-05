@@ -1,0 +1,30 @@
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat( 2, 1fr);
+  gap: 16px;
+}
+
+.pluginName {
+  font-weight: 700;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.typeName {
+  background-color: #d048b6;
+  width: fit-content;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.typeName {
+  margin-top: 16px;
+}
+
+.pluginName:not(:first-child) {
+  margin-top: 16px;
+}
