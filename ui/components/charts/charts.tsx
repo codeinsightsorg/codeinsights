@@ -13,8 +13,8 @@ export default function Charts() {
       setPlugins(chartData.allPluginsData);
     };
 
-    // fetchData().catch(console.error);
-  });
+    fetchData().catch(console.error);
+  }, []);
 
   return (
     <div className={styles.plugins}>
