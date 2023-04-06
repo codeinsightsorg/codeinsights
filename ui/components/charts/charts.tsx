@@ -7,14 +7,13 @@ export default function Charts() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/data").then((res) => res.json());
-      console.log(response);
       const chartData = response.results.find(
         (item) => item.plugin.plugin.name === "ChartJSPlugin"
       );
       setPlugins(chartData.allPluginsData);
     };
 
-    fetchData().catch(console.error);
+    // fetchData().catch(console.error);
   });
 
   return (

@@ -19,6 +19,7 @@
   "homepage": "https://github.com/shuding/nextra-docs-template#readme",
   "dependencies": {
     "chart.js": "^4.2.1",
+    "kbar": "0.1.0-beta.40",
     "next": "^13.0.6",
     "nextra": "latest",
     "nextra-theme-docs": "latest",

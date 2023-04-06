@@ -12,9 +12,10 @@ export async function readConfig(configData?: ConfigModel): Promise<Config> {
   const dir = path.join(process.cwd(), MAIN_REPOS_FOLDER_PATH);
   let repoPath = argv.repoPath ?? configData?.repoPath ?? "";
   let configFromRepo: ConfigModel = configData ?? {};
+  const useCachedRepo = argv.useCachedRepo || configData?.useCachedRepo;
 
   if (repoPath.startsWith("https://github.com") && isURL(repoPath)) {
-    if (!fs.existsSync(dir) || !argv.useCachedRepo) {
+    if (!fs.existsSync(dir) || !useCachedRepo) {
       fetchRepoFromURL(repoPath, dir);
     }
     repoPath = dir;
