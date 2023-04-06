@@ -1,4 +1,4 @@
-import { forwardRef, Fragment, Ref, useMemo } from "react";
+import { forwardRef, Fragment, Ref } from "react";
 import { ActionId, ActionImpl } from "kbar";
 
 export const ResultItem = forwardRef(
@@ -14,17 +14,7 @@ export const ResultItem = forwardRef(
     },
     ref: Ref<HTMLDivElement>
   ) => {
-    const ancestors = useMemo(() => {
-      if (!currentRootActionId) return action.ancestors;
-      const index = action.ancestors.findIndex(
-        (ancestor) => ancestor.id === currentRootActionId
-      );
-      // +1 removes the currentRootAction; e.g.
-      // if we are on the "Set theme" parent action,
-      // the UI should not display "Set theme… > Dark"
-      // but rather just "Dark"
-      return action.ancestors.slice(index + 1);
-    }, [action.ancestors, currentRootActionId]);
+    const ancestors = action.ancestors;
 
     return (
       <div

@@ -3,6 +3,7 @@ import ChartComponent from "../chart/chart";
 import { useAnalyzeResultsStore } from "../../pages/showcase/analyze-result.state";
 
 export default function Charts() {
+  const isLoading = useAnalyzeResultsStore((state) => state.isLoading);
   const analyzeResults = useAnalyzeResultsStore((state) => {
     if (!state.results) return null;
     const chartData = state.results.results.find(
@@ -13,7 +14,7 @@ export default function Charts() {
 
   return (
     <div className={styles.plugins}>
-      {analyzeResults ? (
+      {!isLoading && analyzeResults?.length ? (
         analyzeResults.map((plugin: any, index) => (
           <div className={styles.plugin} key={index}>
             <h1 className={styles.pluginName}>{plugin.name}</h1>

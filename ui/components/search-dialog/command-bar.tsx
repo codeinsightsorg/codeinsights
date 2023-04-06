@@ -18,13 +18,12 @@ import {
 import { useSuggestionsListStore } from "./state";
 import { animatorStyle, searchStyle } from "./styles";
 import { RenderResults } from "./render-results";
-import { useAnalyzeResultsStore } from "../../pages/showcase/analyze-result.state";
 
 export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
   const { query } = useKBar();
   const getRepos = useSuggestionsListStore((state) => state.getSuggestions);
-  const getAnalyzeResults = useAnalyzeResultsStore(
-    (state) => state.getAnalyzeResults
+  const setCurrentSuggestion = useSuggestionsListStore(
+    (state) => state.setCurrentSuggestion
   );
 
   useImperativeHandle(ref, () => ({
@@ -34,6 +33,7 @@ export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
   }));
   const [actions, setActions] = useState<Action[]>([]);
   const suggestions = useSuggestionsListStore((state) => state.suggestions);
+  const currentSuggestion = useSuggestionsListStore((state) => state.current);
 
   useEffect(() => {
     const mappedSuggestions: Action[] = suggestions.map((suggestion) => {
@@ -43,14 +43,17 @@ export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
           name: suggestion.name,
           subtitle: suggestion.description,
           perform: (action) => {
-            console.log(action, suggestion);
-            getAnalyzeResults(suggestion.githubURL).then();
+            setCurrentSuggestion(suggestion);
           },
         };
       }
       return {
         id: suggestion.url,
         name: suggestion.url,
+        subtitle: suggestion.name,
+        perform: (action) => {
+          setCurrentSuggestion(suggestion);
+        },
       };
     });
     setActions(mappedSuggestions);
