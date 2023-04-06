@@ -18,10 +18,14 @@ import {
 import { useSuggestionsListStore } from "./state";
 import { animatorStyle, searchStyle } from "./styles";
 import { RenderResults } from "./render-results";
+import { useAnalyzeResultsStore } from "../../pages/showcase/analyze-result.state";
 
 export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
   const { query } = useKBar();
   const getRepos = useSuggestionsListStore((state) => state.getSuggestions);
+  const getAnalyzeResults = useAnalyzeResultsStore(
+    (state) => state.getAnalyzeResults
+  );
 
   useImperativeHandle(ref, () => ({
     toggle() {
@@ -38,6 +42,10 @@ export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
           id: suggestion.name,
           name: suggestion.name,
           subtitle: suggestion.description,
+          perform: (action) => {
+            console.log(action, suggestion);
+            getAnalyzeResults(suggestion.githubURL).then();
+          },
         };
       }
       return {

@@ -1,25 +1,20 @@
 import styles from "./charts.module.css";
 import ChartComponent from "../chart/chart";
-import { useEffect, useState } from "react";
+import { useAnalyzeResultsStore } from "../../pages/showcase/analyze-result.state";
 
 export default function Charts() {
-  const [plugins, setPlugins] = useState<any[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/api/data").then((res) => res.json());
-      const chartData = response.results.find(
-        (item) => item.plugin.plugin.name === "ChartJSPlugin"
-      );
-      setPlugins(chartData.allPluginsData);
-    };
-
-    fetchData().catch(console.error);
-  }, []);
+  const analyzeResults = useAnalyzeResultsStore((state) => {
+    if (!state.results) return null;
+    const chartData = state.results.results.find(
+      (item) => item.plugin.plugin.name === "ChartJSPlugin"
+    );
+    return chartData.allPluginsData;
+  });
 
   return (
     <div className={styles.plugins}>
-      {plugins.length ? (
-        plugins.map((plugin: any, index) => (
+      {analyzeResults ? (
+        analyzeResults.map((plugin: any, index) => (
           <div className={styles.plugin} key={index}>
             <h1 className={styles.pluginName}>{plugin.name}</h1>
             {Object.entries(plugin.charts).map(([type, value]: any) => (

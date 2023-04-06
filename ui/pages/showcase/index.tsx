@@ -1,12 +1,21 @@
 import Charts from "../../components/charts/charts";
 import Image from "next/image";
 import styles from "./showcase.module.scss";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { SearchDialog } from "../../components/search-dialog/search-dialog";
 import { CommandBarMethods } from "../../shared/types/search-dialog.types";
+import { useAnalyzeResultsStore } from "./analyze-result.state";
 
 export default function Index() {
   const searchDialogRef = useRef<CommandBarMethods>();
+  const getAnalyzeResults = useAnalyzeResultsStore(
+    (state) => state.getAnalyzeResults
+  );
+
+  useEffect(() => {
+    const defaultRepo = "https://github.com/yaircohendev/codeinsightsjs";
+    getAnalyzeResults(defaultRepo).then();
+  }, []);
 
   function toggleDialog() {
     searchDialogRef.current.toggle();
