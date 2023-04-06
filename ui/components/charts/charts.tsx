@@ -4,21 +4,15 @@ import { useAnalyzeResultsStore } from "../../pages/showcase/analyze-result.stat
 
 export default function Charts() {
   const isLoading = useAnalyzeResultsStore((state) => state.isLoading);
-  const analyzeResults = useAnalyzeResultsStore((state) => {
-    if (!state.results) return null;
-    const chartData = state.results.results.find(
-      (item) => item.plugin.plugin.name === "ChartJSPlugin"
-    );
-    return chartData.allPluginsData;
-  });
+  const analyzeResults = useAnalyzeResultsStore((state) => state.charts);
 
   return (
     <div className={styles.plugins}>
       {!isLoading && analyzeResults?.length ? (
-        analyzeResults.map((plugin: any, index) => (
+        analyzeResults.map((plugin, index) => (
           <div className={styles.plugin} key={index}>
             <h1 className={styles.pluginName}>{plugin.name}</h1>
-            {Object.entries(plugin.charts).map(([type, value]: any) => (
+            {Object.entries(plugin.charts).map(([type, value]) => (
               <div className={styles.analyzedItemTypeContainer} key={type}>
                 <h2 className={styles.typeName}>
                   {type} ({value.count})

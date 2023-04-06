@@ -18,6 +18,7 @@ import {
 import { useSuggestionsListStore } from "./state";
 import { animatorStyle, searchStyle } from "./styles";
 import { RenderResults } from "./render-results";
+import { act } from "react-dom/test-utils";
 
 export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
   const { query } = useKBar();

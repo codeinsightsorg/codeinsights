@@ -17,11 +17,7 @@ export const SearchDialog = forwardRef((props: SearchDialog, ref) => {
   }));
 
   return (
-    <KBarProvider
-      options={{
-        enableHistory: true,
-      }}
-    >
+    <KBarProvider>
       {props.children}
       <CommandBar ref={commandBarRef} />
     </KBarProvider>

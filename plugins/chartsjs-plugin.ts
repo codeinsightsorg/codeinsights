@@ -21,12 +21,14 @@ interface ChartDataMap {
   };
 }
 
+export interface PluginResult {
+  name: string;
+  charts: ChartDataMap;
+}
+
 export class ChartJSPlugin implements BaseAnalyzerPlugin {
   async onAllFinishProcessing({ results }: AnalyzeResults) {
-    const pluginResults: {
-      name: string;
-      charts: ChartDataMap;
-    }[] = [];
+    const pluginResults: PluginResult[] = [];
 
     results.forEach((pluginResult) => {
       const chartDataMap: ChartDataMap = {};

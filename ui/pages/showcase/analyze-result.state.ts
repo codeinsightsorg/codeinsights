@@ -1,22 +1,27 @@
 import { create } from "zustand";
-import { AnalyzeResults } from "../../../src/shared/models/analyze.model";
 import axios from "axios";
-
+import { PluginResult } from "../../../plugins/chartsjs-plugin";
+import { AnalyzeResults } from "../../../src/shared/models/analyze.model";
 interface AnalyzeResultState {
-  results: AnalyzeResults | null;
+  charts: PluginResult[];
   isLoading: boolean;
   getAnalyzeResults: (query: string) => Promise<void>;
 }
 export const useAnalyzeResultsStore = create<AnalyzeResultState>((set) => ({
-  results: null,
+  charts: null,
   isLoading: false,
   getAnalyzeResults: async (url) => {
     set({ isLoading: true });
-    const response = await axios.get(`/api/data`, {
+    const response = await axios.get<AnalyzeResults>(`/api/data`, {
       params: {
         url: `${url}.git`,
       },
     });
-    set({ results: response.data, isLoading: false });
+    const chartData = response.data.results
+      .find((item) => item.plugin.plugin.name === "ChartJSPlugin")
+      .allPluginsData.filter((response) => {
+        return !!Object.keys(response.charts).length;
+      });
+    set({ charts: chartData, isLoading: false });
   },
 }));

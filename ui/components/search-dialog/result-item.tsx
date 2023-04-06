@@ -21,10 +21,8 @@ export const ResultItem = forwardRef(
         ref={ref}
         style={{
           padding: "12px 16px",
-          background: active ? "var(--a1)" : "transparent",
-          borderLeft: `2px solid ${
-            active ? "var(--foreground)" : "transparent"
-          }`,
+          background: active ? "#2f2c2c" : "transparent",
+          borderLeft: `2px solid ${active ? "#be7eef" : "transparent"}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",

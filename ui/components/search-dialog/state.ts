@@ -26,12 +26,7 @@ interface SuggestionsListStore {
 }
 export const useSuggestionsListStore = create<SuggestionsListStore>((set) => ({
   suggestions: [],
-  current: {
-    type: "repo",
-    url: "https://github.com/yaircohendev/codeinsightsjs",
-    name: "codeinsightsjs",
-    description: null,
-  },
+  current: null,
   setCurrentSuggestion(suggestion: SearchSuggestion) {
     set({ current: suggestion });
   },
