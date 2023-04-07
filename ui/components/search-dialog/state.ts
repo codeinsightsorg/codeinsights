@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getNPMPackages } from "../../shared/suggestion-api";
+import { getGithubRepos, getNPMPackages } from "../../shared/suggestion-api";
 
 interface Repo {
   type: "repo";
@@ -46,7 +46,7 @@ export const useSuggestionsListStore = create<SuggestionsListStore>((set) => ({
       return;
     }
     const packages = await getNPMPackages(query);
-    const mappedPackages: NPMPackage[] = packages.data.map((pack) => {
+    const mappedPackages: SearchSuggestion[] = packages.data.map((pack) => {
       return {
         type: "npm",
         name: pack.package.name,

@@ -18,7 +18,6 @@ import {
 import { useSuggestionsListStore } from "./state";
 import { animatorStyle, searchStyle } from "./styles";
 import { RenderResults } from "./render-results";
-import { act } from "react-dom/test-utils";
 
 export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
   const { query } = useKBar();
@@ -34,7 +33,6 @@ export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
   }));
   const [actions, setActions] = useState<Action[]>([]);
   const suggestions = useSuggestionsListStore((state) => state.suggestions);
-  const currentSuggestion = useSuggestionsListStore((state) => state.current);
 
   useEffect(() => {
     const mappedSuggestions: Action[] = suggestions.map((suggestion) => {
@@ -43,6 +41,7 @@ export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
           id: suggestion.name,
           name: suggestion.name,
           subtitle: suggestion.description,
+          section: "NPM",
           perform: (action) => {
             setCurrentSuggestion(suggestion);
           },
@@ -52,6 +51,7 @@ export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
         id: suggestion.url,
         name: suggestion.url,
         subtitle: suggestion.name,
+        section: "Github",
         perform: (action) => {
           setCurrentSuggestion(suggestion);
         },
@@ -74,7 +74,7 @@ export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
           <KBarSearch
             onInput={onSearchInput}
             style={searchStyle}
-            defaultPlaceholder="Search for an npm package or a github repo"
+            defaultPlaceholder="Search for an npm package"
           />
           <RenderResults />
         </KBarAnimator>
