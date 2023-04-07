@@ -10,6 +10,8 @@ export function getPluginsResult(
 ) {
   const pluginResults: AnalyzeResultItem[] = [];
   plugins.forEach((plugin) => {
+    plugin.plugin.name = plugin.PluginClass.name;
+
     if (plugin.plugin?.onFinishProcessing) {
       const result = plugin.plugin.onFinishProcessing();
       const pluginResult: AnalyzeResultItem = {
@@ -22,7 +24,13 @@ export function getPluginsResult(
         plugin,
       };
       pluginResults.push(pluginResult);
+    } else {
+      pluginResults.push({
+        data: [],
+        plugin,
+      });
     }
   });
+
   return pluginResults;
 }

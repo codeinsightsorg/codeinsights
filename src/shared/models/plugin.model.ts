@@ -29,6 +29,7 @@ export interface BaseAnalyzerPlugin<T extends BaseAnalyzeInfo = any> {
   fileExtensions?: string[];
   analyzeFile?: (analyzeInfo: T, pluginOptions: PluginOptions) => any;
   parser?: Parser;
+  name?: string;
 }
 
 export interface TypeScriptPlugin

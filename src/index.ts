@@ -1,9 +1,8 @@
 import { readConfig } from "./config/read-config";
 import { initAnalyzer } from "./analyzer/controller";
+import { ConfigModel } from "./shared/models/config.model";
 
-async function init() {
-  const config = await readConfig();
-  await initAnalyzer(config);
+export async function init(configData?: ConfigModel) {
+  const config = await readConfig(configData);
+  return await initAnalyzer(config);
 }
-
-init().then();

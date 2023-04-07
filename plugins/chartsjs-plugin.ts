@@ -21,12 +21,14 @@ interface ChartDataMap {
   };
 }
 
+export interface PluginResult {
+  name: string;
+  charts: ChartDataMap;
+}
+
 export class ChartJSPlugin implements BaseAnalyzerPlugin {
   async onAllFinishProcessing({ results }: AnalyzeResults) {
-    const pluginResults: {
-      name: string;
-      charts: ChartDataMap;
-    }[] = [];
+    const pluginResults: PluginResult[] = [];
 
     results.forEach((pluginResult) => {
       const chartDataMap: ChartDataMap = {};
@@ -66,11 +68,7 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
       });
     });
 
-    const dir = path.dirname(__filename);
-    await fs.writeFile(
-      `${dir}/../ui/public/charts.json`,
-      JSON.stringify(pluginResults)
-    );
+    return pluginResults;
   }
 }
 
