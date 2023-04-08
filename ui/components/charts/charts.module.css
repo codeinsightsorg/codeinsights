@@ -32,3 +32,26 @@
 .loadingContainer {
   height: 100%;
 }
+
+.initialSearch {
+  font-size: 24px;
+  font-weight: 600;
+  padding: 32px;
+  background-color: #262626;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,.2);
+  text-align: center;
+  cursor: pointer;
+  transition: 200ms background-color, color;
+}
+
+.initialSearch:hover{
+  background-color: #323232;
+}
+
+.shortcutKey {
+  background-color: #6c6969;
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-family: monospace;
+}

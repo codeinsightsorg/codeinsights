@@ -5,7 +5,12 @@ import { useEffect, useRef } from "react";
 import { SearchDialog } from "../../components/search-dialog/search-dialog";
 import { CommandBarMethods } from "../../shared/types/search-dialog.types";
 import { useAnalyzeResultsStore } from "./analyze-result.state";
-import { useSuggestionsListStore } from "../../components/search-dialog/state";
+import {
+  SearchSuggestion,
+  useSuggestionsListStore,
+} from "../../components/search-dialog/state";
+import { useRouter } from "next/router";
+import { getGithubRepoNameFromURL } from "../../components/search-dialog/utils";
 
 export default function Index() {
   const searchDialogRef = useRef<CommandBarMethods>();
@@ -13,6 +18,23 @@ export default function Index() {
     (state) => state.getAnalyzeResults
   );
   const currentSuggestion = useSuggestionsListStore((state) => state.current);
+  const router = useRouter();
+  const setCurrentSuggestion = useSuggestionsListStore(
+    (state) => state.setCurrentSuggestion
+  );
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    const repo = router.query.repo as string;
+    if (repo) {
+      const newSuggestion: SearchSuggestion = {
+        type: "repo",
+        url: repo,
+        name: getGithubRepoNameFromURL(repo),
+      };
+      setCurrentSuggestion(newSuggestion);
+    }
+  }, [router.isReady]);
 
   useEffect(() => {
     if (!currentSuggestion) {
@@ -30,7 +52,7 @@ export default function Index() {
   }
 
   return (
-    <>
+    <div className={styles.mainContainer}>
       <SearchDialog ref={searchDialogRef}>
         <div className={styles.logoContainer}>
           <nav>
@@ -46,17 +68,19 @@ export default function Index() {
         {currentSuggestion?.type === "npm" && (
           <div className={styles.currentSuggestion}>
             <h1>{currentSuggestion.name}</h1>
+            <p>{currentSuggestion.githubURL}</p>
             <p>{currentSuggestion.description}</p>
           </div>
         )}
         {currentSuggestion?.type === "repo" && (
           <div className={styles.currentSuggestion}>
             <h1>{currentSuggestion.name}</h1>
+            <p>{currentSuggestion.url}</p>
             <h1>{currentSuggestion.description}</h1>
           </div>
         )}
-        <Charts />
+        <Charts toggleDialog={toggleDialog} />
       </SearchDialog>
-    </>
+    </div>
   );
 }

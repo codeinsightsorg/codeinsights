@@ -18,6 +18,7 @@ import {
 import { useSuggestionsListStore } from "./state";
 import { animatorStyle, searchStyle } from "./styles";
 import { RenderResults } from "./render-results";
+import { useRouter } from "next/router";
 
 export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
   const { query } = useKBar();
@@ -33,18 +34,30 @@ export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
   }));
   const [actions, setActions] = useState<Action[]>([]);
   const suggestions = useSuggestionsListStore((state) => state.suggestions);
+  const router = useRouter();
 
   useEffect(() => {
     const mappedSuggestions: Action[] = suggestions.map((suggestion) => {
+      const perform = () => {
+        setCurrentSuggestion(suggestion);
+        const url =
+          suggestion.type === "npm" ? suggestion.githubURL : suggestion.url;
+        router.replace(
+          {
+            pathname: router.asPath,
+            query: { repo: url },
+          },
+          undefined,
+          { shallow: true }
+        );
+      };
       if (suggestion.type === "npm") {
         return {
           id: suggestion.name,
           name: suggestion.name,
           subtitle: suggestion.description,
           section: "NPM",
-          perform: (action) => {
-            setCurrentSuggestion(suggestion);
-          },
+          perform,
         };
       }
       return {
@@ -52,9 +65,7 @@ export const CommandBar = forwardRef<CommandBarMethods>((props, ref) => {
         name: suggestion.url,
         subtitle: suggestion.name,
         section: "Github",
-        perform: (action) => {
-          setCurrentSuggestion(suggestion);
-        },
+        perform,
       };
     });
     setActions(mappedSuggestions);
