@@ -10,7 +10,7 @@ import {
   useSuggestionsListStore,
 } from "../../components/search-dialog/state";
 import { useRouter } from "next/router";
-import { getGithubRepoNameFromURL } from "../../components/search-dialog/utils";
+import { getGithubRepoDetailsFromURL } from "../../components/search-dialog/utils";
 
 export default function Index() {
   const searchDialogRef = useRef<CommandBarMethods>();
@@ -30,7 +30,7 @@ export default function Index() {
       const newSuggestion: SearchSuggestion = {
         type: "repo",
         url: repo,
-        name: getGithubRepoNameFromURL(repo),
+        name: getGithubRepoDetailsFromURL(repo).name,
       };
       setCurrentSuggestion(newSuggestion);
     }

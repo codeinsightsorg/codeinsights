@@ -1,4 +1,3 @@
-import fs from "fs/promises";
 import { getAST } from "./utils";
 import * as recast from "recast";
 import { Config } from "../config/config";
@@ -10,6 +9,9 @@ import {
   BaseFileInfoMap,
   ParsingError,
 } from "../shared/models/analyze.model";
+import { getGithubRepoDetailsFromURL } from "../../ui/components/search-dialog/utils";
+import axios from "axios";
+import AdmZip from "adm-zip";
 
 export async function analyzeFiles(config: Config) {
   const plugins = config.plugins;
@@ -17,16 +19,26 @@ export async function analyzeFiles(config: Config) {
   const parsingErrors: ParsingError[] = [];
   const fileInformation: BaseFileInfoMap = {};
 
-  await _recursiveAnalyzeAllFiles(rootPath);
+  const getZip = async () => {
+    if (rootPath.startsWith("https://github.com")) {
+      return await fetchRepoFromURL(rootPath);
+    }
+    const zip = new AdmZip();
+    zip.addLocalFolder(rootPath);
+    return zip;
+  };
+
+  const zip = await getZip();
+  await analyzeAllFilesFromZip(zip);
 
   return {
     results: getPluginsResult(plugins, fileInformation),
     parsingErrors,
   };
 
-  async function _recursiveAnalyzeAllFiles(rootPath: string) {
-    const filesNames = await fs.readdir(rootPath);
-    for (const fileName of filesNames) {
+  async function analyzeAllFilesFromZip(zip: AdmZip) {
+    for (const file of zip.getEntries()) {
+      const fileName = file.name;
       const fullPath = `${rootPath}/${fileName}`;
       const filePathFromRoot = fullPath.replace(`${config.data.repoPath}/`, "");
       if (
@@ -38,18 +50,13 @@ export async function analyzeFiles(config: Config) {
       if (fileName.startsWith(".")) {
         continue;
       }
-      const lStat = await fs.lstat(fullPath);
-      if (lStat.isDirectory()) {
-        await _recursiveAnalyzeAllFiles(fullPath);
-        continue;
-      }
       const isSupportedFile = plugins.some((plugin) =>
         doesPluginMatchesFileName(plugin, fileName)
       );
       if (!isSupportedFile) {
         continue;
       }
-      const fileString = await tryToReadFile(fullPath);
+      const fileString = file.getData().toString("utf-8");
 
       if (!fileString) {
         // todo: add error to list
@@ -125,10 +132,11 @@ function doesPluginMatchesFileName(plugin: BasePlugin, fileName: string) {
   );
 }
 
-async function tryToReadFile(fullPath: string) {
-  try {
-    return (await fs.readFile(fullPath)).toString("utf-8");
-  } catch (e) {
-    //
-  }
+async function fetchRepoFromURL(repoPath: string) {
+  const { name, user } = getGithubRepoDetailsFromURL(repoPath);
+  const url = `https://api.github.com/repos/${user}/${name}/zipball`;
+  const repo = await axios.get(url, {
+    responseType: "arraybuffer",
+  });
+  return new AdmZip(repo.data);
 }
