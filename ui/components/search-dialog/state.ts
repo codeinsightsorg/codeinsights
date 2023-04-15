@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { getGithubRepos, getNPMPackages } from "../../shared/suggestion-api";
-import { getGithubRepoNameFromURL } from "./utils";
+import { getGithubRepoDetailsFromURL } from "./utils";
 
 interface Repo {
   type: "repo";
@@ -40,7 +40,7 @@ export const useSuggestionsListStore = create<SuggestionsListStore>((set) => ({
       const suggestion: Repo = {
         type: "repo",
         url: query,
-        name: getGithubRepoNameFromURL(query),
+        name: getGithubRepoDetailsFromURL(query).name,
       };
       set({ suggestions: [suggestion] });
       return;

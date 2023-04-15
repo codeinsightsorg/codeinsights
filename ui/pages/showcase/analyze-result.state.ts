@@ -14,7 +14,7 @@ export const useAnalyzeResultsStore = create<AnalyzeResultState>((set) => ({
     set({ isLoading: true });
     const response = await axios.get<AnalyzeResults>(`/api/data`, {
       params: {
-        url: `${url}.git`,
+        url: `${url}`.replace(/\.git$/, ""),
       },
     });
     const chartData = response.data.results
