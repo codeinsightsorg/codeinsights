@@ -1,11 +1,12 @@
 {
   "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
-  "showcase": {
-    "title": "Showcase",
+  "running-codeinsights": "Running CodeInsights",
+  "plugins": "Plugins",
+  "roadmap": "Roadmap",
+  "explore": {
+    "title": "Explore",
     "type": "page",
-    "href": "/showcase",
+    "href": "/explore",
     "newWindow": true
   },
   "contact": {

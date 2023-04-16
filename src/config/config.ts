@@ -7,7 +7,6 @@ import { PluginOptions } from "../shared/models/plugin.model";
 import path from "path";
 
 const PLUGINS_FOLDER = "plugins";
-const SHARED_PLUGINS_DIRECTORY = path.join(process.cwd(), PLUGINS_FOLDER);
 
 export class Config {
   data: ConfigModel;

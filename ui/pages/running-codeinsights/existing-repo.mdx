@@ -1,0 +1,58 @@
+# Usage in an existing repository
+
+First, install the package:
+
+```bash
+$ npm install --save-dev @codeinsights/js
+```
+
+Then, create a configuration file called `codeinsights.config.ts` in the root of your repository. (`.js` and `.json` files are also supported)
+
+Finally, run the following command:
+
+```bash
+@codeinsights/js
+```
+
+## Configuration Options
+
+| Name          | Type       | Default Value | Description                                            |
+|---------------|------------|---------------|--------------------------------------------------------|
+| repoPath      | `string`     | `null`          | Absolute path of the repository or GitHub URL          |
+| ignoreFolders | `string[]`   | `[]`            | List of folder names to ignore during the scan          |
+| plugins | `(Plugin\|string)[]`   | `[]`       | List of plugins to be used, can use the Plugin object or the full path          |
+
+### Plugin
+
+| Name          | Type       | Default Value | Description                                            |
+|---------------|------------|---------------|--------------------------------------------------------|
+| disabled      | `boolean`     | `false`          | Disable the plugin          |
+| params | `any`   | `null`            | Custom parameters to pass the plugin          |
+| path       | `string`   | ``         | An absolute path to the plugin, or plugin name if using one of the built-in ones |
+
+
+## Configuration Example
+
+```ts
+// analyzer.config.json
+import { ConfigModel } from '@codeinsights/js';
+
+const config: ConfigModel = {
+  ignoreFolders: ['protos', 'rules-standalone', 'scripts', 'app/new-protos', 'assets'],
+  plugins: [
+    'angular',
+    {
+      path: 'plugins/used-html-tags.ts',
+      params: {
+        matchPattern: '^cx|^cgx|^mat',
+      },
+    },
+  ],
+};
+  disabled?: boolean;
+  params?: T;
+  path: string;
+  beforeHooks: Record<BeforeHookKeys, string>;
+
+module.exports = config;
+```

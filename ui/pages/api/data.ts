@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { init } from "@codeinsights/js";
+import { init } from "@codeinsights/js/src/api";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

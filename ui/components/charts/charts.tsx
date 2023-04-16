@@ -1,6 +1,6 @@
 import styles from "./charts.module.css";
 import ChartComponent from "../chart/chart";
-import { useAnalyzeResultsStore } from "../../pages/showcase/analyze-result.state";
+import { useAnalyzeResultsStore } from "../../pages/explore/analyze-result.state";
 import { useSuggestionsListStore } from "../search-dialog/state";
 import { useEffect, useState } from "react";
 
