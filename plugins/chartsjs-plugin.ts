@@ -1,5 +1,3 @@
-import fs from "fs/promises";
-import path from "path";
 import { groupBy, isNil, pick, sum } from "lodash";
 import { BaseAnalyzerPlugin } from "../src/shared/models/plugin.model";
 import {
