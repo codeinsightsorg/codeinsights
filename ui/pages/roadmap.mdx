@@ -1,37 +1,6 @@
 # Roadmap
 
-
-## What is CodeInsightsJS?
-
-CodeInsights analyzes your repository and extracts insights about your code.
-
-The goal of the project is to help developers overcome the challenge of not being able to gain a high-level overview of their codebase.
-
-This is useful for any project, but particularly useful for large projects consisting of thousands of files, where it can be difficult to identify specific problematic areas, detect anomalies in the code, or obtain a macroscopic understanding of the codebase health.
-
-## How CodeInsights Work
-
-CodeInsights is designed around a versatile plugin system that not only allows you to utilize the built-in plugins but also enables you to [create your own]().
-
-There are two primary categories of plugins:
-
-1. **Analyzers** - These plugins are used to analyze files in your repository and derive insights from them.
-2. **Post-Processors** - These plugins are responsible for processing the final results, such as sending them to a logging system or generating visual representations like charts.
-
-The built-in plugins that come with CodeInsights provide a variety of useful information, such as:
-
-* Lines of code per file and per function, enabling you to identify the longest functions and files within your codebase.
-* The quantity of components employed in your code (specifically for Angular).
-* The number of imports and their details, which helps in identifying the most frequently imported modules in your code.
-* The HTML tags utilized, offering insights into the most commonly used tags (useful for determining the most popular components in component libraries).
-
-There are also built in plugins that can be used to process the results, such as:
-* ChartJS Plugin - Generate charts definitions that can be used with ChartJS (UI is also available that supports these charts)
-* OpenSearch Plugin - send the data to OpenSearch instance and visualize with OpenSearch dashboards (comes with docker compose file)
-* Coralogix Plugin - send the data to your Coralogix account, you can then visualize it using OpenSearch dashboards or Coralogix Dashboards.
-
-## Use-Cases
-
-* CodeInsights can be used by using the tool from time to time to analyze your entire codebase
-* Integrate into CI to continuously generate reports
-* You can also use it to explore libraries you want to use, or contribute code to, to understand more about the general state of the project
+* Improved Angular support for services, pipes, directives
+* React and Vue Plugins
+* Comparison mode - run two scans and compare the results (useful to compare PR to master)
+* Support all config in CLI arguments automatically

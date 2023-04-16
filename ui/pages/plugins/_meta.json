@@ -1,4 +1,4 @@
 {
-  "built-in-plugins": "Built-in plugins",
-  "custom-plugins": "Creating a custom plugin"
+  "built-in": "Built-in plugins",
+  "custom": "Creating a custom plugin"
 }
