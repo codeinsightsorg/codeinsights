@@ -11,6 +11,7 @@ import {
 } from "../shared/models/analyze.model";
 import axios from "axios";
 import AdmZip from "adm-zip";
+import { escapeRegExp } from "lodash";
 
 export async function analyzeFiles(config: Config) {
   const plugins = config.plugins;
@@ -42,7 +43,10 @@ export async function analyzeFiles(config: Config) {
       const filePathFromRoot = fullPath.replace(`${config.data.repoPath}/`, "");
       if (
         config.data.ignoreFolders &&
-        config.data.ignoreFolders.includes(filePathFromRoot)
+        config.data.ignoreFolders.some((folder) => {
+          const re = new RegExp(escapeRegExp(folder));
+          return re.test(folder);
+        })
       ) {
         continue;
       }

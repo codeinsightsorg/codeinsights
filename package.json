@@ -1,6 +1,6 @@
 {
   "name": "@codeinsights/js",
-  "version": "0.2.9-alpha.1",
+  "version": "0.3.0-alpha.1",
   "description": "",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
@@ -13,6 +13,7 @@
     "format:write": "prettier --write .",
     "lint:check": "eslint .",
     "lint:fix": "eslint --fix .",
+    "prepublishOnly": "npm run build",
     "bump-version": "npm version patch"
   },
   "keywords": [],
