@@ -21,6 +21,9 @@
   <img alt="Logo" src="./images/White-BG.png" width="500" height="160">
 </picture>
 </a>
+ <p align="center">
+✨<a href="https://www.codeinsightsjs.com" target="_blank">https://www.codeinsightsjs.com</a> ✨
+</p>
   <p align="center">
     <a href="https://github.com/yaircohendev/codeinsightsjs/issues">Report Bug</a>
     ·
@@ -39,11 +42,7 @@
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
     </li>
-    <li><a href="#usage">Usage (Coming soon)</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -58,8 +57,11 @@
 
 ## About The Project
 
-CodeInsightsJS aims to help developers overcome the challenge of not being able to gain a high-level overview of their projects. This is particularly useful for large projects consisting of thousands of files, where it can be difficult to identify specific problematic areas, detect anomalies in the code, or obtain a macroscopic understanding of the project.
-identify specific problematic areas, detect anomalies in the code, or obtain a macroscopic understanding of the project.
+CodeInsights analyzes your repository and extracts insights about your code.
+
+The goal of the project is to help developers overcome the challenge of not being able to gain a high-level overview of their codebase.
+
+This is useful for any project, but particularly useful for large projects consisting of thousands of files, where it can be difficult to identify specific problematic areas, detect anomalies in the code, or obtain a macroscopic understanding of the codebase health.
 
 ### Features
 
@@ -69,30 +71,14 @@ obtain a wide range of information, including:
 - Number of imports and import information, which can be used to generate the top imports
 - File and line of code data to determine the largest files and functions
 - Angular support, providing the number of components
-- HTML analysis, giving tag information to determine the most used tags by searching for specific prefixes (e.g., if your design system component library prefix is "cx-", you can identify the top component usage in the design system)
 - HTML analysis, giving tag information to determine the most used tags by searching for specific prefixes (e.g., if
-  your design system component library prefix is "cx-", you can identify the top component usage in the design system)
+  your design system component library prefix is "mat-", you can identify the top component usage in the component library)
 - Ability to create custom plugins and generate any desired metrics from the code
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/yaircohendev/codeinsightsjs.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-
-## Usage
-
-### To be updated
+Check out the docs to get started:
+https://www.codeinsightsjs.com/
 
 ## Roadmap
 
