@@ -4,7 +4,8 @@ import { initAnalyzer } from "./analyzer/controller";
 
 async function init() {
   const config = await readConfig();
-  await initAnalyzer(config);
+  const result = await initAnalyzer(config);
+  console.log(JSON.stringify(result, null, 2));
 }
 
 init().then();
