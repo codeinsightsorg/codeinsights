@@ -9,7 +9,6 @@ import {
   BaseFileInfoMap,
   ParsingError,
 } from "../shared/models/analyze.model";
-import { getGithubRepoDetailsFromURL } from "../../ui/components/search-dialog/utils";
 import axios from "axios";
 import AdmZip from "adm-zip";
 
@@ -139,4 +138,12 @@ async function fetchRepoFromURL(repoPath: string) {
     responseType: "arraybuffer",
   });
   return new AdmZip(repo.data);
+}
+
+function getGithubRepoDetailsFromURL(query: string) {
+  const [user, name] = query.split("/").slice(-2);
+  return {
+    user,
+    name,
+  };
 }
