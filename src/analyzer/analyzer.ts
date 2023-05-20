@@ -12,6 +12,9 @@ import {
 import axios from "axios";
 import AdmZip from "adm-zip";
 import { escapeRegExp } from "lodash";
+import TreeSitter from "tree-sitter";
+import TreeSitterJSON from "tree-sitter-json";
+import Parser from "tree-sitter";
 
 export async function analyzeFiles(config: Config) {
   const plugins = config.plugins;
@@ -92,6 +95,22 @@ export async function analyzeFiles(config: Config) {
         if (!isSpecifiedPluginExtension) {
           continue;
         }
+        if (fileName === "package.json") {
+        }
+        if (plugin.parser === "JSON") {
+          const object = JSON.parse(fileString);
+          const treeSitter = new TreeSitter();
+          treeSitter.setLanguage(TreeSitterJSON);
+          const ast = treeSitter.parse(fileString);
+          plugin.analyzeFile(
+            {
+              ...baseAnalyzeInfo,
+              ast,
+              object,
+            },
+            basePlugin.options
+          );
+        }
         if (plugin.parser === "TypeScript") {
           let ast;
           try {
@@ -131,7 +150,7 @@ export async function analyzeFiles(config: Config) {
 
 function doesPluginMatchesFileName(plugin: BasePlugin, fileName: string) {
   return plugin.plugin.fileExtensions?.some((extension) =>
-    fileName.endsWith(`.${extension}`)
+    extension.test(fileName)
   );
 }
 

@@ -1,9 +1,9 @@
 import { first } from "lodash";
+import { AnalyzedEntityMetrics } from "../src/shared/models/analyze.model";
 import {
   TypeScriptAnalyzeInfo,
   TypeScriptPlugin,
-} from "../src/shared/models/plugin.model";
-import { AnalyzedEntityMetrics } from "../src/shared/models/analyze.model";
+} from "../src/shared/models/plugins/typescript-plugin.model";
 
 interface Component {
   type: "component";

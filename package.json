@@ -1,6 +1,6 @@
 {
   "name": "@codeinsights/js",
-  "version": "0.3.1-alpha.1",
+  "version": "0.3.2-alpha.1",
   "description": "",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
@@ -37,6 +37,8 @@
     "minimist": "^1.2.8",
     "octokit": "^2.0.14",
     "recast": "^0.22.0",
+    "tree-sitter": "^0.20.1",
+    "tree-sitter-json": "^0.20.0",
     "typescript": "^4.9.5"
   },
   "devDependencies": {
