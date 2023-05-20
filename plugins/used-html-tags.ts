@@ -1,8 +1,8 @@
+import { PluginOptions } from "../src/shared/models/plugins/plugin.model";
 import {
   HTMLAnalyzeInfo,
   HTMLPlugin,
-  PluginOptions,
-} from "../src/shared/models/plugin.model";
+} from "../src/shared/models/plugins/html-plugin.model";
 
 interface HTMLTag {
   type: "tag";

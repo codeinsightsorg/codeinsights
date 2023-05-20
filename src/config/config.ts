@@ -3,7 +3,7 @@ import { merge } from "lodash";
 import { DEFAULT_PLUGINS } from "./constants";
 import { argv } from "../env";
 import { BasePlugin } from "../plugins/analyze-plugin";
-import { PluginOptions } from "../shared/models/plugin.model";
+import { PluginOptions } from "../shared/models/plugins/plugin.model";
 import path from "path";
 
 const PLUGINS_FOLDER = "plugins";

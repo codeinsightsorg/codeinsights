@@ -1,5 +1,5 @@
 import { groupBy, isNil, pick, sum } from "lodash";
-import { BaseAnalyzerPlugin } from "../src/shared/models/plugin.model";
+import { BaseAnalyzerPlugin } from "../src/shared/models/plugins/plugin.model";
 import {
   AnalyzedEntity,
   AnalyzeResults,

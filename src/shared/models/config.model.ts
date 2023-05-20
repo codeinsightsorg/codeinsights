@@ -1,4 +1,4 @@
-import { PluginOptions } from "./plugin.model";
+import { PluginOptions } from "./plugins/plugin.model";
 
 export interface ConfigModel {
   repoPath?: string;

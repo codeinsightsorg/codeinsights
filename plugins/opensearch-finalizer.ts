@@ -1,4 +1,4 @@
-import { BaseAnalyzerPlugin } from "../src/shared/models/plugin.model";
+import { BaseAnalyzerPlugin } from "../src/shared/models/plugins/plugin.model";
 import { AnalyzeResults } from "../src/shared/models/analyze.model";
 import { Client } from "@opensearch-project/opensearch";
 import { v4 as uuidv4 } from "uuid";
