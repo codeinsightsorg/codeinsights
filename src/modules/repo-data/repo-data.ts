@@ -18,7 +18,7 @@ export function getGithubRepoDetailsFromURL(query: string) {
   };
 }
 
-export const getZip = async (path: string) => {
+export const getRepoZip = async (path: string) => {
   if (path.startsWith("https://github.com")) {
     return await fetchRepoFromURL(path);
   }

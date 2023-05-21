@@ -1,33 +1,35 @@
 import {
-  AnalyzeResultItem,
+  AnalyzeResultPlugin,
   BaseFileInfoMap,
-} from "../shared/models/analyze.model";
-import { BasePlugin } from "./analyze-plugin";
+} from "../../shared/models/analyze.model";
+import { BasePlugin } from "../analyzer/plugin-analyzer/analyze-plugin";
 
 export function getPluginsResult(
   plugins: BasePlugin[],
   fileMap: BaseFileInfoMap
 ) {
-  const pluginResults: AnalyzeResultItem[] = [];
+  const pluginResults: AnalyzeResultPlugin[] = [];
   plugins.forEach((plugin) => {
     plugin.instance.name = plugin.sourceClass.name;
 
     if (plugin.instance?.onFinishProcessing) {
       const result = plugin.instance.onFinishProcessing();
-      const pluginResult: AnalyzeResultItem = {
-        data: result.map((item) => {
+      const pluginResult: AnalyzeResultPlugin = {
+        pluginData: result.map((item) => {
           return {
-            baseInfo: fileMap[item.path],
+            file: fileMap[item.path],
             analyzed: item,
           };
         }),
-        plugin,
+        name: plugin.sourceClass.name,
+        plugin: plugin,
       };
       pluginResults.push(pluginResult);
     } else {
       pluginResults.push({
-        data: [],
-        plugin,
+        pluginData: [],
+        plugin: plugin,
+        name: plugin.sourceClass.name,
       });
     }
   });

@@ -1,33 +1,26 @@
-import { doesPluginMatchesFileName, getAST } from "./utils";
-import * as recast from "recast";
-import { Config } from "../config/config";
+import { doesPluginMatchesFileName } from "./utils";
+import { Config } from "../../config/config";
 import { getPluginsResult } from "../plugins";
-import { JSDOM } from "jsdom";
-import { BasePlugin } from "../plugins/analyze-plugin";
 import {
+  AnalyzeResults,
   BaseAnalyzeInfo,
   BaseFileInfoMap,
-  ParsingError,
-} from "../shared/models/analyze.model";
-import axios from "axios";
+} from "../../shared/models/analyze.model";
 import AdmZip from "adm-zip";
 import { escapeRegExp } from "lodash";
-import TreeSitter from "tree-sitter";
-import { getZip } from "./fetch-data";
-const TreeSitterJSON = require("tree-sitter-json");
+import { getRepoZip } from "../repo-data/repo-data";
+import { pluginsAnalyzeList } from "./plugin-analyzer/plugins-list";
 
-export async function analyzeFiles(config: Config) {
+export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
   const plugins = config.plugins;
   const rootPath = config.data.repoPath as string;
-  const parsingErrors: ParsingError[] = [];
   const fileInformation: BaseFileInfoMap = {};
 
-  const zip = await getZip(rootPath);
+  const zip = await getRepoZip(rootPath);
   await analyzeAllFilesFromZip(zip);
 
   return {
-    results: getPluginsResult(plugins, fileInformation),
-    parsingErrors,
+    plugins: getPluginsResult(plugins, fileInformation),
   };
 
   async function analyzeAllFilesFromZip(zip: AdmZip) {
@@ -44,7 +37,8 @@ export async function analyzeFiles(config: Config) {
       ) {
         continue;
       }
-      if (fileName.startsWith(".")) {
+      const isHiddenFile = fileName.startsWith(".");
+      if (isHiddenFile) {
         continue;
       }
       const isSupportedFile = plugins.some((plugin) =>
@@ -62,7 +56,7 @@ export async function analyzeFiles(config: Config) {
 
       for (const basePlugin of plugins) {
         const plugin = basePlugin.instance;
-        if (!plugin.analyzeFile) {
+        if (!plugin.analyzeFile || !plugin.parser) {
           continue;
         }
         const baseAnalyzeInfo: BaseAnalyzeInfo = {
@@ -85,51 +79,22 @@ export async function analyzeFiles(config: Config) {
         if (!isSpecifiedPluginExtension) {
           continue;
         }
-        if (plugin.parser === "JSON") {
-          const object = JSON.parse(fileString);
-          const treeSitter = new TreeSitter();
-          treeSitter.setLanguage(TreeSitterJSON);
-          const ast = treeSitter.parse(fileString);
-          plugin.analyzeFile(
-            {
-              ...baseAnalyzeInfo,
-              ast,
-              object,
-            },
-            basePlugin.options
-          );
-        }
-        if (plugin.parser === "TypeScript") {
-          let ast: any;
-          try {
-            ast = getAST(fileString, fileName);
-          } catch (e) {
-            continue;
-          }
-          ast.errors.forEach((error: any) => {
-            parsingErrors.push({ error, fileName, fullPath });
+        try {
+          const analyzePlugin = pluginsAnalyzeList[plugin.parser];
+          const pluginMetadata = analyzePlugin({
+            fileContents: fileString,
+            path: fullPath,
+            fileName,
           });
-
           plugin.analyzeFile(
             {
+              ...pluginMetadata,
               ...baseAnalyzeInfo,
-              ast,
-              visit: (visitor) => recast.visit(ast, visitor),
-              print: recast.print,
-              prettyPrint: recast.prettyPrint,
             },
             basePlugin.options
           );
-        } else if (plugin.parser === "HTML") {
-          const dom = new JSDOM(fileString);
-          plugin.analyzeFile(
-            {
-              ...baseAnalyzeInfo,
-              document: dom.window.document,
-              window: dom.window,
-            },
-            basePlugin.options
-          );
+        } catch (e) {
+          //
         }
       }
     }

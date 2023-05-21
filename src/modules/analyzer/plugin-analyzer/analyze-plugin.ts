@@ -1,8 +1,8 @@
 import {
   AnalyzerPlugin,
   PluginOptions,
-} from "../shared/models/plugins/plugin.model";
-import { Type } from "../shared/models/general.model";
+} from "../../../shared/models/plugins/plugin.model";
+import { Type } from "../../../shared/models/general.model";
 
 interface IBasePlugin {
   instance: AnalyzerPlugin;

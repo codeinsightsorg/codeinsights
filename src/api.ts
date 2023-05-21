@@ -1,5 +1,5 @@
 import { readConfig } from "./config/read-config";
-import { initAnalyzer } from "./analyzer/controller";
+import { initAnalyzer } from "./modules/analyzer/controller";
 import { ConfigModel } from "./shared/models/config.model";
 import { AnalyzeResults } from "./shared/models/analyze.model";
 

@@ -1,19 +1,22 @@
 import { analyzeFiles } from "./analyzer";
 import { processResults } from "./process";
-import { Config } from "../config/config";
+import { Config } from "../../config/config";
 import { omit } from "lodash";
-import { AnalyzedEntity, AnalyzeResults } from "../shared/models/analyze.model";
+import {
+  AnalyzedEntity,
+  AnalyzeResults,
+} from "../../shared/models/analyze.model";
 
 export async function initAnalyzer(config: Config): Promise<AnalyzeResults> {
   const analyzeResult = await analyzeFiles(config);
 
-  for (const item of analyzeResult.results) {
-    item.data = item.data.map((analyzed) => {
+  for (const item of analyzeResult.plugins) {
+    item.pluginData = item.pluginData.map((analyzed) => {
       return {
         ...analyzed,
-        baseInfo: {
-          ...analyzed.baseInfo,
-          labels: omit(analyzed.baseInfo.labels, ["fileContents"]),
+        file: {
+          ...analyzed.file,
+          labels: omit(analyzed.file.labels, ["fileContents"]),
         },
       } as AnalyzedEntity;
     });

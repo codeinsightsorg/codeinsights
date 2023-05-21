@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readConfig } from "./config/read-config";
-import { initAnalyzer } from "./analyzer/controller";
+import { initAnalyzer } from "./modules/analyzer/controller";
 
 async function init() {
   const config = await readConfig();
