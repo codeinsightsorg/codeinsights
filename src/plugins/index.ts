@@ -10,10 +10,10 @@ export function getPluginsResult(
 ) {
   const pluginResults: AnalyzeResultItem[] = [];
   plugins.forEach((plugin) => {
-    plugin.plugin.name = plugin.PluginClass.name;
+    plugin.instance.name = plugin.sourceClass.name;
 
-    if (plugin.plugin?.onFinishProcessing) {
-      const result = plugin.plugin.onFinishProcessing();
+    if (plugin.instance?.onFinishProcessing) {
+      const result = plugin.instance.onFinishProcessing();
       const pluginResult: AnalyzeResultItem = {
         data: result.map((item) => {
           return {

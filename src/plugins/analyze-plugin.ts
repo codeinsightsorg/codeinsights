@@ -5,32 +5,34 @@ import {
 import { Type } from "../shared/models/general.model";
 
 interface IBasePlugin {
-  plugin: AnalyzerPlugin;
+  instance: AnalyzerPlugin;
   options: PluginOptions;
 }
 
 export class BasePlugin implements IBasePlugin {
-  plugin: AnalyzerPlugin;
+  instance: AnalyzerPlugin;
+  sourceClass: Type<AnalyzerPlugin>;
 
   constructor(
-    public PluginClass: Type<AnalyzerPlugin>,
+    private PluginClass: Type<AnalyzerPlugin>,
     public options: PluginOptions
   ) {
-    this.plugin = new PluginClass();
-    this.plugin.fileExtensions = this.getFileExtensions();
+    this.sourceClass = PluginClass;
+    this.instance = new PluginClass();
+    this.instance.fileExtensions = this.getFileExtensions();
   }
 
   private getFileExtensions() {
-    if (this.plugin.fileExtensions) {
+    if (this.instance.fileExtensions) {
       return;
     }
-    if (this.plugin.parser === "TypeScript") {
+    if (this.instance.parser === "TypeScript") {
       return [/\.ts$/, /\.js$/];
     }
-    if (this.plugin.parser === "HTML") {
+    if (this.instance.parser === "HTML") {
       return [/\.html$/, /^package.json$/];
     }
-    if (this.plugin.parser === "JSON") {
+    if (this.instance.parser === "JSON") {
       return [/^package.json$/];
     }
   }

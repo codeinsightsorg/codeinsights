@@ -1,5 +1,6 @@
 import * as recast from "recast";
 import * as tsParser from "recast/parsers/typescript";
+import { BasePlugin } from "../plugins/analyze-plugin";
 
 const babelParser = require("@babel/parser");
 
@@ -35,3 +36,12 @@ export const getAST = (source: string, fileName: string) => {
     });
   }
 };
+
+export function doesPluginMatchesFileName(
+  plugin: BasePlugin,
+  fileName: string
+) {
+  return plugin.instance.fileExtensions?.some((extension) =>
+    extension.test(fileName)
+  );
+}

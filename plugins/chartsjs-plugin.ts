@@ -61,7 +61,7 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
       });
 
       pluginResults.push({
-        name: pluginResult.plugin.PluginClass.name,
+        name: pluginResult.plugin.sourceClass.name,
         charts: chartDataMap,
       });
     });

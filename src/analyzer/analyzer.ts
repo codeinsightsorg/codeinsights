@@ -1,4 +1,4 @@
-import { getAST } from "./utils";
+import { doesPluginMatchesFileName, getAST } from "./utils";
 import * as recast from "recast";
 import { Config } from "../config/config";
 import { getPluginsResult } from "../plugins";
@@ -13,6 +13,7 @@ import axios from "axios";
 import AdmZip from "adm-zip";
 import { escapeRegExp } from "lodash";
 import TreeSitter from "tree-sitter";
+import { getZip } from "./fetch-data";
 const TreeSitterJSON = require("tree-sitter-json");
 
 export async function analyzeFiles(config: Config) {
@@ -21,16 +22,7 @@ export async function analyzeFiles(config: Config) {
   const parsingErrors: ParsingError[] = [];
   const fileInformation: BaseFileInfoMap = {};
 
-  const getZip = async () => {
-    if (rootPath.startsWith("https://github.com")) {
-      return await fetchRepoFromURL(rootPath);
-    }
-    const zip = new AdmZip();
-    zip.addLocalFolder(rootPath);
-    return zip;
-  };
-
-  const zip = await getZip();
+  const zip = await getZip(rootPath);
   await analyzeAllFilesFromZip(zip);
 
   return {
@@ -62,7 +54,6 @@ export async function analyzeFiles(config: Config) {
         continue;
       }
       const fileString = file.getData().toString("utf-8");
-
       if (!fileString) {
         // todo: add error to list
         continue;
@@ -70,7 +61,7 @@ export async function analyzeFiles(config: Config) {
       const loc = fileString.split("\n").length;
 
       for (const basePlugin of plugins) {
-        const plugin = basePlugin.plugin;
+        const plugin = basePlugin.instance;
         if (!plugin.analyzeFile) {
           continue;
         }
@@ -143,27 +134,4 @@ export async function analyzeFiles(config: Config) {
       }
     }
   }
-}
-
-function doesPluginMatchesFileName(plugin: BasePlugin, fileName: string) {
-  return plugin.plugin.fileExtensions?.some((extension) =>
-    extension.test(fileName)
-  );
-}
-
-async function fetchRepoFromURL(repoPath: string) {
-  const { name, user } = getGithubRepoDetailsFromURL(repoPath);
-  const url = `https://api.github.com/repos/${user}/${name}/zipball`;
-  const repo = await axios.get(url, {
-    responseType: "arraybuffer",
-  });
-  return new AdmZip(repo.data);
-}
-
-function getGithubRepoDetailsFromURL(query: string) {
-  const [user, name] = query.split("/").slice(-2);
-  return {
-    user,
-    name,
-  };
 }
