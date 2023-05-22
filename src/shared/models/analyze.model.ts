@@ -1,5 +1,4 @@
-import { BasePlugin } from "../../plugins/analyze-plugin";
-import { ParseError } from "@babel/parser";
+import { BasePlugin } from "../../modules/analyzer/plugin-analyzer/analyze-plugin";
 
 export type AnalyzedEntityLabels = Record<string, string | boolean | undefined>;
 
@@ -31,12 +30,13 @@ export interface PluginAnalyzedEntity {
 
 export interface AnalyzedEntity {
   analyzed: PluginAnalyzedEntity;
-  baseInfo: BaseAnalyzeInfo;
+  file: BaseAnalyzeInfo;
 }
 
-export interface AnalyzeResultItem {
+export interface AnalyzeResultPlugin {
+  name: string;
   plugin: BasePlugin;
-  data: AnalyzedEntity[];
+  pluginData: AnalyzedEntity[];
   allPluginsData?: any[];
 }
 
@@ -45,12 +45,5 @@ type FilePath = string;
 export type BaseFileInfoMap = Record<FilePath, BaseAnalyzeInfo>;
 
 export type AnalyzeResults = {
-  results: AnalyzeResultItem[];
-  parsingErrors: ParsingError[];
+  plugins: AnalyzeResultPlugin[];
 };
-
-export interface ParsingError {
-  error: ParseError;
-  fileName: string;
-  fullPath: string;
-}

@@ -1,11 +1,11 @@
-import { AnalyzeResults } from "../shared/models/analyze.model";
-import { BasePlugin } from "../plugins/analyze-plugin";
+import { AnalyzeResults } from "../../shared/models/analyze.model";
+import { BasePlugin } from "./plugin-analyzer/analyze-plugin";
 
 export async function processResults(
   result: AnalyzeResults,
   basePlugin: BasePlugin
 ) {
-  if (!basePlugin.plugin.onAllFinishProcessing) {
+  if (!basePlugin.instance.onAllFinishProcessing) {
     return [];
   }
   let data = result;
@@ -16,5 +16,5 @@ export async function processResults(
     const preProcessFn = (await import(onAllFinishBeforeHook)).default;
     data = preProcessFn(result);
   }
-  return basePlugin.plugin.onAllFinishProcessing(data, basePlugin);
+  return basePlugin.instance.onAllFinishProcessing(data, basePlugin);
 }

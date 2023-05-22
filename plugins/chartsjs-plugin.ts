@@ -25,20 +25,20 @@ export interface PluginResult {
 }
 
 export class ChartJSPlugin implements BaseAnalyzerPlugin {
-  async onAllFinishProcessing({ results }: AnalyzeResults) {
+  async onAllFinishProcessing({ plugins }: AnalyzeResults) {
     const pluginResults: PluginResult[] = [];
 
-    results.forEach((pluginResult) => {
+    plugins.forEach((pluginResult) => {
       const chartDataMap: ChartDataMap = {};
 
       const groupedByType = groupBy(
-        pluginResult.data,
+        pluginResult.pluginData,
         (item) => item.analyzed.type
       );
 
       Object.entries(groupedByType).forEach(([type, items]) => {
         const getBaseLabels = (item: AnalyzedEntity) =>
-          pick(item.baseInfo.labels, ["fileName", "filePath"]);
+          pick(item.file.labels, ["fileName", "filePath"]);
         const getAnalyzedLabels = (item: AnalyzedEntity) =>
           item.analyzed.labels;
         const getAnalyzedMetrics = (item: AnalyzedEntity) =>
@@ -61,7 +61,7 @@ export class ChartJSPlugin implements BaseAnalyzerPlugin {
       });
 
       pluginResults.push({
-        name: pluginResult.plugin.PluginClass.name,
+        name: pluginResult.plugin.sourceClass.name,
         charts: chartDataMap,
       });
     });

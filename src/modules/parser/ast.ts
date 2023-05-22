@@ -11,7 +11,7 @@ export const getAST = (source: string, fileName: string) => {
   } else if (fileName.endsWith(".js")) {
     return recast.parse(source, {
       parser: {
-        parse(source) {
+        parse(source: string) {
           return babelParser.parse(source, {
             sourceType: "unambiguous",
             allowAwaitOutsideFunction: true,

@@ -2,7 +2,7 @@ import { BaseAnalyzerPlugin } from "../src/shared/models/plugins/plugin.model";
 import { AnalyzeResults } from "../src/shared/models/analyze.model";
 import { Client } from "@opensearch-project/opensearch";
 import { v4 as uuidv4 } from "uuid";
-import { BasePlugin } from "../src/plugins/analyze-plugin";
+import { BasePlugin } from "../src/modules/analyzer/plugin-analyzer/analyze-plugin";
 
 interface ElasticOptions {
   indexPattern?: string;
@@ -13,7 +13,7 @@ export class OpensearchFinalizer implements BaseAnalyzerPlugin {
     const params = (plugin.options.params || {}) as ElasticOptions;
     const runId = uuidv4();
     const timestamp = new Date().toISOString();
-    const allLogs = items.results
+    const allLogs = items.plugins
       .flatMap((item) => item.result)
       .map((item) => {
         return {
