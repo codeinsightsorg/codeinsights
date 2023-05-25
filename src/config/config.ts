@@ -6,6 +6,8 @@ import { BasePlugin } from "../modules/analyzer/plugin-analyzer/analyze-plugin";
 import { PluginOptions } from "../shared/models/plugins/plugin.model";
 import path from "path";
 import { supportedPlugins } from "../shared/plugins/constants/plugins.constants";
+import { exec, execSync } from "child_process";
+import * as fs from "fs";
 
 const PLUGINS_FOLDER = "plugins";
 
@@ -30,7 +32,8 @@ export class Config {
 
     for (const plugin of plugins) {
       let pluginPath = plugin;
-      if (supportedPlugins[plugin]) {
+      const isSupportedPlugin = supportedPlugins[plugin];
+      if (isSupportedPlugin) {
         pluginPath = `${PLUGINS_FOLDER}/${plugin}`;
       }
       let pluginConfig = plugin;
@@ -44,6 +47,14 @@ export class Config {
       pluginConfig.path = path.join(process.cwd(), pluginConfig.path);
       if (pluginConfig.disabled) {
         continue;
+      }
+      if (isSupportedPlugin) {
+        const nodeModulesPath = path.join(pluginConfig.path, "node_modules");
+        try {
+          await fs.promises.stat(nodeModulesPath);
+        } catch {
+          execSync(`npm install`, { cwd: pluginConfig.path });
+        }
       }
       const pluginClass = (await import(pluginConfig.path)).default;
       if (pluginConfig.disabled) {
