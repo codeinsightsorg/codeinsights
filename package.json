@@ -1,6 +1,6 @@
 {
   "name": "@codeinsights/js",
-  "version": "0.3.2-alpha.1",
+  "version": "0.3.3-alpha.1",
   "description": "",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
@@ -23,7 +23,7 @@
     "url": "https://github.com/codeinsightsorg/codeinsights"
   },
   "bin": {
-    "codeinsights": "lib/src/index.js"
+    "codeinsights": "lib/index.js"
   },
   "license": "ISC",
   "dependencies": {
