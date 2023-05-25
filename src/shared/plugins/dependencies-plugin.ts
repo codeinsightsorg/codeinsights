@@ -1,7 +1,7 @@
 import {
   JSONAnalyzeInfo,
   JSONPlugin,
-} from "../src/shared/models/plugins/json-plugin.model";
+} from "../models/plugins/json-plugin.model";
 
 interface Dependency {
   type: "dependancy";

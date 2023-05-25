@@ -1,7 +1,7 @@
 import {
   TypeScriptAnalyzeInfo,
   TypeScriptPlugin,
-} from "../src/shared/models/plugins/typescript-plugin.model";
+} from "../models/plugins/typescript-plugin.model";
 
 type FunctionType = "ObjectMethod" | "FunctionDeclaration" | "ClassMethod";
 
