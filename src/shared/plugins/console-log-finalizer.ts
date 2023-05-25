@@ -1,5 +1,5 @@
-import { AnalyzeResults } from "../src/shared/models/analyze.model";
-import { BaseAnalyzerPlugin } from "../src/shared/models/plugins/plugin.model";
+import { AnalyzeResults } from "../models/analyze.model";
+import { BaseAnalyzerPlugin } from "../models/plugins/plugin.model";
 
 export class ConsoleLogFinalizer implements BaseAnalyzerPlugin {
   onAllFinishProcessing(items: AnalyzeResults) {

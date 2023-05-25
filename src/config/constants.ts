@@ -1,10 +1,10 @@
-import { TSFilePlugin } from "../../plugins/ts-file";
-import ImportsPlugin from "../../plugins/imports";
+import { TSFilePlugin } from "../shared/plugins/ts-file";
+import ImportsPlugin from "../shared/plugins/imports";
 import { AnalyzerPlugin } from "../shared/models/plugins/plugin.model";
 import { Type } from "../shared/models/general.model";
-import UsedHTMLTags from "../../plugins/used-html-tags";
-import ChartJSPlugin from "../../plugins/chartsjs-plugin";
-import DependenciesPlugin from "../../plugins/dependencies-plugin";
+import UsedHTMLTags from "../shared/plugins/used-html-tags";
+import ChartJSPlugin from "../shared/plugins/chartsjs-plugin";
+import DependenciesPlugin from "../shared/plugins/dependencies-plugin";
 
 export const DEFAULT_PLUGINS: Type<AnalyzerPlugin>[] = [
   TSFilePlugin,

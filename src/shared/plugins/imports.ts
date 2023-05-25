@@ -1,8 +1,8 @@
-import { AnalyzedEntityMetrics } from "../src/shared/models/analyze.model";
+import { AnalyzedEntityMetrics } from "../models/analyze.model";
 import {
   TypeScriptAnalyzeInfo,
   TypeScriptPlugin,
-} from "../src/shared/models/plugins/typescript-plugin.model";
+} from "../models/plugins/typescript-plugin.model";
 
 interface ImportDefinition {
   type: "import";

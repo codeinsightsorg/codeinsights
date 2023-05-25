@@ -1,9 +1,6 @@
 import { groupBy, isNil, pick, sum } from "lodash";
-import { BaseAnalyzerPlugin } from "../src/shared/models/plugins/plugin.model";
-import {
-  AnalyzedEntity,
-  AnalyzeResults,
-} from "../src/shared/models/analyze.model";
+import { BaseAnalyzerPlugin } from "../models/plugins/plugin.model";
+import { AnalyzedEntity, AnalyzeResults } from "../models/analyze.model";
 
 interface GenericChartDefinition {
   chartType: "line" | "bar" | "pie";

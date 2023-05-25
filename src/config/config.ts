@@ -5,6 +5,7 @@ import { argv } from "../env";
 import { BasePlugin } from "../modules/analyzer/plugin-analyzer/analyze-plugin";
 import { PluginOptions } from "../shared/models/plugins/plugin.model";
 import path from "path";
+import { supportedPlugins } from "../shared/plugins/constants/plugins.constants";
 
 const PLUGINS_FOLDER = "plugins";
 
@@ -24,15 +25,19 @@ export class Config {
   }
 
   private async getAllPlugins(): Promise<BasePlugin[]> {
-    const plugins = this.data.plugins ?? [];
+    const plugins = this.data.plugins ?? argv.plugins?.split(",") ?? [];
     const pluginsInstances: BasePlugin[] = [];
 
     for (const plugin of plugins) {
+      let pluginPath = plugin;
+      if (supportedPlugins[plugin]) {
+        pluginPath = `${PLUGINS_FOLDER}/${plugin}`;
+      }
       let pluginConfig = plugin;
       pluginConfig = (
         typeof pluginConfig === "string"
           ? {
-              path: `${PLUGINS_FOLDER}/${plugin}`,
+              path: pluginPath,
             }
           : pluginConfig
       ) as PluginOptions;

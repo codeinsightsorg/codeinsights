@@ -1,9 +1,9 @@
 import { first } from "lodash";
-import { AnalyzedEntityMetrics } from "../src/shared/models/analyze.model";
+import { AnalyzedEntityMetrics } from "../../src/shared/models/analyze.model";
 import {
   TypeScriptAnalyzeInfo,
   TypeScriptPlugin,
-} from "../src/shared/models/plugins/typescript-plugin.model";
+} from "../../src/shared/models/plugins/typescript-plugin.model";
 
 interface Component {
   type: "component";
@@ -20,7 +20,6 @@ export class AngularPlugin implements TypeScriptPlugin {
   parser = "TypeScript" as const;
 
   analyzeFile({ visit, labels }: TypeScriptAnalyzeInfo) {
-    const file = labels.file;
     const items: Component[] = [];
     visit({
       visitClassDeclaration(path) {
@@ -39,7 +38,7 @@ export class AngularPlugin implements TypeScriptPlugin {
                   const selectorKey = selectorNode.value.value;
                   const component: Component = {
                     metrics: {},
-                    path: file.path,
+                    path: labels.filePath,
                     type: "component",
                     labels: {
                       selector: selectorKey,
