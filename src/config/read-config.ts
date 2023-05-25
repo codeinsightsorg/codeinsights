@@ -8,7 +8,7 @@ export async function readConfig(configData?: ConfigModel): Promise<Config> {
   const repoPath = argv.repoPath ?? configData?.repoPath ?? "";
   let configFromRepo: ConfigModel = configData ?? {};
   configFromRepo = {
-    useDefaultPlugins: true,
+    useDefaultPlugins: configFromRepo?.useDefaultPlugins ?? true,
     ...configFromRepo,
   };
   const importResult = await fetchConfigFromFolder(repoPath);

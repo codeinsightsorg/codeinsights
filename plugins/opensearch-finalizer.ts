@@ -14,7 +14,7 @@ export class OpensearchFinalizer implements BaseAnalyzerPlugin {
     const runId = uuidv4();
     const timestamp = new Date().toISOString();
     const allLogs = items.plugins
-      .flatMap((item) => item.result)
+      .flatMap((item) => item.pluginData)
       .map((item) => {
         return {
           timestamp,
