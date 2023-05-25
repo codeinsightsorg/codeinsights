@@ -1,4 +1,4 @@
-import { ConfigModel } from "../shared/models/config.model";
+import { ConfigModel, ConfigPluginModel } from "../shared/models/config.model";
 import { merge } from "lodash";
 import { DEFAULT_PLUGINS } from "./constants";
 import { argv } from "../env";
@@ -6,10 +6,6 @@ import { BasePlugin } from "../modules/analyzer/plugin-analyzer/analyze-plugin";
 import { PluginOptions } from "../shared/models/plugins/plugin.model";
 import path from "path";
 import { supportedPlugins } from "../shared/plugins/constants/plugins.constants";
-import { exec, execSync } from "child_process";
-import * as fs from "fs";
-
-const PLUGINS_FOLDER = "plugins";
 
 export class Config {
   data: ConfigModel;
@@ -27,37 +23,27 @@ export class Config {
   }
 
   private async getAllPlugins(): Promise<BasePlugin[]> {
-    const plugins = this.data.plugins ?? argv.plugins?.split(",") ?? [];
+    const plugins = (this.data.plugins ??
+      argv.plugins?.split(",") ??
+      []) as ConfigPluginModel[];
     const pluginsInstances: BasePlugin[] = [];
 
     for (const plugin of plugins) {
-      let pluginPath = plugin;
-      const isSupportedPlugin = supportedPlugins[plugin];
-      if (isSupportedPlugin) {
-        pluginPath = `${PLUGINS_FOLDER}/${plugin}`;
-      }
+      const pluginPath = typeof plugin === "string" ? plugin : plugin.path;
+      const isSupportedPlugin = !!supportedPlugins[pluginPath];
       let pluginConfig = plugin;
-      pluginConfig = (
-        typeof pluginConfig === "string"
-          ? {
-              path: pluginPath,
-            }
-          : pluginConfig
-      ) as PluginOptions;
-      pluginConfig.path = path.join(process.cwd(), pluginConfig.path);
+      if (typeof pluginConfig === "string") {
+        pluginConfig = {
+          path: pluginConfig,
+        } as PluginOptions;
+      }
       if (pluginConfig.disabled) {
         continue;
       }
-      if (isSupportedPlugin) {
-        const absolutePluginPath = path.resolve(__dirname, pluginConfig.path);
-        const nodeModulesPath = path.join(absolutePluginPath, "node_modules");
-        try {
-          await fs.promises.stat(nodeModulesPath);
-        } catch {
-          execSync(`npm install`, { cwd: pluginConfig.path });
-        }
+      let pluginClass = supportedPlugins[pluginPath];
+      if (!isSupportedPlugin) {
+        pluginClass = (await import(pluginConfig.path)).default;
       }
-      const pluginClass = (await import(pluginConfig.path)).default;
       if (pluginConfig.disabled) {
         continue;
       }

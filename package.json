@@ -1,6 +1,6 @@
 {
   "name": "@codeinsights/js",
-  "version": "0.3.7-alpha.1",
+  "version": "0.3.8-alpha.1",
   "description": "",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
@@ -23,7 +23,7 @@
     "url": "https://github.com/codeinsightsorg/codeinsights"
   },
   "bin": {
-    "codeinsights": "lib/index.js"
+    "codeinsights": "lib/src/index.js"
   },
   "license": "ISC",
   "dependencies": {
@@ -32,7 +32,6 @@
     "@types/jsdom": "^21.1.0",
     "adm-zip": "^0.5.10",
     "axios": "^1.3.5",
-    "isomorphic-git": "^1.23.0",
     "jsdom": "^21.1.1",
     "lodash": "^4.17.21",
     "minimist": "^1.2.8",

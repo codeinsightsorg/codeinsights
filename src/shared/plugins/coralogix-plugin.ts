@@ -1,7 +1,7 @@
-import { BaseAnalyzerPlugin } from "../../src/shared/models/plugins/plugin.model";
-import { AnalyzeResults } from "../../src/shared/models/analyze.model";
+import { BaseAnalyzerPlugin } from "../models/plugins/plugin.model";
+import { AnalyzeResults } from "../models/analyze.model";
 import axios from "axios";
-import { BasePlugin } from "../../src/modules/analyzer/plugin-analyzer/analyze-plugin";
+import { BasePlugin } from "../../modules/analyzer/plugin-analyzer/analyze-plugin";
 
 interface CoralogixProcessorConfig {
   clusterURL?: string;

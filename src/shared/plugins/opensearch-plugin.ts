@@ -1,8 +1,8 @@
-import { BaseAnalyzerPlugin } from "../../src/shared/models/plugins/plugin.model";
-import { AnalyzeResults } from "../../src/shared/models/analyze.model";
+import { BaseAnalyzerPlugin } from "../models/plugins/plugin.model";
+import { AnalyzeResults } from "../models/analyze.model";
 import { Client } from "@opensearch-project/opensearch";
 import { v4 as uuidv4 } from "uuid";
-import { BasePlugin } from "../../src/modules/analyzer/plugin-analyzer/analyze-plugin";
+import { BasePlugin } from "../../modules/analyzer/plugin-analyzer/analyze-plugin";
 
 interface ElasticOptions {
   indexPattern?: string;

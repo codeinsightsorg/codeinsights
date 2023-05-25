@@ -1,8 +1,9 @@
 import { PluginOptions } from "./plugins/plugin.model";
 
+export type ConfigPluginModel = string | PluginOptions;
 export interface ConfigModel {
   repoPath?: string;
   ignoreFolders?: string[];
-  plugins?: (string | PluginOptions)[];
+  plugins?: ConfigPluginModel[];
   useDefaultPlugins?: boolean;
 }

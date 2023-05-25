@@ -10,4 +10,7 @@ async function init() {
 
 init().then();
 
-export { ConfigModel } from "./shared/models/config.model";
+export { ConfigModel, ConfigPluginModel } from "./shared/models/config.model";
+export * from "./shared/models/plugins/index";
+export * from "./shared/models/analyze.model";
+export { BasePlugin } from "./modules/analyzer/plugin-analyzer/analyze-plugin";
