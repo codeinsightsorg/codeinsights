@@ -49,21 +49,12 @@ export class Config {
         continue;
       }
       if (isSupportedPlugin) {
-        const packageJson = (
-          await fs.promises.readFile(`${pluginConfig.path}/package.json`)
-        ).toString("utf-8");
+        const absolutePluginPath = path.resolve(__dirname, pluginConfig.path);
+        const nodeModulesPath = path.join(absolutePluginPath, "node_modules");
         try {
-          const parsedPackageJSON = JSON.parse(packageJson);
-          const dependencies = {
-            ...parsedPackageJSON.dependencies,
-            ...parsedPackageJSON.devDependencies,
-          };
-          const dependenciesStr = Object.entries(dependencies)
-            .map(([key, value]) => `${key}@${value}`)
-            .join(" ");
-          execSync(`npm install ${dependenciesStr}`);
-        } catch (err) {
-          console.error(err);
+          await fs.promises.stat(nodeModulesPath);
+        } catch {
+          execSync(`npm install`, { cwd: pluginConfig.path });
         }
       }
       const pluginClass = (await import(pluginConfig.path)).default;
