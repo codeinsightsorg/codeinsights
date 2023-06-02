@@ -31,5 +31,5 @@ export interface PluginOptions<T = any> {
   disabled?: boolean;
   params?: T;
   path: string;
-  beforeHooks: Record<BeforeHookKeys, string>;
+  beforeHooks?: Record<BeforeHookKeys, string>;
 }
