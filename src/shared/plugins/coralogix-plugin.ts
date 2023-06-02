@@ -19,9 +19,8 @@ export class CoralogixPlugin implements BaseAnalyzerPlugin {
       const result = (
         await axios.post(url, {
           privateKey: process.env.CGX_PRIVATE_KEY,
-          applicationName:
-            (config && config.applicationName) ?? "code-analyzer",
-          subsystemName: (config && config.subsystemName) ?? "code-analyzer",
+          applicationName: (config && config.applicationName) ?? "codeinsights",
+          subsystemName: (config && config.subsystemName) ?? "codeinsights",
           logEntries: items,
         })
       ).data;
