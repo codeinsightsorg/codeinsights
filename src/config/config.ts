@@ -4,7 +4,6 @@ import { DEFAULT_PLUGINS } from "./constants";
 import { argv } from "../env";
 import { BasePlugin } from "../modules/analyzer/plugin-analyzer/analyze-plugin";
 import { PluginOptions } from "../shared/models/plugins/plugin.model";
-import path from "path";
 import { supportedPlugins } from "../shared/plugins/constants/plugins.constants";
 
 export class Config {

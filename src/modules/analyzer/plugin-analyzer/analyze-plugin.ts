@@ -1,7 +1,4 @@
-import {
-  AnalyzerPlugin,
-  PluginOptions,
-} from "../../../shared/models/plugins/plugin.model";
+import { AnalyzerPlugin, PluginOptions } from "../../../shared/models/plugins";
 import { Type } from "../../../shared/models/general.model";
 
 interface IBasePlugin {
@@ -27,13 +24,13 @@ export class BasePlugin implements IBasePlugin {
       return;
     }
     if (this.instance.parser === "TypeScript") {
-      return [/\.ts$/, /\.js$/];
+      return [".ts", ".js"];
     }
     if (this.instance.parser === "HTML") {
-      return [/\.html$/, /^package.json$/];
+      return [".html"];
     }
     if (this.instance.parser === "JSON") {
-      return [/^package.json$/];
+      return ["package.json"];
     }
   }
 }
