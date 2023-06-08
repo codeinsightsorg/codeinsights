@@ -20,6 +20,9 @@ export async function initAnalyzer(config: Config): Promise<AnalyzeResults> {
         },
       } as AnalyzedEntity;
     });
+  }
+
+  for (const item of analyzeResult.plugins) {
     item.allPluginsData = await processResults(analyzeResult, item.plugin);
   }
 
