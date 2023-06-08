@@ -13,7 +13,7 @@ export type Parser = "TypeScript" | "HTML" | "JSON";
 export interface BaseAnalyzerPlugin<T extends BaseAnalyzeInfo = any> {
   onFinishProcessing?: () => PluginAnalyzedEntity[];
   onAllFinishProcessing?: (items: AnalyzeResults, plugin: BasePlugin) => any;
-  fileExtensions?: RegExp[];
+  fileExtensions?: string[];
   analyzeFile?: (analyzeInfo: T, pluginOptions: PluginOptions) => any;
   parser?: Parser;
   name?: string;

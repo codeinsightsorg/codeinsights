@@ -5,6 +5,6 @@ export function doesPluginMatchesFileName(
   fileName: string
 ) {
   return plugin.instance.fileExtensions?.some((extension) =>
-    extension.test(fileName)
+    extension.endsWith(fileName)
   );
 }
