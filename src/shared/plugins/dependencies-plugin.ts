@@ -18,6 +18,8 @@ export class DependenciesPlugin implements JSONPlugin {
   parser = "JSON" as const;
 
   analyzeFile({ labels, object }: JSONAnalyzeInfo) {
+    if (labels.fileName !== "package.json") return;
+
     const dependencies = object.dependencies;
     const devDependencies = object.devDependencies;
 

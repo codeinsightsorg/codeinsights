@@ -30,7 +30,7 @@ export class BasePlugin implements IBasePlugin {
       return [".html"];
     }
     if (this.instance.parser === "JSON") {
-      return ["package.json"];
+      return [".json"];
     }
   }
 }
