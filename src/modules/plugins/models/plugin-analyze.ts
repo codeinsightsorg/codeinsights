@@ -1,4 +1,4 @@
-import { Parser } from "../../../shared/models/plugins/plugin.model";
+import { Parser } from "../../../shared/models/plugins";
 
 export interface IPluginAnalyzeInfo {
   fileContents: string;

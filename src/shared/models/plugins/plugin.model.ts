@@ -7,8 +7,9 @@ import { BasePlugin } from "../../../modules/analyzer/plugin-analyzer/analyze-pl
 import { HTMLPlugin } from "./html-plugin.model";
 import { TypeScriptPlugin } from "./typescript-plugin.model";
 import { JSONPlugin } from "./json-plugin.model";
+import { VuePluginModel } from "./vue-plugin.model";
 
-export type Parser = "TypeScript" | "HTML" | "JSON";
+export type Parser = "TypeScript" | "HTML" | "JSON" | "Vue3";
 
 export interface BaseAnalyzerPlugin<T extends BaseAnalyzeInfo = any> {
   onFinishProcessing?: () => PluginAnalyzedEntity[];
@@ -23,7 +24,8 @@ export type AnalyzerPlugin =
   | BaseAnalyzerPlugin
   | TypeScriptPlugin
   | HTMLPlugin
-  | JSONPlugin;
+  | JSONPlugin
+  | VuePluginModel;
 
 export type BeforeHookKeys = "onAllFinishProcessing";
 

@@ -1,7 +1,4 @@
-import {
-  JSONAnalyzeInfo,
-  JSONPlugin,
-} from "../models/plugins/json-plugin.model";
+import { JSONAnalyzeInfo, JSONPlugin } from "../models/plugins";
 
 interface Dependency {
   type: "dependancy";
@@ -18,6 +15,9 @@ export class DependenciesPlugin implements JSONPlugin {
   parser = "JSON" as const;
 
   analyzeFile({ labels, object }: JSONAnalyzeInfo) {
+    if (labels.fileName !== "package.json") {
+      return;
+    }
     const dependencies = object.dependencies;
     const devDependencies = object.devDependencies;
 

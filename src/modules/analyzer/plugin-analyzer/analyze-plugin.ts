@@ -23,14 +23,15 @@ export class BasePlugin implements IBasePlugin {
     if (this.instance.fileExtensions) {
       return;
     }
-    if (this.instance.parser === "TypeScript") {
-      return [".ts", ".js"];
-    }
-    if (this.instance.parser === "HTML") {
-      return [".html"];
-    }
-    if (this.instance.parser === "JSON") {
-      return ["package.json"];
+    switch (this.instance.parser) {
+      case "TypeScript":
+        return [".ts", ".js"];
+      case "HTML":
+        return [".html"];
+      case "JSON":
+        return [".json"];
+      case "Vue3":
+        return [".vue"];
     }
   }
 }
