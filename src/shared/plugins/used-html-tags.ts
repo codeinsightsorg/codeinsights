@@ -1,8 +1,6 @@
 import { PluginOptions } from "../models/plugins/plugin.model";
-import {
-  HTMLAnalyzeInfo,
-  HTMLPlugin,
-} from "../models/plugins/html-plugin.model";
+import { HTMLAnalyzeInfo } from "../models/plugins/html-plugin.model";
+import { HTMLPlugin } from "../../modules/plugins";
 
 interface HTMLTag {
   type: "tag";
@@ -16,8 +14,7 @@ interface Params {
   matchPattern?: string;
 }
 
-export default class UsedHTMLTags implements HTMLPlugin {
-  parser = "HTML" as const;
+export default class UsedHTMLTags extends HTMLPlugin {
   allTags: HTMLTag[] = [];
 
   analyzeFile(

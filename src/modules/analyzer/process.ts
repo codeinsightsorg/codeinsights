@@ -1,5 +1,5 @@
 import { AnalyzeResults } from "../../shared/models/analyze.model";
-import { BasePlugin } from "./plugin-analyzer/analyze-plugin";
+import { BasePlugin } from "../parser/plugin-parsers/analyze-plugin";
 
 export async function processResults(
   result: AnalyzeResults,

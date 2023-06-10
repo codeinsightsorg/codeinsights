@@ -1,6 +1,5 @@
 import { doesPluginMatchesFileName } from "./utils";
 import { Config } from "../../config/config";
-import { getPluginsResult } from "../plugins";
 import {
   AnalyzeResults,
   BaseAnalyzeInfo,
@@ -9,7 +8,8 @@ import {
 import AdmZip from "adm-zip";
 import { escapeRegExp } from "lodash";
 import { getRepoZip } from "../repo-data/repo-data";
-import { pluginsAnalyzeList } from "./plugin-analyzer/plugins-list";
+import { getPluginParsingFunction } from "../parser/plugin-parsers/plugins-list";
+import { getPluginsResult } from "../plugins/plugin-results";
 
 export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
   const plugins = config.plugins;
@@ -56,7 +56,7 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
 
       for (const basePlugin of plugins) {
         const plugin = basePlugin.instance;
-        if (!plugin.analyzeFile || !plugin.parser) {
+        if (!plugin.analyzeFile) {
           continue;
         }
         const baseAnalyzeInfo: BaseAnalyzeInfo = {
@@ -80,7 +80,8 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
           continue;
         }
         try {
-          const analyzePlugin = pluginsAnalyzeList[plugin.parser];
+          const analyzePlugin = getPluginParsingFunction(plugin);
+          if (!analyzePlugin) continue;
           const pluginMetadata = analyzePlugin({
             fileContents: fileString,
             path: fullPath,

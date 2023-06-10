@@ -1,14 +1,14 @@
-import { BaseAnalyzerPlugin } from "../models/plugins/plugin.model";
 import { AnalyzeResults } from "../models/analyze.model";
 import { Client } from "@opensearch-project/opensearch";
 import { v4 as uuidv4 } from "uuid";
-import { BasePlugin } from "../../modules/analyzer/plugin-analyzer/analyze-plugin";
+import { BasePlugin } from "../../modules/parser/plugin-parsers/analyze-plugin";
+import { BaseAnalyzerPlugin } from "../../modules/plugins";
 
 interface ElasticOptions {
   indexPattern?: string;
 }
 
-export class OpensearchFinalizer implements BaseAnalyzerPlugin {
+export class OpensearchFinalizer extends BaseAnalyzerPlugin {
   async onAllFinishProcessing(items: AnalyzeResults, plugin: BasePlugin) {
     const params = (plugin.options.params || {}) as ElasticOptions;
     const runId = uuidv4();

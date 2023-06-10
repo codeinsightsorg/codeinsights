@@ -1,4 +1,4 @@
-import { getAST } from "../../parser/ast";
+import { getAST } from "../ast";
 import * as recast from "recast";
 import { IPluginAnalyzeInfo } from "../../plugins/models/plugin-analyze";
 import { Visitor } from "ast-types/gen/visitor";

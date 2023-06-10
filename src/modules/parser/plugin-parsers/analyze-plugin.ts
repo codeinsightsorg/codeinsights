@@ -1,5 +1,7 @@
 import { AnalyzerPlugin, PluginOptions } from "../../../shared/models/plugins";
 import { Type } from "../../../shared/models/general.model";
+import { TypeScriptPlugin } from "../../plugins/typescript-plugin";
+import { HTMLPlugin, JSONPlugin } from "../../plugins";
 
 interface IBasePlugin {
   instance: AnalyzerPlugin;
@@ -23,13 +25,13 @@ export class BasePlugin implements IBasePlugin {
     if (this.instance.fileExtensions) {
       return;
     }
-    if (this.instance.parser === "TypeScript") {
+    if (this.instance instanceof TypeScriptPlugin) {
       return [".ts", ".js"];
     }
-    if (this.instance.parser === "HTML") {
+    if (this.instance instanceof HTMLPlugin) {
       return [".html"];
     }
-    if (this.instance.parser === "JSON") {
+    if (this.instance instanceof JSONPlugin) {
       return [".json"];
     }
   }

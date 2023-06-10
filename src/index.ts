@@ -13,4 +13,4 @@ init().then();
 export { ConfigModel, ConfigPluginModel } from "./shared/models/config.model";
 export * from "./shared/models/plugins/index";
 export * from "./shared/models/analyze.model";
-export { BasePlugin } from "./modules/analyzer/plugin-analyzer/analyze-plugin";
+export { BasePlugin } from "./modules/parser/plugin-parsers/analyze-plugin";
