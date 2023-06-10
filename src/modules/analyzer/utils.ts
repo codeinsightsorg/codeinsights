@@ -1,4 +1,4 @@
-import { BasePlugin } from "./plugin-analyzer/analyze-plugin";
+import { BasePlugin } from "../parser/plugin-parsers/analyze-plugin";
 
 export function doesPluginMatchesFileName(
   plugin: BasePlugin,

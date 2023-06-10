@@ -1,4 +1,4 @@
-import { BasePlugin } from "../../modules/analyzer/plugin-analyzer/analyze-plugin";
+import { BasePlugin } from "../../modules/parser/plugin-parsers/analyze-plugin";
 
 export type AnalyzedEntityLabels = Record<string, string | boolean | undefined>;
 

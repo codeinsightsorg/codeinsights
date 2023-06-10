@@ -1,10 +1,9 @@
-import { BaseAnalyzerPlugin } from "./plugin.model";
+import { BaseAnalyzerPluginModel } from "./plugin.model";
 import { BaseAnalyzeInfo } from "../analyze.model";
 import TreeSitter from "tree-sitter";
 
-export interface JSONPlugin extends BaseAnalyzerPlugin<JSONAnalyzeInfo> {
-  parser: "JSON";
-}
+export interface JSONPluginModel
+  extends BaseAnalyzerPluginModel<JSONAnalyzeInfo> {}
 
 export interface JSONAnalyzeInfo extends BaseAnalyzeInfo {
   ast: TreeSitter.Tree;

@@ -1,7 +1,5 @@
-import {
-  TypeScriptAnalyzeInfo,
-  TypeScriptPlugin,
-} from "../models/plugins/typescript-plugin.model";
+import { TypeScriptAnalyzeInfo } from "../models/plugins/typescript-plugin.model";
+import { TypeScriptPlugin } from "../../modules/plugins/typescript-plugin";
 
 type FunctionType = "ObjectMethod" | "FunctionDeclaration" | "ClassMethod";
 
@@ -28,9 +26,8 @@ interface File {
   };
 }
 
-export class TSFilePlugin implements TypeScriptPlugin {
+export class TSFilePlugin extends TypeScriptPlugin {
   analyzedItems: (File | FunctionModel)[] = [];
-  parser = "TypeScript" as const;
 
   analyzeFile({ labels, visit, ast }: TypeScriptAnalyzeInfo) {
     const { fileName, filePath } = labels;

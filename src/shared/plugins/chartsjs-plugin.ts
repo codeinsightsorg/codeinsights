@@ -1,6 +1,6 @@
 import { groupBy, isNil, pick, sum } from "lodash";
-import { BaseAnalyzerPlugin } from "../models/plugins/plugin.model";
 import { AnalyzedEntity, AnalyzeResults } from "../models/analyze.model";
+import { BaseAnalyzerPlugin } from "../../modules/plugins";
 
 interface GenericChartDefinition {
   chartType: "line" | "bar" | "pie";
@@ -21,7 +21,7 @@ export interface PluginResult {
   charts: ChartDataMap;
 }
 
-export class ChartJSPlugin implements BaseAnalyzerPlugin {
+export class ChartJSPlugin extends BaseAnalyzerPlugin {
   async onAllFinishProcessing({ plugins }: AnalyzeResults) {
     const pluginResults: PluginResult[] = [];
 

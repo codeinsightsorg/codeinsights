@@ -3,27 +3,24 @@ import {
   BaseAnalyzeInfo,
   PluginAnalyzedEntity,
 } from "../analyze.model";
-import { BasePlugin } from "../../../modules/analyzer/plugin-analyzer/analyze-plugin";
-import { HTMLPlugin } from "./html-plugin.model";
-import { TypeScriptPlugin } from "./typescript-plugin.model";
-import { JSONPlugin } from "./json-plugin.model";
+import { BasePlugin } from "../../../modules/parser/plugin-parsers/analyze-plugin";
+import { HTMLPluginModel } from "./html-plugin.model";
+import { TypeScriptPluginModel } from "./typescript-plugin.model";
+import { JSONPluginModel } from "./json-plugin.model";
 
-export type Parser = "TypeScript" | "HTML" | "JSON";
-
-export interface BaseAnalyzerPlugin<T extends BaseAnalyzeInfo = any> {
+export interface BaseAnalyzerPluginModel<T extends BaseAnalyzeInfo = any> {
   onFinishProcessing?: () => PluginAnalyzedEntity[];
   onAllFinishProcessing?: (items: AnalyzeResults, plugin: BasePlugin) => any;
   fileExtensions?: string[];
   analyzeFile?: (analyzeInfo: T, pluginOptions: PluginOptions) => any;
-  parser?: Parser;
   name?: string;
 }
 
 export type AnalyzerPlugin =
-  | BaseAnalyzerPlugin
-  | TypeScriptPlugin
-  | HTMLPlugin
-  | JSONPlugin;
+  | BaseAnalyzerPluginModel
+  | TypeScriptPluginModel
+  | HTMLPluginModel
+  | JSONPluginModel;
 
 export type BeforeHookKeys = "onAllFinishProcessing";
 
