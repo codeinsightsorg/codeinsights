@@ -23,7 +23,7 @@ export class BasePlugin implements IBasePlugin {
 
   private getFileExtensions() {
     if (this.instance.fileExtensions) {
-      return;
+      return this.instance.fileExtensions;
     }
     if (this.instance instanceof TypeScriptPlugin) {
       return [".ts", ".js"];

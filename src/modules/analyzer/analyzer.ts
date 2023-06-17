@@ -8,8 +8,9 @@ import {
 import AdmZip from "adm-zip";
 import { escapeRegExp } from "lodash";
 import { getRepoZip } from "../repo-data/repo-data";
-import { getPluginParsingFunction } from "../parser/plugin-parsers/plugins-list";
 import { getPluginsResult } from "../plugins/plugin-results";
+import { parseByFilename } from "../parser/parse-by-filename";
+import path from "path";
 
 export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
   const plugins = config.plugins;
@@ -62,6 +63,7 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
         const baseAnalyzeInfo: BaseAnalyzeInfo = {
           path: filePathFromRoot,
           type: "file",
+          fileExtension: path.extname(fileName),
           labels: {
             filePath: filePathFromRoot,
             fileName: fileName,
@@ -80,7 +82,7 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
           continue;
         }
         try {
-          const analyzePlugin = getPluginParsingFunction(plugin);
+          const analyzePlugin = parseByFilename(fileName);
           if (!analyzePlugin) continue;
           const pluginMetadata = analyzePlugin({
             fileContents: fileString,
@@ -95,7 +97,7 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
             basePlugin.options
           );
         } catch (e) {
-          //
+          console.error(e);
         }
       }
     }

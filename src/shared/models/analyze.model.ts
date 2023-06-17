@@ -15,6 +15,7 @@ type BaseMetrics = AnalyzedEntityMetrics & {
 };
 
 export type BaseAnalyzeInfo = PluginAnalyzedEntity & {
+  fileExtension: string;
   labels: BaseLabels;
   metrics: BaseMetrics;
   type: "file";

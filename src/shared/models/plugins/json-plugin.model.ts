@@ -6,6 +6,7 @@ export interface JSONPluginModel
   extends BaseAnalyzerPluginModel<JSONAnalyzeInfo> {}
 
 export interface JSONAnalyzeInfo extends BaseAnalyzeInfo {
+  fileExtension: "json";
   ast: TreeSitter.Tree;
   object: Record<string, any>;
 }

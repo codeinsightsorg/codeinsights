@@ -8,6 +8,7 @@ export interface TypeScriptPluginModel
   extends BaseAnalyzerPluginModel<TypeScriptAnalyzeInfo> {}
 
 export interface TypeScriptAnalyzeInfo extends BaseAnalyzeInfo {
+  fileExtension: ".ts";
   visit: (visitor: Visitor) => any;
   print: (node: types.ASTNode, options?: Options) => PrintResultType;
   prettyPrint: (node: types.ASTNode, options?: Options) => PrintResultType;

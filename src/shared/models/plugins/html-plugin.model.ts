@@ -8,4 +8,5 @@ export interface HTMLPluginModel
 export interface HTMLAnalyzeInfo extends BaseAnalyzeInfo {
   window: DOMWindow;
   document: Document;
+  fileExtension: ".html";
 }
