@@ -8,6 +8,7 @@ import DependenciesPlugin from "../dependencies-plugin";
 import ChartJSPlugin from "../chartsjs-plugin";
 import ImportsPlugin from "../imports";
 import TSFilePlugin from "../ts-file";
+import CyclomaticComplexity from "../cyclomatic-complexity";
 
 export const supportedPlugins: Record<string, Type<BaseAnalyzerPluginModel>> = {
   angular: AngularPlugin,
@@ -18,4 +19,5 @@ export const supportedPlugins: Record<string, Type<BaseAnalyzerPluginModel>> = {
   ts: TSFilePlugin,
   html: UsedHTMLTags,
   dependencies: DependenciesPlugin,
+  cyclomaticComplexity: CyclomaticComplexity,
 };

@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 import { readConfig } from "./config/read-config";
 import { initAnalyzer } from "./modules/analyzer/controller";
+import { argv } from "./env";
 
 async function init() {
   const config = await readConfig();
   const result = await initAnalyzer(config);
-  console.log(JSON.stringify(result, null, 2));
+  if (!argv.noOutput) {
+    console.log(JSON.stringify(result, null, 2));
+  }
 }
 
 init().then();

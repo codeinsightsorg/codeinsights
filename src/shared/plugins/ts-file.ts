@@ -1,5 +1,6 @@
 import { TypeScriptAnalyzeInfo } from "../models/plugins/typescript-plugin.model";
 import { TypeScriptPlugin } from "../../modules/plugins/typescript-plugin";
+import { getFunctionDetailsFromNode } from "./shared/function.utils";
 
 type FunctionType = "ObjectMethod" | "FunctionDeclaration" | "ClassMethod";
 
@@ -58,23 +59,16 @@ export class TSFilePlugin extends TypeScriptPlugin {
             functionType: path.value.type,
           },
         };
-        if (
-          path.value.type === "ClassMethod" ||
-          path.value.type === "ObjectMethod"
-        ) {
-          functionEntity.metrics.loc =
-            path.value.loc.end.line - path.value.loc.start.line;
-          functionEntity.labels.name = path.value.key.name;
-        }
-        if (path.value.type === "FunctionDeclaration") {
-          functionEntity.labels.name = path?.value?.id?.name ?? "";
-          functionEntity.metrics.loc =
-            path.value.body.loc.end.line - path.value.body.loc.start.line;
-        }
-        if (path.value.type === "ArrowFunctionExpression") {
-          functionEntity.labels.name = path?.value?.id?.name ?? "";
-          functionEntity.metrics.loc =
-            path.value.body.loc.end.line - path.value.body.loc.start.line;
+        const functionDetails = getFunctionDetailsFromNode(path);
+        if (functionDetails) {
+          functionEntity.labels = {
+            ...functionEntity.labels,
+            ...functionDetails.labels,
+          };
+          functionEntity.metrics = {
+            ...functionEntity.metrics,
+            ...functionDetails.metrics,
+          };
         }
         self.analyzedItems.push(functionEntity);
         this.traverse(path);

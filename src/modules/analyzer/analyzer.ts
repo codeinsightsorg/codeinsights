@@ -95,7 +95,7 @@ export async function analyzeFiles(config: Config): Promise<AnalyzeResults> {
             basePlugin.options
           );
         } catch (e) {
-          //
+          console.error(e);
         }
       }
     }
