@@ -1,6 +1,6 @@
 {
   "name": "@codeinsights/js",
-  "version": "0.5.10-alpha.3",
+  "version": "0.5.10-alpha.4",
   "description": "",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",

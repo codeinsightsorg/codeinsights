@@ -2,7 +2,7 @@ import { JSONAnalyzeInfo } from "../models/plugins/json-plugin.model";
 import { JSONPlugin } from "../../modules/plugins";
 
 interface Dependency {
-  type: "dependancy";
+  type: "dependency";
   path: string;
   labels: {
     name: string;
@@ -26,7 +26,7 @@ export class DependenciesPlugin extends JSONPlugin {
     ) => {
       Object.entries(dependenciesMap).forEach(([name, version]) => {
         this.analyzedItems.push({
-          type: "dependancy",
+          type: "dependency",
           path: labels.filePath,
           labels: {
             name,
